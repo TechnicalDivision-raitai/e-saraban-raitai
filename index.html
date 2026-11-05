@@ -69,7 +69,7 @@
                             </div>
                             <div>
                                 <div class="font-semibold text-blue-900">ผู้ดูแลระบบ (Admin)</div>
-                                <div class="text-xs text-blue-600">นส. นิศาชล คงดี (เฉพาะผู้ดูแลระบบตัวจริง)</div>
+                                <div class="text-xs text-blue-600">นส. นิศาชล คงดี (ต้องใส่รหัสผ่าน)</div>
                             </div>
                         </div>
                         <i class="fa-solid fa-chevron-right text-blue-400 group-hover:translate-x-1 transition"></i>
@@ -613,6 +613,8 @@
 
     <!-- ==================== JAVASCRIPT LOGIC ==================== -->
     <script>
+        const ADMIN_PASSWORD = "12345"; // รหัสผ่านสำหรับ Admin
+
         let documents = [
             {
                 id: 1,
@@ -712,26 +714,60 @@
             toggleFormFields();
         });
 
-        // ล็อกสิทธิ์ Admin ให้เข้าได้เฉพาะ "นิศาชล คงดี" เท่านั้น (ตามข้อ 3)
-        function loginAs(roleType) {
+        // ระบบเข้าสู่ระบบแบบยืนยันรหัสผ่านสำหรับ Admin (12345)
+        async function loginAs(roleType) {
             if (roleType === 'admin') {
-                currentUser = { username: "admin", name: "นิศาชล คงดี", role: "admin", roleName: "ผู้ดูแลระบบ" };
+                const { value: password } = await Swal.fire({
+                    title: 'ยืนยันตัวตนผู้ดูแลระบบ',
+                    text: 'กรุณากรอกรหัสผ่านเพื่อเข้าสู่ระบบ Admin',
+                    input: 'password',
+                    inputPlaceholder: 'กรอกรหัสผ่านที่นี่...',
+                    inputAttributes: {
+                        autocapitalize: 'off',
+                        autocorrect: 'off'
+                    },
+                    showCancelButton: true,
+                    confirmButtonText: 'เข้าสู่ระบบ',
+                    cancelButtonText: 'ยกเลิก',
+                    confirmButtonColor: '#2563eb'
+                });
+
+                if (password === ADMIN_PASSWORD) {
+                    currentUser = { username: "admin", name: "นิศาชล คงดี", role: "admin", roleName: "ผู้ดูแลระบบ" };
+                    document.getElementById('loginScreen').classList.add('hidden');
+                    document.getElementById('appContent').classList.remove('hidden');
+                    updateUserInterface();
+                    renderAll();
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'กำลังเข้าสู่ระบบ',
+                        timer: 1200,
+                        showConfirmButton: false
+                    });
+                } else if (password !== undefined) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'รหัสผ่านไม่ถูกต้อง',
+                        text: 'คุณไม่มีสิทธิ์เข้าใช้งานในฐานะผู้ดูแลระบบ',
+                        confirmButtonText: 'ตกลง',
+                        confirmButtonColor: '#ef4444'
+                    });
+                }
             } else {
                 currentUser = { username: "staff", name: "บุคลากรทั่วไป", role: "staff", roleName: "บุคลากร / เจ้าหน้าที่" };
-            }
-            
-            document.getElementById('loginScreen').classList.add('hidden');
-            document.getElementById('appContent').classList.remove('hidden');
-            
-            updateUserInterface();
-            renderAll();
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('appContent').classList.remove('hidden');
+                updateUserInterface();
+                renderAll();
 
-            Swal.fire({
-                icon: 'success',
-                title: 'กำลังเข้าสู่ระบบ',
-                timer: 1200,
-                showConfirmButton: false
-            });
+                Swal.fire({
+                    icon: 'success',
+                    title: 'กำลังเข้าสู่ระบบ',
+                    timer: 1200,
+                    showConfirmButton: false
+                });
+            }
         }
 
         function openLoginScreen() {
@@ -745,12 +781,6 @@
 
         function updateUserInterface() {
             const isAdmin = currentUser.role === 'admin' && currentUser.name === 'นิศาชล คงดี';
-            
-            // ป้องกันกรณีแอบเปลี่ยน role แต่ชื่อไม่ใช่ นิศาชล คงดี
-            if (currentUser.role === 'admin' && currentUser.name !== 'นิศาชล คงดี') {
-                currentUser.role = 'staff';
-                currentUser.roleName = 'บุคลากร / เจ้าหน้าที่';
-            }
 
             document.getElementById('sidebarUserName').innerText = currentUser.name;
             document.getElementById('sidebarUserRoleName').innerText = `สถานะ: ${currentUser.roleName}`;
@@ -894,7 +924,6 @@
             }
         }
 
-        // คำนวณเลขรับกองช่างอัตโนมัติ (ข้อ 2)
         function getNextIncomingRegNo() {
             const incomingDocs = documents.filter(d => d.type === 'incoming');
             if (incomingDocs.length === 0) return 1;
@@ -902,7 +931,6 @@
             return maxNo + 1;
         }
 
-        // สร้างฟอร์ม Dynamic ตามประเภทหนังสือ พร้อมแสดงเลขรับกองช่างอัตโนมัติสำหรับหนังสือรับ
         function toggleFormFields() {
             const type = document.getElementById('docType').value;
             const container = document.getElementById('dynamicFormFields');
@@ -1063,7 +1091,7 @@
         }
 
         function renderTables() {
-            const isAdmin = currentUser.role === 'admin';
+            const isAdmin = currentUser.role === 'admin' && currentUser.name === 'นิศาชล คงดี';
 
             const getActionButtons = (doc) => {
                 let html = `<button onclick="viewDoc(${doc.id})" class="text-blue-600 hover:text-blue-800 p-1" title="ดูรายละเอียด"><i class="fa-solid fa-eye"></i></button>`;
@@ -1091,7 +1119,6 @@
                 return `<span class="bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full text-xs font-medium">${status}</span>`;
             };
 
-            // รูปแบบเลขทะเบียนตามข้อ 1 (1 - 2569)
             const formatRegDisplay = (doc) => {
                 if (doc.regNo && doc.regNo !== '-') {
                     return `${doc.regNo} - ${doc.yearStr}`;
@@ -1133,7 +1160,7 @@
                 </tr>
             `).join('') : `<tr><td colspan="7" class="p-6 text-center text-gray-400">ไม่มีงานที่ได้รับมอบหมายในขณะนี้</td></tr>`;
 
-            // 3. Incoming Table (รองรับค้นหาข้อ 4: ผู้ส่ง, เรื่อง, เลขที่เอกสาร)
+            // 3. Incoming Table
             const searchInc = document.getElementById('searchIncoming').value.toLowerCase();
             const incDocs = documents.filter(d => d.type === 'incoming' && (d.subject.toLowerCase().includes(searchInc) || d.sender.toLowerCase().includes(searchInc) || d.docNumber.toLowerCase().includes(searchInc) || d.centralRegNo.toLowerCase().includes(searchInc)));
             document.getElementById('incomingTableBody').innerHTML = incDocs.map(d => `
@@ -1149,7 +1176,7 @@
                 </tr>
             `).join('');
 
-            // 4. Outgoing Table (รองรับค้นหาข้อ 4: ผู้รับ, เรื่อง, เลขที่เอกสาร)
+            // 4. Outgoing Table
             const searchOut = document.getElementById('searchOutgoing').value.toLowerCase();
             const outDocs = documents.filter(d => d.type === 'outgoing' && (d.subject.toLowerCase().includes(searchOut) || d.sender.toLowerCase().includes(searchOut) || d.docNumber.toLowerCase().includes(searchOut)));
             document.getElementById('outgoingTableBody').innerHTML = outDocs.map(d => `
@@ -1163,7 +1190,7 @@
                 </tr>
             `).join('');
 
-            // 5. Orders Table (รองรับค้นหาข้อ 4: เรื่อง, เลขที่เอกสาร)
+            // 5. Orders Table
             const searchOrd = document.getElementById('searchOrders').value.toLowerCase();
             const ordDocs = documents.filter(d => d.type === 'orders' && (d.subject.toLowerCase().includes(searchOrd) || d.docNumber.toLowerCase().includes(searchOrd)));
             document.getElementById('ordersTableBody').innerHTML = ordDocs.map(d => `
@@ -1177,7 +1204,7 @@
                 </tr>
             `).join('');
 
-            // 6. Memos Table (รองรับค้นหาข้อ 4: ผู้รับ/เรียน, เรื่อง, เลขที่เอกสาร)
+            // 6. Memos Table
             const searchMem = document.getElementById('searchMemos').value.toLowerCase();
             const memDocs = documents.filter(d => d.type === 'memos' && (d.subject.toLowerCase().includes(searchMem) || d.sender.toLowerCase().includes(searchMem) || d.docNumber.toLowerCase().includes(searchMem)));
             document.getElementById('memosTableBody').innerHTML = memDocs.map(d => `

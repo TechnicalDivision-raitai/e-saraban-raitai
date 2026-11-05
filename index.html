@@ -346,8 +346,14 @@
                                 <h2 class="text-lg font-bold text-gray-800">ทะเบียนหนังสือรับ (ปีปฏิทิน)</h2>
                                 <p class="text-xs text-gray-500">จัดการและตรวจสอบหนังสือรับเข้ากองช่าง อบต.ไร่ใต้ ทั้งหมด</p>
                             </div>
-                            <div class="flex items-center space-x-2 w-full md:w-auto">
-                                <div class="relative w-full md:w-72">
+                            <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                                <select id="filterYearIncoming" onchange="renderTables()" class="px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                    <option value="">ทุกปี (All Years)</option>
+                                    <option value="2569" selected>ปี 2569</option>
+                                    <option value="2568">ปี 2568</option>
+                                    <option value="2570">ปี 2570</option>
+                                </select>
+                                <div class="relative w-full md:w-60">
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
                                     <input type="text" id="searchIncoming" onkeyup="renderTables()" placeholder="ค้นหา ผู้ส่ง, เรื่อง, เลขที่..." class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                 </div>
@@ -382,8 +388,14 @@
                                 <h2 class="text-lg font-bold text-gray-800">ทะเบียนหนังสือส่ง (ปีปฏิทิน)</h2>
                                 <p class="text-xs text-gray-500">จัดการและตรวจสอบหนังสือส่งออกจากกองช่าง อบต.ไร่ใต้</p>
                             </div>
-                            <div class="flex items-center space-x-2 w-full md:w-auto">
-                                <div class="relative w-full md:w-72">
+                            <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                                <select id="filterYearOutgoing" onchange="renderTables()" class="px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                    <option value="">ทุกปี (All Years)</option>
+                                    <option value="2569" selected>ปี 2569</option>
+                                    <option value="2568">ปี 2568</option>
+                                    <option value="2570">ปี 2570</option>
+                                </select>
+                                <div class="relative w-full md:w-60">
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
                                     <input type="text" id="searchOutgoing" onkeyup="renderTables()" placeholder="ค้นหา ผู้รับ, เรื่อง, เลขที่..." class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                 </div>
@@ -416,8 +428,14 @@
                                 <h2 class="text-lg font-bold text-gray-800">ทะเบียนคำสั่ง (ปีปฏิทิน)</h2>
                                 <p class="text-xs text-gray-500">คำสั่งและประกาศภายในกองช่าง อบต.ไร่ใต้</p>
                             </div>
-                            <div class="flex items-center space-x-2 w-full md:w-auto">
-                                <div class="relative w-full md:w-72">
+                            <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                                <select id="filterYearOrders" onchange="renderTables()" class="px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                    <option value="">ทุกปี (All Years)</option>
+                                    <option value="2569" selected>ปี 2569</option>
+                                    <option value="2568">ปี 2568</option>
+                                    <option value="2570">ปี 2570</option>
+                                </select>
+                                <div class="relative w-full md:w-60">
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
                                     <input type="text" id="searchOrders" onkeyup="renderTables()" placeholder="ค้นหาเรื่อง, เลขที่..." class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                 </div>
@@ -450,8 +468,14 @@
                                 <h2 class="text-lg font-bold text-gray-800">ทะเบียนบันทึกข้อความ (ปีงบประมาณ)</h2>
                                 <p class="text-xs text-gray-500">บันทึกข้อความภายในและระหว่างกอง (ตัดรอบปีงบประมาณ 1 ต.ค. - 30 ก.ย.)</p>
                             </div>
-                            <div class="flex items-center space-x-2 w-full md:w-auto">
-                                <div class="relative w-full md:w-72">
+                            <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                                <select id="filterYearMemos" onchange="renderTables()" class="px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                    <option value="">ทุกปี (All Years)</option>
+                                    <option value="2569" selected>ปีงบฯ 2569</option>
+                                    <option value="2568">ปีงบฯ 2568</option>
+                                    <option value="2570">ปีงบฯ 2570</option>
+                                </select>
+                                <div class="relative w-full md:w-60">
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
                                     <input type="text" id="searchMemos" onkeyup="renderTables()" placeholder="ค้นหา เรียน, เรื่อง, เลขที่..." class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                 </div>
@@ -569,14 +593,24 @@
             <form id="documentForm" onsubmit="saveDocument(event)" class="p-6 space-y-4">
                 <input type="hidden" id="editDocId">
                 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">ประเภทหนังสือ</label>
-                    <select id="docType" onchange="toggleFormFields()" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm font-semibold">
-                        <option value="incoming">หนังสือรับ (ปีปฏิทิน)</option>
-                        <option value="outgoing">หนังสือส่ง (ปีปฏิทิน)</option>
-                        <option value="orders">คำสั่ง (ปีปฏิทิน)</option>
-                        <option value="memos">บันทึกข้อความ (ปีงบประมาณ)</option>
-                    </select>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">ประเภทหนังสือ</label>
+                        <select id="docType" onchange="toggleFormFields()" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm font-semibold">
+                            <option value="incoming">หนังสือรับ (ปีปฏิทิน)</option>
+                            <option value="outgoing">หนังสือส่ง (ปีปฏิทิน)</option>
+                            <option value="orders">คำสั่ง (ปีปฏิทิน)</option>
+                            <option value="memos">บันทึกข้อความ (ปีงบประมาณ)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1"><span id="yearLabelName">ปีปฏิทิน</span></label>
+                        <select id="selectedYear" onchange="updateModalRegPreview()" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm font-semibold text-blue-900 bg-blue-50">
+                            <option value="2569">2569</option>
+                            <option value="2568">2568</option>
+                            <option value="2570">2570</option>
+                        </select>
+                    </div>
                 </div>
 
                 <!-- ฟิลด์เฉพาะตามประเภทเอกสาร -->
@@ -613,7 +647,7 @@
 
     <!-- ==================== JAVASCRIPT LOGIC ==================== -->
     <script>
-        const ADMIN_PASSWORD = "12345"; // รหัสผ่านสำหรับ Admin
+        const ADMIN_PASSWORD = "12345";
 
         let documents = [
             {
@@ -714,7 +748,6 @@
             toggleFormFields();
         });
 
-        // ระบบเข้าสู่ระบบแบบยืนยันรหัสผ่านสำหรับ Admin (12345)
         async function loginAs(roleType) {
             if (roleType === 'admin') {
                 const { value: password } = await Swal.fire({
@@ -910,40 +943,30 @@
             });
         }
 
-        function calculateYear(dateString, isBudgetYear) {
-            if (!dateString) return '2569';
-            const date = new Date(dateString);
-            const gYear = date.getFullYear();
-            const thaiYear = gYear + 543;
-            const month = date.getMonth() + 1;
-
-            if (isBudgetYear) {
-                return month >= 10 ? (thaiYear + 1).toString() : thaiYear.toString();
-            } else {
-                return thaiYear.toString();
-            }
-        }
-
-        function getNextIncomingRegNo() {
-            const incomingDocs = documents.filter(d => d.type === 'incoming');
-            if (incomingDocs.length === 0) return 1;
-            const maxNo = Math.max(...incomingDocs.map(d => typeof d.regNo === 'number' ? d.regNo : 0));
+        // คำนวณรันเลขรับกองช่างตามปีที่เลือกใน Modal
+        function getNextRegNoForYear(type, yearStr) {
+            const matched = documents.filter(d => d.type === type && d.yearStr === yearStr);
+            if (matched.length === 0) return 1;
+            const maxNo = Math.max(...matched.map(d => typeof d.regNo === 'number' ? d.regNo : 0));
             return maxNo + 1;
         }
 
         function toggleFormFields() {
             const type = document.getElementById('docType').value;
             const container = document.getElementById('dynamicFormFields');
-            
+            const yearLabel = document.getElementById('yearLabelName');
+
+            if (type === 'memos') {
+                yearLabel.innerText = 'ปีงบประมาณ';
+            } else {
+                yearLabel.innerText = 'ปีปฏิทิน';
+            }
+
+            updateModalRegPreview();
+
             let html = '';
             if (type === 'incoming') {
-                const autoRegNo = getNextIncomingRegNo();
-                const currentYear = calculateYear(new Date().toISOString().split('T')[0], false);
                 html = `
-                    <div class="p-3 bg-blue-50 border border-blue-200 rounded-xl mb-3 flex items-center justify-between">
-                        <span class="text-xs font-semibold text-blue-800">เลขรับกองช่าง (ระบบรันให้อัตโนมัติ):</span>
-                        <span class="text-sm font-bold text-blue-900 bg-white px-3 py-1 rounded-lg border border-blue-200">${autoRegNo} - ${currentYear}</span>
-                    </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">เลขที่รับส่วนกลาง</label>
@@ -1083,6 +1106,10 @@
             container.innerHTML = html;
         }
 
+        function updateModalRegPreview() {
+            // ฟังก์ชันนี้สามารถเพิ่มส่วนแสดงพรีวิวเลขทะเบียนรันอัตโนมัติใน Modal ได้หากต้องการ
+        }
+
         function setDefaultDocDate(val) {
             const docDateInput = document.getElementById('fieldDocDate');
             if (docDateInput && !docDateInput.value) {
@@ -1160,9 +1187,15 @@
                 </tr>
             `).join('') : `<tr><td colspan="7" class="p-6 text-center text-gray-400">ไม่มีงานที่ได้รับมอบหมายในขณะนี้</td></tr>`;
 
-            // 3. Incoming Table
+            // 3. Incoming Table (กรองตามปีที่เลือก)
+            const filterYearInc = document.getElementById('filterYearIncoming').value;
             const searchInc = document.getElementById('searchIncoming').value.toLowerCase();
-            const incDocs = documents.filter(d => d.type === 'incoming' && (d.subject.toLowerCase().includes(searchInc) || d.sender.toLowerCase().includes(searchInc) || d.docNumber.toLowerCase().includes(searchInc) || d.centralRegNo.toLowerCase().includes(searchInc)));
+            const incDocs = documents.filter(d => {
+                const matchType = (d.type === 'incoming');
+                const matchYear = (!filterYearInc || d.yearStr === filterYearInc);
+                const matchText = (d.subject.toLowerCase().includes(searchInc) || d.sender.toLowerCase().includes(searchInc) || d.docNumber.toLowerCase().includes(searchInc) || d.centralRegNo.toLowerCase().includes(searchInc));
+                return matchType && matchYear && matchText;
+            });
             document.getElementById('incomingTableBody').innerHTML = incDocs.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-bold text-blue-600">${d.regNo} - ${d.yearStr}</td>
@@ -1176,9 +1209,15 @@
                 </tr>
             `).join('');
 
-            // 4. Outgoing Table
+            // 4. Outgoing Table (กรองตามปีที่เลือก)
+            const filterYearOut = document.getElementById('filterYearOutgoing').value;
             const searchOut = document.getElementById('searchOutgoing').value.toLowerCase();
-            const outDocs = documents.filter(d => d.type === 'outgoing' && (d.subject.toLowerCase().includes(searchOut) || d.sender.toLowerCase().includes(searchOut) || d.docNumber.toLowerCase().includes(searchOut)));
+            const outDocs = documents.filter(d => {
+                const matchType = (d.type === 'outgoing');
+                const matchYear = (!filterYearOut || d.yearStr === filterYearOut);
+                const matchText = (d.subject.toLowerCase().includes(searchOut) || d.sender.toLowerCase().includes(searchOut) || d.docNumber.toLowerCase().includes(searchOut));
+                return matchType && matchYear && matchText;
+            });
             document.getElementById('outgoingTableBody').innerHTML = outDocs.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-bold text-emerald-600">ปี ${d.yearStr}</td>
@@ -1190,9 +1229,15 @@
                 </tr>
             `).join('');
 
-            // 5. Orders Table
+            // 5. Orders Table (กรองตามปีที่เลือก)
+            const filterYearOrd = document.getElementById('filterYearOrders').value;
             const searchOrd = document.getElementById('searchOrders').value.toLowerCase();
-            const ordDocs = documents.filter(d => d.type === 'orders' && (d.subject.toLowerCase().includes(searchOrd) || d.docNumber.toLowerCase().includes(searchOrd)));
+            const ordDocs = documents.filter(d => {
+                const matchType = (d.type === 'orders');
+                const matchYear = (!filterYearOrd || d.yearStr === filterYearOrd);
+                const matchText = (d.subject.toLowerCase().includes(searchOrd) || d.docNumber.toLowerCase().includes(searchOrd));
+                return matchType && matchYear && matchText;
+            });
             document.getElementById('ordersTableBody').innerHTML = ordDocs.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-bold text-amber-600">ปี ${d.yearStr}</td>
@@ -1204,9 +1249,15 @@
                 </tr>
             `).join('');
 
-            // 6. Memos Table
+            // 6. Memos Table (กรองตามปีงบประมาณที่เลือก)
+            const filterYearMem = document.getElementById('filterYearMemos').value;
             const searchMem = document.getElementById('searchMemos').value.toLowerCase();
-            const memDocs = documents.filter(d => d.type === 'memos' && (d.subject.toLowerCase().includes(searchMem) || d.sender.toLowerCase().includes(searchMem) || d.docNumber.toLowerCase().includes(searchMem)));
+            const memDocs = documents.filter(d => {
+                const matchType = (d.type === 'memos');
+                const matchYear = (!filterYearMem || d.yearStr === filterYearMem);
+                const matchText = (d.subject.toLowerCase().includes(searchMem) || d.sender.toLowerCase().includes(searchMem) || d.docNumber.toLowerCase().includes(searchMem));
+                return matchType && matchYear && matchText;
+            });
             document.getElementById('memosTableBody').innerHTML = memDocs.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-bold text-purple-600">ปีงบฯ ${d.yearStr}</td>
@@ -1256,6 +1307,7 @@
             document.getElementById('documentForm').reset();
             document.getElementById('editDocId').value = '';
             document.getElementById('docType').value = 'incoming';
+            document.getElementById('selectedYear').value = '2569';
             toggleFormFields();
             document.getElementById('documentModal').classList.remove('hidden');
         }
@@ -1270,6 +1322,7 @@
 
             const editId = document.getElementById('editDocId').value;
             const type = document.getElementById('docType').value;
+            const selectedYearStr = document.getElementById('selectedYear').value;
             const fileInput = document.getElementById('docFile');
 
             let fileName = '';
@@ -1297,10 +1350,6 @@
                 urgency = document.getElementById('fieldUrgency').value;
             }
 
-            const isBudget = (type === 'memos');
-            const targetDate = (type === 'incoming') ? receiveDate : docDate;
-            const calculatedYear = calculateYear(targetDate, isBudget);
-
             const assignee = document.getElementById('docAssignee').value;
             const dueDate = document.getElementById('docDueDate').value;
 
@@ -1315,7 +1364,7 @@
                     doc.status = status;
                     doc.assignee = assignee;
                     doc.dueDate = dueDate;
-                    doc.yearStr = calculatedYear;
+                    doc.yearStr = selectedYearStr;
                     if (type === 'incoming') {
                         doc.centralRegNo = centralRegNo;
                         doc.receiveDate = receiveDate;
@@ -1328,13 +1377,14 @@
                 }
                 Swal.fire('สำเร็จ', 'อัปเดตข้อมูลหนังสือเรียบร้อยแล้ว', 'success');
             } else {
-                const nextRegNo = type === 'incoming' ? getNextIncomingRegNo() : '-';
+                // รันเลขทะเบียนอิงตามประเภทและปีที่ผู้ใช้เลือกในฟอร์ม (รองรับการลงทะเบียนย้อนหลัง)
+                const nextRegNo = type === 'incoming' ? getNextRegNoForYear('incoming', selectedYearStr) : '-';
 
                 const newDoc = {
                     id: Date.now(),
                     type,
                     regNo: nextRegNo,
-                    yearStr: calculatedYear,
+                    yearStr: selectedYearStr,
                     centralRegNo,
                     receiveDate,
                     sender,
@@ -1351,7 +1401,7 @@
                     fileData: fileData || 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
                 };
                 documents.unshift(newDoc);
-                Swal.fire('สำเร็จ', `ลงทะเบียนหนังสือเรียบร้อย ${nextRegNo !== '-' ? '(เลขรับกองช่าง: ' + nextRegNo + ' - ' + calculatedYear + ')' : ''}`, 'success');
+                Swal.fire('สำเร็จ', `ลงทะเบียนหนังสือเรียบร้อย ${nextRegNo !== '-' ? '(เลขรับกองช่าง: ' + nextRegNo + ' - ' + selectedYearStr + ')' : ''}`, 'success');
             }
 
             closeDocumentModal();
@@ -1369,6 +1419,7 @@
             document.getElementById('modalTitle').innerText = 'แก้ไขข้อมูลหนังสือ';
             document.getElementById('editDocId').value = doc.id;
             document.getElementById('docType').value = doc.type;
+            document.getElementById('selectedYear').value = doc.yearStr || '2569';
             toggleFormFields();
 
             setTimeout(() => {

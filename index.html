@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบจัดการงานสารบรรณและเอกสารภายในกองช่าง (e-Saraban)</title>
+    <title>ระบบจัดการงานสารบรรณและเอกสารภายในกองช่าง (e-Saraban) อบต.ไร่ใต้</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -60,7 +60,7 @@
             
             <div class="p-6 space-y-5">
                 <div class="space-y-3">
-                    <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider">เข้าสู่ระบบ</label>
+                    <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider">เข้าสู่ระบบเพื่อทดสอบสิทธิ์</label>
                     
                     <button onclick="loginAs('admin')" class="w-full flex items-center justify-between p-3 rounded-xl border border-blue-200 bg-blue-50/50 hover:bg-blue-100/60 transition group text-left">
                         <div class="flex items-center space-x-3">
@@ -69,7 +69,7 @@
                             </div>
                             <div>
                                 <div class="font-semibold text-blue-900">ผู้ดูแลระบบ (Admin)</div>
-                                <div class="text-xs text-blue-600">นิศาชล คงดี (จัดการระบบทั้งหมด)</div>
+                                <div class="text-xs text-blue-600">นส. นิศาชล คงดี (จัดการระบบทั้งหมด)</div>
                             </div>
                         </div>
                         <i class="fa-solid fa-chevron-right text-blue-400 group-hover:translate-x-1 transition"></i>
@@ -162,10 +162,6 @@
             <!-- Sidebar Footer Controls -->
             <div class="p-3 border-t border-slate-800 space-y-2">
                 <button id="switchRoleBtn" onclick="openLoginScreen()" class="w-full flex items-center justify-center space-x-2 py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm transition">
-    <i class="fa-solid fa-right-left"></i>
-    <span>สลับสิทธิ์การใช้งาน</span>
-</button>
-                <button onclick="openLoginScreen()" class="w-full flex items-center justify-center space-x-2 py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm transition">
                     <i class="fa-solid fa-right-left"></i>
                     <span>สลับสิทธิ์การใช้งาน</span>
                 </button>
@@ -226,7 +222,7 @@
                         <a href="#" onclick="switchTab('overdue'); toggleMobileMenu();" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800"><i class="fa-solid fa-triangle-exclamation w-5 text-red-400"></i><span>งานเกินกำหนด</span></a>
                     </nav>
                     <div class="pt-4 border-t border-slate-800 space-y-2">
-                        <button onclick="openLoginScreen(); toggleMobileMenu();" class="w-full py-2 bg-slate-800 rounded-lg text-sm">สลับสิทธิ์การใช้งาน</button>
+                        <button id="switchRoleBtnMobile" onclick="openLoginScreen(); toggleMobileMenu();" class="w-full py-2 bg-slate-800 rounded-lg text-sm">สลับสิทธิ์การใช้งาน</button>
                         <button onclick="logout()" class="w-full py-2 bg-red-950/50 text-red-400 rounded-lg text-sm">ออกจากระบบ</button>
                     </div>
                 </div>
@@ -351,19 +347,22 @@
                                 <p class="text-xs text-gray-500">จัดการและตรวจสอบหนังสือรับเข้ากองช่าง อบต.ไร่ใต้ ทั้งหมด</p>
                             </div>
                             <div class="flex items-center space-x-2 w-full md:w-auto">
-                                <input type="text" id="searchIncoming" onkeyup="renderTables()" placeholder="ค้นหาเรื่อง, เลขที่..." class="px-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none w-full md:w-64">
-                                <button onclick="exportCSV('incoming')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
+                                <div class="relative w-full md:w-72">
+                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
+                                    <input type="text" id="searchIncoming" onkeyup="renderTables()" placeholder="ค้นหา ผู้ส่ง, เรื่อง, เลขที่..." class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                </div>
+                                <button onclick="exportCSV('incoming')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
                             </div>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse">
                                 <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                     <tr>
-                                        <th class="p-3">เลขรับกองช่าง</th>
+                                        <th class="p-3">เลขรับกองช่าง / ส่วนกลาง</th>
                                         <th class="p-3">เลขที่หนังสือ / วันที่</th>
                                         <th class="p-3">เรื่อง / ผู้ส่ง</th>
-                                        <th class="p-3">ผู้รับผิดชอบ</th>
-                                        <th class="p-3">สถานะ</th>
+                                        <th class="p-3">ความเร่งด่วน</th>
+                                        <th class="p-3">สถานะดำเนินการ</th>
                                         <th class="p-3 text-center">ไฟล์แนบ</th>
                                         <th class="p-3 text-center">จัดการ</th>
                                     </tr>
@@ -383,19 +382,21 @@
                                 <p class="text-xs text-gray-500">จัดการและตรวจสอบหนังสือส่งออกจากกองช่าง อบต.ไร่ใต้</p>
                             </div>
                             <div class="flex items-center space-x-2 w-full md:w-auto">
-                                <input type="text" id="searchOutgoing" onkeyup="renderTables()" placeholder="ค้นหาเรื่อง, เลขที่..." class="px-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none w-full md:w-64">
-                                <button onclick="exportCSV('outgoing')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
+                                <div class="relative w-full md:w-72">
+                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
+                                    <input type="text" id="searchOutgoing" onkeyup="renderTables()" placeholder="ค้นหา ผู้รับ, เรื่อง, เลขที่..." class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                </div>
+                                <button onclick="exportCSV('outgoing')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
                             </div>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse">
                                 <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                     <tr>
-                                        <th class="p-3">เลขรับกองช่าง</th>
-                                        <th class="p-3">เลขที่หนังสือ / วันที่</th>
+                                        <th class="p-3">เลขที่หนังสือส่ง</th>
+                                        <th class="p-3">ลงวันที่</th>
                                         <th class="p-3">เรื่อง / ผู้รับ</th>
-                                        <th class="p-3">ผู้รับผิดชอบ</th>
-                                        <th class="p-3">สถานะ</th>
+                                        <th class="p-3">สถานะดำเนินการ</th>
                                         <th class="p-3 text-center">ไฟล์แนบ</th>
                                         <th class="p-3 text-center">จัดการ</th>
                                     </tr>
@@ -415,19 +416,21 @@
                                 <p class="text-xs text-gray-500">คำสั่งและประกาศภายในกองช่าง อบต.ไร่ใต้</p>
                             </div>
                             <div class="flex items-center space-x-2 w-full md:w-auto">
-                                <input type="text" id="searchOrders" onkeyup="renderTables()" placeholder="ค้นหาคำสั่ง..." class="px-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none w-full md:w-64">
-                                <button onclick="exportCSV('orders')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
+                                <div class="relative w-full md:w-72">
+                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
+                                    <input type="text" id="searchOrders" onkeyup="renderTables()" placeholder="ค้นหาเรื่อง, เลขที่..." class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                </div>
+                                <button onclick="exportCSV('orders')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
                             </div>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse">
                                 <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                     <tr>
-                                        <th class="p-3">เลขรับกองช่าง</th>
-                                        <th class="p-3">วันที่ลงนาม</th>
+                                        <th class="p-3">เลขที่คำสั่ง</th>
+                                        <th class="p-3">ลงวันที่</th>
                                         <th class="p-3">เรื่องคำสั่ง</th>
-                                        <th class="p-3">ผู้รับผิดชอบ</th>
-                                        <th class="p-3">สถานะ</th>
+                                        <th class="p-3">สถานะดำเนินการ</th>
                                         <th class="p-3 text-center">ไฟล์แนบ</th>
                                         <th class="p-3 text-center">จัดการ</th>
                                     </tr>
@@ -447,19 +450,21 @@
                                 <p class="text-xs text-gray-500">บันทึกข้อความภายในและระหว่างกอง</p>
                             </div>
                             <div class="flex items-center space-x-2 w-full md:w-auto">
-                                <input type="text" id="searchMemos" onkeyup="renderTables()" placeholder="ค้นหาเรื่องบันทึก..." class="px-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none w-full md:w-64">
-                                <button onclick="exportCSV('memos')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
+                                <div class="relative w-full md:w-72">
+                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
+                                    <input type="text" id="searchMemos" onkeyup="renderTables()" placeholder="ค้นหา เรียน, เรื่อง, เลขที่..." class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                </div>
+                                <button onclick="exportCSV('memos')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
                             </div>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse">
                                 <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                     <tr>
-                                        <th class="p-3">เลขรับกองช่าง</th>
-                                        <th class="p-3">วันที่</th>
-                                        <th class="p-3">เรื่อง / ผู้เสนอ</th>
-                                        <th class="p-3">ผู้รับผิดชอบ</th>
-                                        <th class="p-3">สถานะ</th>
+                                        <th class="p-3">เลขที่บันทึก</th>
+                                        <th class="p-3">ลงวันที่</th>
+                                        <th class="p-3">เรียน / เรื่อง</th>
+                                        <th class="p-3">สถานะดำเนินการ</th>
                                         <th class="p-3 text-center">ไฟล์แนบ</th>
                                         <th class="p-3 text-center">จัดการ</th>
                                     </tr>
@@ -487,9 +492,8 @@
                                 <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                     <tr>
                                         <th class="p-3">ประเภท</th>
-                                        <th class="p-3">เลขรับกองช่าง</th>
-                                        <th class="p-3">เรื่อง / ผู้ส่ง</th>
-                                        <th class="p-3">ผู้รับผิดชอบ</th>
+                                        <th class="p-3">เลขทะเบียน</th>
+                                        <th class="p-3">เรื่อง / ผู้ส่ง/ผู้รับ</th>
                                         <th class="p-3">สถานะ</th>
                                         <th class="p-3 text-center">ไฟล์แนบ</th>
                                         <th class="p-3 text-center">จัดการ</th>
@@ -510,7 +514,7 @@
                             <table class="w-full text-left border-collapse">
                                 <thead class="bg-red-50 text-xs text-red-700 uppercase">
                                     <tr>
-                                        <th class="p-3">เลขรับกองช่าง</th>
+                                        <th class="p-3">เลขทะเบียน</th>
                                         <th class="p-3">เรื่อง</th>
                                         <th class="p-3">ผู้รับผิดชอบ</th>
                                         <th class="p-3">กำหนดเสร็จ</th>
@@ -561,51 +565,35 @@
             </div>
             <form id="documentForm" onsubmit="saveDocument(event)" class="p-6 space-y-4">
                 <input type="hidden" id="editDocId">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">ประเภทหนังสือ</label>
-                        <select id="docType" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
-                            <option value="incoming">หนังสือรับ</option>
-                            <option value="outgoing">หนังสือส่ง</option>
-                            <option value="orders">คำสั่ง</option>
-                            <option value="memos">บันทึกข้อความ</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">ความเร่งด่วน</label>
-                        <select id="docUrgency" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
-                            <option value="ปกติ">ปกติ</option>
-                            <option value="ด่วน">ด่วน</option>
-                            <option value="ด่วนมาก">ด่วนมาก</option>
-                            <option value="ด่วนที่สุด">ด่วนที่สุด</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">เลขที่หนังสือ</label>
-                        <input type="text" id="docNumber" required placeholder="เช่น อบ 0023.23/ว 36" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">ลงวันที่</label>
-                        <input type="date" id="docDate" required class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
-                    </div>
-                </div>
-
+                
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">เรื่อง</label>
-                    <input type="text" id="docSubject" required placeholder="ระบุเรื่องหนังสือ" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">ประเภทหนังสือ</label>
+                    <select id="docType" onchange="toggleFormFields()" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm font-semibold">
+                        <option value="incoming">หนังสือรับ</option>
+                        <option value="outgoing">หนังสือส่ง</option>
+                        <option value="orders">คำสั่ง</option>
+                        <option value="memos">บันทึกข้อความ</option>
+                    </select>
                 </div>
 
+                <!-- ฟิลด์เฉพาะตามประเภทเอกสาร -->
+                <div id="dynamicFormFields" class="space-y-4">
+                    <!-- จะถูกแทนที่ด้วย Javascript ตามประเภทที่เลือก -->
+                </div>
+
+                <!-- ข้อมูลพื้นฐานที่ใช้ร่วมกันหรือเพิ่มเติม -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">ผู้ส่ง / หน่วยงานต้นสังกัด</label>
-                        <input type="text" id="docSender" required placeholder="เช่น อำเภอพิบูลมังสาหาร" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    <div id="assigneeWrapper">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">มอบหมายผู้รับผิดชอบ</label>
+                        <select id="docAssignee" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                            <option value="นิศาชล คงดี">นิศาชล คงดี (ผู้ดูแลระบบ)</option>
+                            <option value="นายสมชาย ช่างทอง">นายสมชาย ช่างทอง (ช่างโยธา)</option>
+                            <option value="นายวิศวกร ปฏิบัติการ">นายวิศวกร ปฏิบัติการ (วิศวกรโยธา)</option>
+                        </select>
                     </div>
-                    <div>
+                    <div id="dueDateWrapper">
                         <label class="block text-sm font-medium text-gray-700 mb-1">กำหนดวันเสร็จสิ้น</label>
-                        <input type="date" id="docDueDate" required class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                        <input type="date" id="docDueDate" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
                     </div>
                 </div>
 
@@ -629,85 +617,76 @@
             {
                 id: 1,
                 type: 'incoming',
-                regNo: '5',
+                regNo: '1',
+                centralRegNo: 'รับกลาง-102/2569',
+                receiveDate: '2026-01-09',
+                sender: 'นางสาวสลิลวา มีศรี',
+                urgency: 'ปกติ',
                 docNumber: 'อบ 0023.23/ว 36',
                 docDate: '2026-01-09',
                 subject: 'ขอหนังสือรับรองสิ่งปลูกสร้าง',
-                sender: 'นางสาวสลิลวา มีศรี',
+                status: 'ลงรับแล้ว',
                 assignee: 'นิศาชล คงดี',
-                urgency: 'ปกติ',
                 dueDate: '2026-02-15',
                 ackStatus: 'รับทราบแล้ว',
                 ackTime: '09 ม.ค. 2569 10:30',
-                status: 'กำลังดำเนินการ',
                 fileName: 'sample_doc_1.pdf',
                 fileData: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
             },
             {
                 id: 2,
-                type: 'incoming',
-                regNo: '6',
-                docNumber: 'อบ 0023.23/ว 36',
-                docDate: '2026-01-09',
-                subject: 'ซักซ้อมความเข้าใจเกี่ยวกับแนวทางปฏิบัติในการรับโอนภารกิจด้านแหล่งน้ำ',
-                sender: 'อำเภอพิบูลมังสาหาร',
-                assignee: 'นิศาชล คงดี',
-                urgency: 'ด่วน',
-                dueDate: '2026-02-20',
-                ackStatus: 'รอรับทราบ',
-                ackTime: '-',
-                status: 'รอรับทราบ',
-                fileName: 'sample_doc_2.pdf',
-                fileData: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
-            },
-            {
-                id: 3,
                 type: 'outgoing',
                 regNo: '1',
+                centralRegNo: '-',
+                receiveDate: '-',
+                sender: 'กองช่าง อบต.ไร่ใต้',
+                urgency: 'ปกติ',
                 docNumber: 'อบ 0023.23/12',
                 docDate: '2026-01-10',
                 subject: 'รายงานผลการสำรวจซ่อมแซมถนนสายบ้านหนองไฮ',
-                sender: 'กองช่าง อบต.ไร่ใต้',
+                status: 'ออกเอกสาร',
                 assignee: 'นายวิศวกร ปฏิบัติการ',
-                urgency: 'ปกติ',
                 dueDate: '2026-01-20',
                 ackStatus: 'รอรับทราบ',
                 ackTime: '-',
-                status: 'รอรับทราบ',
                 fileName: 'report_road.pdf',
                 fileData: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
             },
             {
-                id: 4,
+                id: 3,
                 type: 'orders',
                 regNo: '1',
+                centralRegNo: '-',
+                receiveDate: '-',
+                sender: 'กองช่าง อบต.ไร่ใต้',
+                urgency: 'ด่วนที่สุด',
                 docNumber: 'ที่ 5/2569',
                 docDate: '2026-01-05',
                 subject: 'คำสั่งแต่งตั้งคณะกรรมการตรวจการจ้างโครงการก่อสร้าง',
-                sender: 'กองช่าง อบต.ไร่ใต้',
+                status: 'ดำเนินการแล้ว',
                 assignee: 'นิศาชล คงดี',
-                urgency: 'ด่วนที่สุด',
                 dueDate: '2026-01-12',
                 ackStatus: 'รับทราบแล้ว',
                 ackTime: '05 ม.ค. 2569 09:00',
-                status: 'เสร็จสิ้น',
                 fileName: 'order_committee.pdf',
                 fileData: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
             },
             {
-                id: 5,
+                id: 4,
                 type: 'memos',
                 regNo: '1',
+                centralRegNo: '-',
+                receiveDate: '-',
+                sender: 'ฝ่ายโยธา',
+                urgency: 'ปกติ',
                 docNumber: 'วส 001/2569',
                 docDate: '2026-01-11',
                 subject: 'ขออนุมัติเบิกใช้น้ำมันเชื้อเพลิงยานพาหนะส่วนกลาง',
-                sender: 'ฝ่ายโยธา',
+                status: 'เสนอเซนต์',
                 assignee: 'นิศาชล คงดี',
-                urgency: 'ปกติ',
                 dueDate: '2026-01-15',
                 ackStatus: 'รับทราบแล้ว',
                 ackTime: '11 ม.ค. 2569 14:15',
-                status: 'กำลังดำเนินการ',
                 fileName: 'memo_oil.pdf',
                 fileData: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
             }
@@ -726,6 +705,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             updateUserInterface();
             renderAll();
+            toggleFormFields();
         });
 
         function loginAs(roleType) {
@@ -741,11 +721,11 @@
             updateUserInterface();
             renderAll();
 
+            // แจ้งเตือนแบบไม่ระบุชื่อผู้ใช้ตามต้องการ
             Swal.fire({
                 icon: 'success',
-                title: 'เข้าสู่ระบบสำเร็จ',
-                text: `ยินดีต้อนรับคุณ ${currentUser.name} (${currentUser.roleName})`,
-                timer: 1500,
+                title: 'กำลังเข้าสู่ระบบ',
+                timer: 1200,
                 showConfirmButton: false
             });
         }
@@ -767,24 +747,22 @@
             document.getElementById('sidebarUserAvatar').innerText = currentUser.name.charAt(0);
 
             const badgeColor = document.getElementById('headerRoleBadge');
+            const switchBtn = document.getElementById('switchRoleBtn');
+            const switchBtnMobile = document.getElementById('switchRoleBtnMobile');
+
             if (isAdmin) {
                 badgeColor.className = "w-2.5 h-2.5 rounded-full bg-green-500";
                 document.getElementById('addDocBtn').classList.remove('hidden');
+                if (switchBtn) switchBtn.classList.remove('hidden');
+                if (switchBtnMobile) switchBtnMobile.classList.remove('hidden');
             } else {
                 badgeColor.className = "w-2.5 h-2.5 rounded-full bg-amber-500";
                 document.getElementById('addDocBtn').classList.add('hidden');
+                // ซ่อนปุ่ม "สลับสิทธิ์การใช้งาน" ในหน้า Staff ตามข้อ 1.1
+                if (switchBtn) switchBtn.classList.add('hidden');
+                if (switchBtnMobile) switchBtnMobile.classList.add('hidden');
             }
-           const switchBtn = document.getElementById('switchRoleBtn');
-           const switchBtnMobile = document.getElementById('switchRoleBtnMobile');
-
-        if (isAdmin) {
-        if (switchBtn) switchBtn.classList.remove('hidden');
-        if (switchBtnMobile) switchBtnMobile.classList.remove('hidden');
-           } else {
-        if (switchBtn) switchBtn.classList.add('hidden');
-        if (switchBtnMobile) switchBtnMobile.classList.add('hidden');
-    }
-}
+        }
 
         function switchTab(tabId) {
             document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
@@ -835,11 +813,11 @@
         function updateStats() {
             const total = documents.length;
             const pending = documents.filter(d => d.status === 'รอรับทราบ' || d.ackStatus === 'รอรับทราบ').length;
-            const progress = documents.filter(d => d.status === 'กำลังดำเนินการ').length;
-            const done = documents.filter(d => d.status === 'เสร็จสิ้น').length;
+            const progress = documents.filter(d => d.status === 'กำลังดำเนินการ' || d.status === 'เสนอเซนต์').length;
+            const done = documents.filter(d => d.status === 'เสร็จสิ้น' || d.status === 'ดำเนินการแล้ว').length;
             
             const today = new Date().toISOString().split('T')[0];
-            const overdue = documents.filter(d => d.dueDate < today && d.status !== 'เสร็จสิ้น').length;
+            const overdue = documents.filter(d => d.dueDate && d.dueDate < today && d.status !== 'ดำเนินการแล้ว' && d.status !== 'เสร็จสิ้น').length;
 
             document.getElementById('statTotal').innerText = total;
             document.getElementById('statPending').innerText = pending;
@@ -858,9 +836,9 @@
             const ordersCount = documents.filter(d => d.type === 'orders').length;
             const memosCount = documents.filter(d => d.type === 'memos').length;
 
-            const pending = documents.filter(d => d.status === 'รอรับทราบ').length;
-            const progress = documents.filter(d => d.status === 'กำลังดำเนินการ').length;
-            const done = documents.filter(d => d.status === 'เสร็จสิ้น').length;
+            const pending = documents.filter(d => d.status === 'รอรับทราบ' || d.status === 'ลงรับแล้ว').length;
+            const progress = documents.filter(d => d.status === 'กำลังดำเนินการ' || d.status === 'เสนอเซนต์' || d.status === 'ออกเอกสาร').length;
+            const done = documents.filter(d => d.status === 'เสร็จสิ้น' || d.status === 'ดำเนินการแล้ว').length;
 
             const ctxType = document.getElementById('typeChart').getContext('2d');
             if (typeChartInstance) typeChartInstance.destroy();
@@ -881,7 +859,7 @@
             statusChartInstance = new Chart(ctxStatus, {
                 type: 'bar',
                 data: {
-                    labels: ['รอรับทราบ', 'กำลังดำเนินการ', 'เสร็จสิ้น'],
+                    labels: ['รอดำเนินการ', 'กำลังดำเนินการ / เสนอเซนต์', 'ดำเนินการแล้ว / เสร็จสิ้น'],
                     datasets: [{
                         label: 'จำนวนหนังสือ',
                         data: [pending, progress, done],
@@ -890,6 +868,153 @@
                 },
                 options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
             });
+        }
+
+        // ฟอร์มแบบ Dynamic ตามหัวข้อประเภทหนังสือ (ข้อ 2)
+        function toggleFormFields() {
+            const type = document.getElementById('docType').value;
+            const container = document.getElementById('dynamicFormFields');
+            
+            let html = '';
+            if (type === 'incoming') {
+                html = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">เลขที่รับส่วนกลาง</label>
+                            <input type="text" id="fieldCentralReg" required placeholder="เช่น รับกลาง-102/2569" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">วันที่ลงรับ</label>
+                            <input type="date" id="fieldReceiveDate" required class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">ผู้ส่ง / หน่วยงานต้นสังกัด</label>
+                            <input type="text" id="fieldSender" required placeholder="เช่น อำเภอพิบูลมังสาหาร" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">ความเร่งด่วน</label>
+                            <select id="fieldUrgency" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
+                                <option value="ปกติ">ปกติ</option>
+                                <option value="ด่วน">ด่วน</option>
+                                <option value="ด่วนมาก">ด่วนมาก</option>
+                                <option value="ด่วนที่สุด">ด่วนที่สุด</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">เลขที่หนังสือ</label>
+                            <input type="text" id="fieldDocNumber" required placeholder="เช่น อบ 0023.23/ว 36" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">ลงวันที่</label>
+                            <input type="date" id="fieldDocDate" required class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">เรื่อง</label>
+                        <input type="text" id="fieldSubject" required placeholder="ระบุเรื่องหนังสือ" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">สถานะดำเนินการ</label>
+                        <select id="fieldStatus" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm font-semibold text-blue-700">
+                            <option value="ลงรับแล้ว">ลงรับแล้ว</option>
+                            <option value="เสนอเซนต์">เสนอเซนต์</option>
+                            <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
+                        </select>
+                    </div>
+                `;
+            } else if (type === 'outgoing') {
+                html = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">เลขที่หนังสือส่ง</label>
+                            <input type="text" id="fieldDocNumber" required placeholder="เช่น อบ 0023.23/12" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">ลงวันที่</label>
+                            <input type="date" id="fieldDocDate" required class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">เรื่อง</label>
+                        <input type="text" id="fieldSubject" required placeholder="ระบุเรื่องหนังสือส่ง" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">ผู้รับ / หน่วยงานรับ</label>
+                            <input type="text" id="fieldSender" required placeholder="เช่น ท้องถิ่นจังหวัดอุบลราชธานี" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">สถานะดำเนินการ</label>
+                            <select id="fieldStatus" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm font-semibold text-blue-700">
+                                <option value="ออกเอกสาร">ออกเอกสาร</option>
+                                <option value="เสนอเซนต์">เสนอเซนต์</option>
+                                <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
+                            </select>
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'orders') {
+                html = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">เลขที่คำสั่ง</label>
+                            <input type="text" id="fieldDocNumber" required placeholder="เช่น ที่ 5/2569" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">ลงวันที่</label>
+                            <input type="date" id="fieldDocDate" required class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">เรื่อง</label>
+                        <input type="text" id="fieldSubject" required placeholder="ระบุเรื่องคำสั่ง" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">สถานะดำเนินการ</label>
+                        <select id="fieldStatus" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm font-semibold text-blue-700">
+                            <option value="ออกเอกสาร">ออกเอกสาร</option>
+                            <option value="เสนอเซนต์">เสนอเซนต์</option>
+                            <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
+                        </select>
+                    </div>
+                `;
+            } else if (type === 'memos') {
+                html = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">เลขที่บันทึก</label>
+                            <input type="text" id="fieldDocNumber" required placeholder="เช่น วส 001/2569" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">ลงวันที่</label>
+                            <input type="date" id="fieldDocDate" required class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">เรียน</label>
+                            <input type="text" id="fieldSender" required placeholder="เช่น นายกองค์การบริหารส่วนตำบลไร่ใต้" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">สถานะดำเนินการ</label>
+                            <select id="fieldStatus" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm font-semibold text-blue-700">
+                                <option value="ออกเอกสาร">ออกเอกสาร</option>
+                                <option value="เสนอเซนต์">เสนอเซนต์</option>
+                                <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">เรื่อง</label>
+                        <input type="text" id="fieldSubject" required placeholder="ระบุเรื่องบันทึกข้อความ" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
         }
 
         function renderTables() {
@@ -916,16 +1041,9 @@
             };
 
             const getStatusBadge = (status) => {
-                if (status === 'เสร็จสิ้น') return `<span class="bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full text-xs font-medium">เสร็จสิ้น</span>`;
-                if (status === 'กำลังดำเนินการ') return `<span class="bg-blue-100 text-blue-800 px-2.5 py-1 rounded-full text-xs font-medium">กำลังดำเนินการ</span>`;
-                return `<span class="bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full text-xs font-medium">รอรับทราบ</span>`;
-            };
-
-            const getUrgencyBadge = (urgency) => {
-                if (urgency === 'ด่วนที่สุด') return `<span class="bg-red-100 text-red-700 px-2 py-0.5 rounded text-xs font-bold">ด่วนที่สุด</span>`;
-                if (urgency === 'ด่วนมาก') return `<span class="bg-orange-100 text-orange-700 px-2 py-0.5 rounded text-xs font-bold">ด่วนมาก</span>`;
-                if (urgency === 'ด่วน') return `<span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded text-xs font-medium">ด่วน</span>`;
-                return `<span class="text-gray-500 text-xs">ปกติ</span>`;
+                if (status === 'ดำเนินการแล้ว' || status === 'เสร็จสิ้น') return `<span class="bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full text-xs font-medium">${status}</span>`;
+                if (status === 'เสนอเซนต์' || status === 'กำลังดำเนินการ' || status === 'ออกเอกสาร') return `<span class="bg-blue-100 text-blue-800 px-2.5 py-1 rounded-full text-xs font-medium">${status}</span>`;
+                return `<span class="bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full text-xs font-medium">${status}</span>`;
             };
 
             // 1. Dashboard Table
@@ -934,11 +1052,11 @@
                     <td class="p-3 font-bold text-blue-600">${d.regNo}</td>
                     <td class="p-3">
                         <div class="font-medium text-gray-800 truncate max-w-xs">${d.subject}</div>
-                        <div class="text-xs text-gray-500">จาก: ${d.sender}</div>
+                        <div class="text-xs text-gray-500">จาก/ถึง: ${d.sender}</div>
                     </td>
                     <td class="p-3 text-gray-600">${d.assignee}</td>
-                    <td class="p-3">${getUrgencyBadge(d.urgency)}</td>
-                    <td class="p-3 text-gray-600">${d.dueDate}</td>
+                    <td class="p-3"><span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded text-xs font-medium">${d.urgency || 'ปกติ'}</span></td>
+                    <td class="p-3 text-gray-600">${d.dueDate || '-'}</td>
                     <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
                     <td class="p-3 text-center">${getActionButtons(d)}</td>
                 </tr>
@@ -962,60 +1080,60 @@
                 </tr>
             `).join('') : `<tr><td colspan="7" class="p-6 text-center text-gray-400">ไม่มีงานที่ได้รับมอบหมายในขณะนี้</td></tr>`;
 
-            // 3. Incoming Table
+            // 3. Incoming Table (รองรับช่องค้นหาตามข้อ 4)
             const searchInc = document.getElementById('searchIncoming').value.toLowerCase();
-            const incDocs = documents.filter(d => d.type === 'incoming' && (d.subject.toLowerCase().includes(searchInc) || d.regNo.toLowerCase().includes(searchInc)));
+            const incDocs = documents.filter(d => d.type === 'incoming' && (d.subject.toLowerCase().includes(searchInc) || d.sender.toLowerCase().includes(searchInc) || d.docNumber.toLowerCase().includes(searchInc) || d.regNo.toLowerCase().includes(searchInc)));
             document.getElementById('incomingTableBody').innerHTML = incDocs.map(d => `
                 <tr class="hover:bg-gray-50">
-                    <td class="p-3 font-bold text-blue-600">${d.regNo}</td>
-                    <td class="p-3 text-xs"><span class="font-semibold">${d.docNumber}</span><br><span class="text-gray-400">${d.docDate}</span></td>
+                    <td class="p-3">
+                        <span class="font-bold text-blue-600">รับ: ${d.regNo}</span><br>
+                        <span class="text-xs text-gray-400">กลาง: ${d.centralRegNo || '-'}</span>
+                    </td>
+                    <td class="p-3 text-xs"><span class="font-semibold">${d.docNumber}</span><br><span class="text-gray-400">ลงวันที่: ${d.docDate}</span></td>
                     <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div><div class="text-xs text-gray-500">ผู้ส่ง: ${d.sender}</div></td>
-                    <td class="p-3 text-gray-600">${d.assignee}</td>
+                    <td class="p-3"><span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded text-xs">${d.urgency || 'ปกติ'}</span></td>
                     <td class="p-3">${getStatusBadge(d.status)}</td>
                     <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
                     <td class="p-3 text-center">${getActionButtons(d)}</td>
                 </tr>
             `).join('');
 
-            // 4. Outgoing Table
+            // 4. Outgoing Table (รองรับช่องค้นหาตามข้อ 4)
             const searchOut = document.getElementById('searchOutgoing').value.toLowerCase();
-            const outDocs = documents.filter(d => d.type === 'outgoing' && (d.subject.toLowerCase().includes(searchOut) || d.regNo.toLowerCase().includes(searchOut)));
+            const outDocs = documents.filter(d => d.type === 'outgoing' && (d.subject.toLowerCase().includes(searchOut) || d.sender.toLowerCase().includes(searchOut) || d.docNumber.toLowerCase().includes(searchOut)));
             document.getElementById('outgoingTableBody').innerHTML = outDocs.map(d => `
                 <tr class="hover:bg-gray-50">
-                    <td class="p-3 font-bold text-emerald-600">${d.regNo}</td>
-                    <td class="p-3 text-xs"><span class="font-semibold">${d.docNumber}</span><br><span class="text-gray-400">${d.docDate}</span></td>
+                    <td class="p-3 font-bold text-emerald-600">${d.docNumber}</td>
+                    <td class="p-3 text-xs text-gray-600">${d.docDate}</td>
                     <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div><div class="text-xs text-gray-500">ผู้รับ: ${d.sender}</div></td>
-                    <td class="p-3 text-gray-600">${d.assignee}</td>
                     <td class="p-3">${getStatusBadge(d.status)}</td>
                     <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
                     <td class="p-3 text-center">${getActionButtons(d)}</td>
                 </tr>
             `).join('');
 
-            // 5. Orders Table
+            // 5. Orders Table (รองรับช่องค้นหาตามข้อ 4)
             const searchOrd = document.getElementById('searchOrders').value.toLowerCase();
-            const ordDocs = documents.filter(d => d.type === 'orders' && (d.subject.toLowerCase().includes(searchOrd) || d.regNo.toLowerCase().includes(searchOrd)));
+            const ordDocs = documents.filter(d => d.type === 'orders' && (d.subject.toLowerCase().includes(searchOrd) || d.docNumber.toLowerCase().includes(searchOrd)));
             document.getElementById('ordersTableBody').innerHTML = ordDocs.map(d => `
                 <tr class="hover:bg-gray-50">
-                    <td class="p-3 font-bold text-amber-600">${d.regNo}</td>
-                    <td class="p-3 text-gray-600">${d.docDate}</td>
+                    <td class="p-3 font-bold text-amber-600">${d.docNumber}</td>
+                    <td class="p-3 text-xs text-gray-600">${d.docDate}</td>
                     <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div></td>
-                    <td class="p-3 text-gray-600">${d.assignee}</td>
                     <td class="p-3">${getStatusBadge(d.status)}</td>
                     <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
                     <td class="p-3 text-center">${getActionButtons(d)}</td>
                 </tr>
             `).join('');
 
-            // 6. Memos Table
+            // 6. Memos Table (รองรับช่องค้นหาตามข้อ 4)
             const searchMem = document.getElementById('searchMemos').value.toLowerCase();
-            const memDocs = documents.filter(d => d.type === 'memos' && (d.subject.toLowerCase().includes(searchMem) || d.regNo.toLowerCase().includes(searchMem)));
+            const memDocs = documents.filter(d => d.type === 'memos' && (d.subject.toLowerCase().includes(searchMem) || d.sender.toLowerCase().includes(searchMem) || d.docNumber.toLowerCase().includes(searchMem)));
             document.getElementById('memosTableBody').innerHTML = memDocs.map(d => `
                 <tr class="hover:bg-gray-50">
-                    <td class="p-3 font-bold text-purple-600">${d.regNo}</td>
-                    <td class="p-3 text-gray-600">${d.docDate}</td>
-                    <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div><div class="text-xs text-gray-500">โดย: ${d.sender}</div></td>
-                    <td class="p-3 text-gray-600">${d.assignee}</td>
+                    <td class="p-3 font-bold text-purple-600">${d.docNumber}</td>
+                    <td class="p-3 text-xs text-gray-600">${d.docDate}</td>
+                    <td class="p-3"><div class="font-medium text-gray-800">เรียน: ${d.sender}</div><div class="text-xs text-gray-500">เรื่อง: ${d.subject}</div></td>
                     <td class="p-3">${getStatusBadge(d.status)}</td>
                     <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
                     <td class="p-3 text-center">${getActionButtons(d)}</td>
@@ -1026,9 +1144,8 @@
             document.getElementById('allDocsTableBody').innerHTML = documents.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 uppercase text-xs font-semibold text-gray-500">${d.type}</td>
-                    <td class="p-3 font-bold text-blue-600">${d.regNo}</td>
-                    <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div></td>
-                    <td class="p-3 text-gray-600">${d.assignee}</td>
+                    <td class="p-3 font-bold text-blue-600">${d.regNo || '-'}</td>
+                    <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div><div class="text-xs text-gray-400">เลขที่: ${d.docNumber}</div></td>
                     <td class="p-3">${getStatusBadge(d.status)}</td>
                     <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
                     <td class="p-3 text-center">${getActionButtons(d)}</td>
@@ -1037,10 +1154,10 @@
 
             // 8. Overdue Table
             const today = new Date().toISOString().split('T')[0];
-            const overdueDocs = documents.filter(d => d.dueDate < today && d.status !== 'เสร็จสิ้น');
+            const overdueDocs = documents.filter(d => d.dueDate && d.dueDate < today && d.status !== 'ดำเนินการแล้ว' && d.status !== 'เสร็จสิ้น');
             document.getElementById('overdueTableBody').innerHTML = overdueDocs.length ? overdueDocs.map(d => `
                 <tr class="hover:bg-red-50/50">
-                    <td class="p-3 font-bold text-red-600">${d.regNo}</td>
+                    <td class="p-3 font-bold text-red-600">${d.regNo || '-'}</td>
                     <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div></td>
                     <td class="p-3 text-gray-600">${d.assignee}</td>
                     <td class="p-3 text-red-600 font-semibold">${d.dueDate}</td>
@@ -1051,6 +1168,7 @@
         }
 
         function openDocumentModal() {
+            // ป้องกันไม่ให้บัญชี Staff เข้าหน้าเพิ่มข้อมูล (ตามข้อ 6)
             if (currentUser.role !== 'admin') {
                 Swal.fire('ไม่อนุญาต', 'คุณไม่มีสิทธิ์เพิ่มข้อมูล (เฉพาะผู้ดูแลระบบเท่านั้น)', 'warning');
                 return;
@@ -1058,6 +1176,8 @@
             document.getElementById('modalTitle').innerText = 'ลงทะเบียนหนังสือใหม่';
             document.getElementById('documentForm').reset();
             document.getElementById('editDocId').value = '';
+            document.getElementById('docType').value = 'incoming';
+            toggleFormFields();
             document.getElementById('documentModal').classList.remove('hidden');
         }
 
@@ -1071,13 +1191,6 @@
 
             const editId = document.getElementById('editDocId').value;
             const type = document.getElementById('docType').value;
-            const urgency = document.getElementById('docUrgency').value;
-            const docNumber = document.getElementById('docNumber').value;
-            const docDate = document.getElementById('docDate').value;
-            const subject = document.getElementById('docSubject').value;
-            const sender = document.getElementById('docSender').value;
-            const dueDate = document.getElementById('docDueDate').value;
-            const assignee = document.getElementById('docAssignee').value;
             const fileInput = document.getElementById('docFile');
 
             let fileName = '';
@@ -1089,17 +1202,41 @@
                 fileData = URL.createObjectURL(file);
             }
 
+            const docNumber = document.getElementById('fieldDocNumber') ? document.getElementById('fieldDocNumber').value : '';
+            const docDate = document.getElementById('fieldDocDate') ? document.getElementById('fieldDocDate').value : '';
+            const subject = document.getElementById('fieldSubject') ? document.getElementById('fieldSubject').value : '';
+            const sender = document.getElementById('fieldSender') ? document.getElementById('fieldSender').value : '';
+            const status = document.getElementById('fieldStatus') ? document.getElementById('fieldStatus').value : 'ลงรับแล้ว';
+            
+            let centralRegNo = '-';
+            let receiveDate = '-';
+            let urgency = 'ปกติ';
+
+            if (type === 'incoming') {
+                centralRegNo = document.getElementById('fieldCentralReg').value;
+                receiveDate = document.getElementById('fieldReceiveDate').value;
+                urgency = document.getElementById('fieldUrgency').value;
+            }
+
+            const assignee = document.getElementById('docAssignee').value;
+            const dueDate = document.getElementById('docDueDate').value;
+
             if (editId) {
                 const doc = documents.find(d => d.id == editId);
                 if (doc) {
                     doc.type = type;
-                    doc.urgency = urgency;
                     doc.docNumber = docNumber;
                     doc.docDate = docDate;
                     doc.subject = subject;
                     doc.sender = sender;
-                    doc.dueDate = dueDate;
+                    doc.status = status;
                     doc.assignee = assignee;
+                    doc.dueDate = dueDate;
+                    if (type === 'incoming') {
+                        doc.centralRegNo = centralRegNo;
+                        doc.receiveDate = receiveDate;
+                        doc.urgency = urgency;
+                    }
                     if (fileName) {
                         doc.fileName = fileName;
                         doc.fileData = fileData;
@@ -1107,27 +1244,29 @@
                 }
                 Swal.fire('สำเร็จ', 'อัปเดตข้อมูลหนังสือเรียบร้อยแล้ว', 'success');
             } else {
-                const nextRegNo = documents.length + 1;
+                const nextRegNo = type === 'incoming' ? (documents.filter(d => d.type === 'incoming').length + 1).toString() : '-';
 
                 const newDoc = {
                     id: Date.now(),
                     type,
-                    regNo: nextRegNo.toString(),
+                    regNo: nextRegNo,
+                    centralRegNo,
+                    receiveDate,
+                    sender,
+                    urgency,
                     docNumber,
                     docDate,
                     subject,
-                    sender,
+                    status,
                     assignee,
-                    urgency,
                     dueDate,
                     ackStatus: 'รอรับทราบ',
                     ackTime: '-',
-                    status: 'รอรับทราบ',
                     fileName: fileName || 'document_file.pdf',
                     fileData: fileData || 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
                 };
                 documents.unshift(newDoc);
-                Swal.fire('สำเร็จ', `ลงทะเบียนหนังสือเรียบร้อย (เลขรับกองช่าง: ${nextRegNo})`, 'success');
+                Swal.fire('สำเร็จ', `ลงทะเบียนหนังสือเรียบร้อย${nextRegNo !== '-' ? ' (เลขรับกองช่าง: ' + nextRegNo + ')' : ''}`, 'success');
             }
 
             closeDocumentModal();
@@ -1145,13 +1284,20 @@
             document.getElementById('modalTitle').innerText = 'แก้ไขข้อมูลหนังสือ';
             document.getElementById('editDocId').value = doc.id;
             document.getElementById('docType').value = doc.type;
-            document.getElementById('docUrgency').value = doc.urgency;
-            document.getElementById('docNumber').value = doc.docNumber;
-            document.getElementById('docDate').value = doc.docDate;
-            document.getElementById('docSubject').value = doc.subject;
-            document.getElementById('docSender').value = doc.sender;
-            document.getElementById('docDueDate').value = doc.dueDate;
-            document.getElementById('docAssignee').value = doc.assignee;
+            toggleFormFields();
+
+            setTimeout(() => {
+                if (document.getElementById('fieldDocNumber')) document.getElementById('fieldDocNumber').value = doc.docNumber || '';
+                if (document.getElementById('fieldDocDate')) document.getElementById('fieldDocDate').value = doc.docDate || '';
+                if (document.getElementById('fieldSubject')) document.getElementById('fieldSubject').value = doc.subject || '';
+                if (document.getElementById('fieldSender')) document.getElementById('fieldSender').value = doc.sender || '';
+                if (document.getElementById('fieldStatus')) document.getElementById('fieldStatus').value = doc.status || 'ลงรับแล้ว';
+                if (document.getElementById('fieldCentralReg')) document.getElementById('fieldCentralReg').value = doc.centralRegNo || '';
+                if (document.getElementById('fieldReceiveDate')) document.getElementById('fieldReceiveDate').value = doc.receiveDate || '';
+                if (document.getElementById('fieldUrgency')) document.getElementById('fieldUrgency').value = doc.urgency || 'ปกติ';
+                if (document.getElementById('docAssignee')) document.getElementById('docAssignee').value = doc.assignee || '';
+                if (document.getElementById('docDueDate')) document.getElementById('docDueDate').value = doc.dueDate || '';
+            }, 50);
 
             document.getElementById('documentModal').classList.remove('hidden');
         }
@@ -1183,18 +1329,16 @@
             if (!doc) return;
 
             Swal.fire({
-                title: `รายละเอียด: เลขรับกองช่างที่ ${doc.regNo}`,
+                title: `รายละเอียดเอกสาร (${doc.type.toUpperCase()})`,
                 html: `
                     <div class="text-left space-y-2 text-sm bg-gray-50 p-4 rounded-xl border border-gray-200">
-                        <p><b>ประเภท:</b> <span class="uppercase">${doc.type}</span></p>
+                        ${doc.regNo && doc.regNo !== '-' ? `<p><b>เลขรับกองช่าง:</b> ${doc.regNo}</p>` : ''}
+                        ${doc.centralRegNo && doc.centralRegNo !== '-' ? `<p><b>เลขรับส่วนกลาง:</b> ${doc.centralRegNo}</p>` : ''}
                         <p><b>เลขที่หนังสือ:</b> ${doc.docNumber} (ลงวันที่ ${doc.docDate})</p>
                         <p><b>เรื่อง:</b> ${doc.subject}</p>
-                        <p><b>ผู้ส่ง/หน่วยงาน:</b> ${doc.sender}</p>
+                        <p><b>ผู้ส่ง/ผู้รับ/เรียน:</b> ${doc.sender}</p>
+                        <p><b>สถานะดำเนินการ:</b> <span class="text-blue-600 font-semibold">${doc.status}</span></p>
                         <p><b>ผู้รับผิดชอบ:</b> ${doc.assignee}</p>
-                        <p><b>ความเร่งด่วน:</b> ${doc.urgency}</p>
-                        <p><b>กำหนดเสร็จ:</b> ${doc.dueDate}</p>
-                        <p><b>สถานะรับทราบ:</b> ${doc.ackStatus} (${doc.ackTime})</p>
-                        <p><b>สถานะงาน:</b> ${doc.status}</p>
                         <div class="pt-2 border-t border-gray-200 flex items-center justify-between">
                             <span><b>ไฟล์แนบ:</b> ${doc.fileName || 'ไม่มีเอกสาร'}</span>
                             ${doc.fileData ? `<a href="${doc.fileData}" target="_blank" class="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-blue-700 transition"><i class="fa-solid fa-external-link-alt mr-1"></i> เปิดดูไฟล์</a>` : ''}
@@ -1226,7 +1370,11 @@
                 input: 'select',
                 inputOptions: {
                     'รอรับทราบ': 'รอรับทราบ',
+                    'ลงรับแล้ว': 'ลงรับแล้ว',
+                    'ออกเอกสาร': 'ออกเอกสาร',
+                    'เสนอเซนต์': 'เสนอเซนต์',
                     'กำลังดำเนินการ': 'กำลังดำเนินการ',
+                    'ดำเนินการแล้ว': 'ดำเนินการแล้ว',
                     'เสร็จสิ้น': 'เสร็จสิ้น'
                 },
                 inputValue: doc.status,
@@ -1249,9 +1397,9 @@
                 return;
             }
 
-            let csvContent = "data:text/csv;charset=utf-8,\uFEFF" + "เลขรับกองช่าง,เลขที่หนังสือ,วันที่,เรื่อง,ผู้ส่ง,ผู้รับผิดชอบ,สถานะ\n";
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF" + "เลขรับกองช่าง,เลขที่หนังสือ,วันที่,เรื่อง,ผู้ส่ง/ผู้รับ,สถานะ\n";
             filtered.forEach(d => {
-                csvContent += `"${d.regNo}","${d.docNumber}","${d.docDate}","${d.subject}","${d.sender}","${d.assignee}","${d.status}"\n`;
+                csvContent += `"${d.regNo || '-'}","${d.docNumber}","${d.docDate}","${d.subject}","${d.sender}","${d.status}"\n`;
             });
 
             const encodedUri = encodeURI(csvContent);

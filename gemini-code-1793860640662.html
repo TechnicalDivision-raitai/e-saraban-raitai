@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบจัดการงานสารบรรณและเอกสารภายในกองช่าง (e-Saraban)</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Kanit & Sarabun -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome 6 CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+        }
+        .sarabun-font {
+            font-family: 'Sarabun', sans-serif;
+        }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printableArea, #printableArea * {
+                visibility: visible;
+            }
+            #printableArea {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased">
+
+    <!-- ==================== LOGIN SCREEN ==================== -->
+    <div id="loginScreen" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 backdrop-blur-sm p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden border border-gray-100">
+            <div class="bg-gradient-to-r from-blue-700 to-indigo-800 p-6 text-white text-center">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/10 mb-3 backdrop-blur-md">
+                    <i class="fa-solid fa-folder-open text-3xl"></i>
+                </div>
+                <h1 class="text-2xl font-bold">e-Saraban กองช่าง</h1>
+                <p class="text-blue-100 text-sm mt-1">องค์การบริหารส่วนตำบลไร่ใต้</p>
+            </div>
+            
+            <div class="p-6 space-y-5">
+                <div class="space-y-3">
+                    <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider">เข้าสู่ระบบด่วนเพื่อทดสอบสิทธิ์</label>
+                    
+                    <button onclick="loginAs('admin')" class="w-full flex items-center justify-between p-3 rounded-xl border border-blue-200 bg-blue-50/50 hover:bg-blue-100/60 transition group text-left">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold">
+                                <i class="fa-solid fa-user-shield"></i>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-blue-900">ผู้ดูแลระบบ (Admin)</div>
+                                <div class="text-xs text-blue-600">นส. นิศาชล คงดี (จัดการระบบทั้งหมด)</div>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-blue-400 group-hover:translate-x-1 transition"></i>
+                    </button>
+
+                    <button onclick="loginAs('staff')" class="w-full flex items-center justify-between p-3 rounded-xl border border-gray-200 bg-gray-50 hover:bg-gray-100 transition group text-left">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-lg bg-gray-600 text-white flex items-center justify-center font-bold">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-gray-800">บุคลากร / เจ้าหน้าที่ (Staff)</div>
+                                <div class="text-xs text-gray-500">สิทธิ์ดูรายงาน ค้นหาหนังสือ และเปิดดูเอกสารเท่านั้น</div>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-gray-400 group-hover:translate-x-1 transition"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MAIN APP CONTAINER ==================== -->
+    <div id="appContent" class="hidden min-h-screen flex flex-col md:flex-row">
+        
+        <!-- Sidebar Desktop -->
+        <aside class="hidden md:flex flex-col w-64 bg-slate-900 text-white border-r border-slate-800 shrink-0">
+            <div class="p-5 border-b border-slate-800 flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/30">
+                    <i class="fa-solid fa-book-bookmark text-lg"></i>
+                </div>
+                <div>
+                    <h2 class="font-bold text-base leading-tight">งานสารบรรณ</h2>
+                    <span class="text-xs text-slate-400">กองช่าง อบต.ไร่ใต้</span>
+                </div>
+            </div>
+
+            <!-- User Info Badge -->
+            <div class="p-4 mx-3 my-3 bg-slate-800/80 rounded-xl border border-slate-700/60 flex items-center space-x-3">
+                <div id="sidebarUserAvatar" class="w-9 h-9 rounded-full bg-blue-500 flex items-center justify-center font-bold text-sm">น</div>
+                <div class="overflow-hidden">
+                    <div id="sidebarUserName" class="text-sm font-medium truncate">นิศาชล คงดี</div>
+                    <div id="sidebarUserRoleName" class="text-xs text-blue-400">สถานะ: ผู้ดูแลระบบ</div>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="flex-1 px-3 space-y-1 overflow-y-auto py-2">
+                <a href="#" onclick="switchTab('dashboard')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition active-tab bg-blue-600 text-white" data-tab="dashboard">
+                    <i class="fa-solid fa-chart-pie w-5 text-center"></i>
+                    <span>แดชบอร์ด</span>
+                </a>
+                <a href="#" onclick="switchTab('myInbox')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-tab="myInbox">
+                    <i class="fa-solid fa-inbox w-5 text-center"></i>
+                    <span>กล่องงานของฉัน</span>
+                    <span id="badgeMyInbox" class="ml-auto bg-blue-500 text-white text-xs px-2 py-0.5 rounded-full font-bold">0</span>
+                </a>
+
+                <div class="pt-4 pb-1 px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">ทะเบียนแยกประเภท</div>
+                
+                <a href="#" onclick="switchTab('incoming')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-tab="incoming">
+                    <i class="fa-solid fa-file-arrow-down w-5 text-center text-blue-400"></i>
+                    <span>หนังสือรับ</span>
+                </a>
+                <a href="#" onclick="switchTab('outgoing')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-tab="outgoing">
+                    <i class="fa-solid fa-file-arrow-up w-5 text-center text-emerald-400"></i>
+                    <span>หนังสือส่ง</span>
+                </a>
+                <a href="#" onclick="switchTab('orders')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-tab="orders">
+                    <i class="fa-solid fa-gavel w-5 text-center text-amber-400"></i>
+                    <span>คำสั่ง</span>
+                </a>
+                <a href="#" onclick="switchTab('memos')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-tab="memos">
+                    <i class="fa-solid fa-note-sticky w-5 text-center text-purple-400"></i>
+                    <span>บันทึกข้อความ</span>
+                </a>
+                <a href="#" onclick="switchTab('allDocs')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-tab="allDocs">
+                    <i class="fa-solid fa-folder-tree w-5 text-center text-teal-400"></i>
+                    <span>รวมทะเบียนทั้งหมด</span>
+                </a>
+
+                <div class="pt-4 pb-1 px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">รายงานและติดตาม</div>
+                <a href="#" onclick="switchTab('overdue')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-tab="overdue">
+                    <i class="fa-solid fa-triangle-exclamation w-5 text-center text-red-400"></i>
+                    <span>งานเกินกำหนด</span>
+                    <span id="badgeOverdue" class="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full font-bold">0</span>
+                </a>
+            </nav>
+
+            <!-- Sidebar Footer Controls -->
+            <div class="p-3 border-t border-slate-800 space-y-2">
+                <button onclick="openLoginScreen()" class="w-full flex items-center justify-center space-x-2 py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm transition">
+                    <i class="fa-solid fa-right-left"></i>
+                    <span>สลับสิทธิ์การใช้งาน</span>
+                </button>
+                <button onclick="logout()" class="w-full flex items-center justify-center space-x-2 py-2 px-3 rounded-lg bg-red-950/40 hover:bg-red-900/60 text-red-400 text-sm transition">
+                    <i class="fa-solid fa-power-off"></i>
+                    <span>ออกจากระบบ</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="flex-1 flex flex-col min-w-0">
+            
+            <!-- Top Header Bar -->
+            <header class="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-4 md:px-8 shadow-xs sticky top-0 z-30">
+                <div class="flex items-center space-x-3">
+                    <button onclick="toggleMobileMenu()" class="md:hidden text-gray-600 hover:text-gray-900 focus:outline-none text-xl">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <h1 id="pageTitle" class="text-lg md:text-xl font-bold text-gray-800">แดชบอร์ดสรุปผลงานสารบรรณ</h1>
+                </div>
+
+                <div class="flex items-center space-x-3">
+                    <button id="addDocBtn" onclick="openDocumentModal()" class="hidden bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-xl shadow-md transition flex items-center space-x-2">
+                        <i class="fa-solid fa-plus-circle"></i>
+                        <span class="hidden sm:inline">ลงทะเบียนหนังสือใหม่</span>
+                    </button>
+
+                    <div class="bg-gray-100 border border-gray-200 px-3 py-1.5 rounded-xl flex items-center space-x-2 text-xs font-semibold">
+                        <span id="headerRoleBadge" class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+                        <span id="headerRoleName" class="text-gray-700">ผู้ดูแลระบบ (Admin)</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Mobile Drawer Menu -->
+            <div id="mobileDrawer" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden md:hidden">
+                <div class="w-72 bg-slate-900 text-white h-full flex flex-col p-4 space-y-2">
+                    <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center">
+                                <i class="fa-solid fa-book-bookmark"></i>
+                            </div>
+                            <span class="font-bold">e-Saraban อบต.ไร่ใต้</span>
+                        </div>
+                        <button onclick="toggleMobileMenu()" class="text-slate-400 hover:text-white text-lg">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                    <nav class="flex-1 space-y-1 overflow-y-auto py-2">
+                        <a href="#" onclick="switchTab('dashboard'); toggleMobileMenu();" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800"><i class="fa-solid fa-chart-pie w-5"></i><span>แดชบอร์ด</span></a>
+                        <a href="#" onclick="switchTab('myInbox'); toggleMobileMenu();" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800"><i class="fa-solid fa-inbox w-5"></i><span>กล่องงานของฉัน</span></a>
+                        <a href="#" onclick="switchTab('incoming'); toggleMobileMenu();" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800"><i class="fa-solid fa-file-arrow-down w-5 text-blue-400"></i><span>หนังสือรับ</span></a>
+                        <a href="#" onclick="switchTab('outgoing'); toggleMobileMenu();" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800"><i class="fa-solid fa-file-arrow-up w-5 text-emerald-400"></i><span>หนังสือส่ง</span></a>
+                        <a href="#" onclick="switchTab('orders'); toggleMobileMenu();" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800"><i class="fa-solid fa-gavel w-5 text-amber-400"></i><span>คำสั่ง</span></a>
+                        <a href="#" onclick="switchTab('memos'); toggleMobileMenu();" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800"><i class="fa-solid fa-note-sticky w-5 text-purple-400"></i><span>บันทึกข้อความ</span></a>
+                        <a href="#" onclick="switchTab('allDocs'); toggleMobileMenu();" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800"><i class="fa-solid fa-folder-tree w-5 text-teal-400"></i><span>รวมทะเบียนทั้งหมด</span></a>
+                        <a href="#" onclick="switchTab('overdue'); toggleMobileMenu();" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800"><i class="fa-solid fa-triangle-exclamation w-5 text-red-400"></i><span>งานเกินกำหนด</span></a>
+                    </nav>
+                    <div class="pt-4 border-t border-slate-800 space-y-2">
+                        <button onclick="openLoginScreen(); toggleMobileMenu();" class="w-full py-2 bg-slate-800 rounded-lg text-sm">สลับสิทธิ์การใช้งาน</button>
+                        <button onclick="logout()" class="w-full py-2 bg-red-950/50 text-red-400 rounded-lg text-sm">ออกจากระบบ</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Tab Content Views -->
+            <main class="flex-1 p-4 md:p-8 overflow-y-auto pb-20 md:pb-8">
+                
+                <!-- 1. DASHBOARD TAB -->
+                <div id="view-dashboard" class="tab-view space-y-6">
+                    <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
+                        <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-xs flex flex-col justify-between">
+                            <span class="text-xs font-semibold text-gray-500 uppercase">หนังสือทั้งหมด</span>
+                            <div class="flex items-end justify-between mt-2">
+                                <span id="statTotal" class="text-2xl md:text-3xl font-bold text-gray-800">0</span>
+                                <div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center"><i class="fa-solid fa-folder"></i></div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-xs flex flex-col justify-between">
+                            <span class="text-xs font-semibold text-gray-500 uppercase">รอรับทราบ</span>
+                            <div class="flex items-end justify-between mt-2">
+                                <span id="statPending" class="text-2xl md:text-3xl font-bold text-amber-600">0</span>
+                                <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center"><i class="fa-solid fa-clock"></i></div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-xs flex flex-col justify-between">
+                            <span class="text-xs font-semibold text-gray-500 uppercase">กำลังดำเนินการ</span>
+                            <div class="flex items-end justify-between mt-2">
+                                <span id="statProgress" class="text-2xl md:text-3xl font-bold text-blue-600">0</span>
+                                <div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center"><i class="fa-solid fa-spinner"></i></div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-xs flex flex-col justify-between">
+                            <span class="text-xs font-semibold text-gray-500 uppercase">เสร็จสิ้นแล้ว</span>
+                            <div class="flex items-end justify-between mt-2">
+                                <span id="statDone" class="text-2xl md:text-3xl font-bold text-emerald-600">0</span>
+                                <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center"><i class="fa-solid fa-circle-check"></i></div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-xs flex flex-col justify-between col-span-2 lg:col-span-1">
+                            <span class="text-xs font-semibold text-gray-500 uppercase">เกินกำหนดส่ง</span>
+                            <div class="flex items-end justify-between mt-2">
+                                <span id="statOverdue" class="text-2xl md:text-3xl font-bold text-red-600">0</span>
+                                <div class="w-9 h-9 rounded-xl bg-red-50 text-red-600 flex items-center justify-center"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs flex flex-col">
+                            <h3 class="font-bold text-gray-800 mb-4 text-sm uppercase tracking-wider">สัดส่วนประเภทหนังสือ</h3>
+                            <div class="relative flex-1 flex items-center justify-center min-h-[220px]">
+                                <canvas id="typeChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs lg:col-span-2 flex flex-col">
+                            <h3 class="font-bold text-gray-800 mb-4 text-sm uppercase tracking-wider">ภาพรวมสถานะการทำงาน</h3>
+                            <div class="relative flex-1 flex items-center justify-center min-h-[220px]">
+                                <canvas id="statusChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl border border-gray-200 shadow-xs overflow-hidden">
+                        <div class="p-4 border-b border-gray-100 flex items-center justify-between">
+                            <h3 class="font-bold text-gray-800">หนังสือเร่งด่วน / งานค้างดำเนินการ</h3>
+                            <button onclick="switchTab('allDocs')" class="text-xs font-semibold text-blue-600 hover:text-blue-800">ดูทั้งหมด →</button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
+                                    <tr>
+                                        <th class="p-3">เลขรับกองช่าง</th>
+                                        <th class="p-3">เรื่อง / ผู้ส่ง</th>
+                                        <th class="p-3">ผู้รับผิดชอบ</th>
+                                        <th class="p-3">ความเร่งด่วน</th>
+                                        <th class="p-3">กำหนดเสร็จ</th>
+                                        <th class="p-3 text-center">ไฟล์แนบ</th>
+                                        <th class="p-3 text-center">จัดการ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dashboardTableBody" class="divide-y divide-gray-100 text-sm"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. MY INBOX TAB -->
+                <div id="view-myInbox" class="tab-view hidden space-y-6">
+                    <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5">
+                            <div>
+                                <h2 class="text-lg font-bold text-gray-800">กล่องงานของฉัน (My Inbox)</h2>
+                                <p class="text-xs text-gray-500">รายการหนังสือและเอกสารทั้งหมดที่คุณได้รับมอบหมาย</p>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
+                                    <tr>
+                                        <th class="p-3">เลขรับกองช่าง</th>
+                                        <th class="p-3">ประเภท</th>
+                                        <th class="p-3">เรื่อง / ผู้ส่ง</th>
+                                        <th class="p-3">สถานะรับทราบ</th>
+                                        <th class="p-3">สถานะงาน</th>
+                                        <th class="p-3 text-center">ไฟล์แนบ</th>
+                                        <th class="p-3 text-center">การกระทำ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="myInboxTableBody" class="divide-y divide-gray-100 text-sm"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. INCOMING DOCS TAB -->
+                <div id="view-incoming" class="tab-view hidden space-y-6">
+                    <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5">
+                            <div>
+                                <h2 class="text-lg font-bold text-gray-800">ทะเบียนหนังสือรับ</h2>
+                                <p class="text-xs text-gray-500">จัดการและตรวจสอบหนังสือรับเข้ากองช่าง อบต.ไร่ใต้ ทั้งหมด</p>
+                            </div>
+                            <div class="flex items-center space-x-2 w-full md:w-auto">
+                                <input type="text" id="searchIncoming" onkeyup="renderTables()" placeholder="ค้นหาเรื่อง, เลขที่..." class="px-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none w-full md:w-64">
+                                <button onclick="exportCSV('incoming')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
+                                    <tr>
+                                        <th class="p-3">เลขรับกองช่าง</th>
+                                        <th class="p-3">เลขที่หนังสือ / วันที่</th>
+                                        <th class="p-3">เรื่อง / ผู้ส่ง</th>
+                                        <th class="p-3">ผู้รับผิดชอบ</th>
+                                        <th class="p-3">สถานะ</th>
+                                        <th class="p-3 text-center">ไฟล์แนบ</th>
+                                        <th class="p-3 text-center">จัดการ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="incomingTableBody" class="divide-y divide-gray-100 text-sm"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. OUTGOING DOCS TAB -->
+                <div id="view-outgoing" class="tab-view hidden space-y-6">
+                    <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5">
+                            <div>
+                                <h2 class="text-lg font-bold text-gray-800">ทะเบียนหนังสือส่ง</h2>
+                                <p class="text-xs text-gray-500">จัดการและตรวจสอบหนังสือส่งออกจากกองช่าง อบต.ไร่ใต้</p>
+                            </div>
+                            <div class="flex items-center space-x-2 w-full md:w-auto">
+                                <input type="text" id="searchOutgoing" onkeyup="renderTables()" placeholder="ค้นหาเรื่อง, เลขที่..." class="px-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none w-full md:w-64">
+                                <button onclick="exportCSV('outgoing')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
+                                    <tr>
+                                        <th class="p-3">เลขรับกองช่าง</th>
+                                        <th class="p-3">เลขที่หนังสือ / วันที่</th>
+                                        <th class="p-3">เรื่อง / ผู้รับ</th>
+                                        <th class="p-3">ผู้รับผิดชอบ</th>
+                                        <th class="p-3">สถานะ</th>
+                                        <th class="p-3 text-center">ไฟล์แนบ</th>
+                                        <th class="p-3 text-center">จัดการ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="outgoingTableBody" class="divide-y divide-gray-100 text-sm"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. ORDERS TAB -->
+                <div id="view-orders" class="tab-view hidden space-y-6">
+                    <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5">
+                            <div>
+                                <h2 class="text-lg font-bold text-gray-800">ทะเบียนคำสั่ง</h2>
+                                <p class="text-xs text-gray-500">คำสั่งและประกาศภายในกองช่าง อบต.ไร่ใต้</p>
+                            </div>
+                            <div class="flex items-center space-x-2 w-full md:w-auto">
+                                <input type="text" id="searchOrders" onkeyup="renderTables()" placeholder="ค้นหาคำสั่ง..." class="px-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none w-full md:w-64">
+                                <button onclick="exportCSV('orders')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
+                                    <tr>
+                                        <th class="p-3">เลขรับกองช่าง</th>
+                                        <th class="p-3">วันที่ลงนาม</th>
+                                        <th class="p-3">เรื่องคำสั่ง</th>
+                                        <th class="p-3">ผู้รับผิดชอบ</th>
+                                        <th class="p-3">สถานะ</th>
+                                        <th class="p-3 text-center">ไฟล์แนบ</th>
+                                        <th class="p-3 text-center">จัดการ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ordersTableBody" class="divide-y divide-gray-100 text-sm"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. MEMOS TAB -->
+                <div id="view-memos" class="tab-view hidden space-y-6">
+                    <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5">
+                            <div>
+                                <h2 class="text-lg font-bold text-gray-800">ทะเบียนบันทึกข้อความ</h2>
+                                <p class="text-xs text-gray-500">บันทึกข้อความภายในและระหว่างกอง</p>
+                            </div>
+                            <div class="flex items-center space-x-2 w-full md:w-auto">
+                                <input type="text" id="searchMemos" onkeyup="renderTables()" placeholder="ค้นหาเรื่องบันทึก..." class="px-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none w-full md:w-64">
+                                <button onclick="exportCSV('memos')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
+                                    <tr>
+                                        <th class="p-3">เลขรับกองช่าง</th>
+                                        <th class="p-3">วันที่</th>
+                                        <th class="p-3">เรื่อง / ผู้เสนอ</th>
+                                        <th class="p-3">ผู้รับผิดชอบ</th>
+                                        <th class="p-3">สถานะ</th>
+                                        <th class="p-3 text-center">ไฟล์แนบ</th>
+                                        <th class="p-3 text-center">จัดการ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="memosTableBody" class="divide-y divide-gray-100 text-sm"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. ALL DOCS TAB -->
+                <div id="view-allDocs" class="tab-view hidden space-y-6">
+                    <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5">
+                            <div>
+                                <h2 class="text-lg font-bold text-gray-800">รวมทะเบียนเอกสารทั้งหมด</h2>
+                                <p class="text-xs text-gray-500">ค้นหา กรอง และพิมพ์รายงานภาพรวมสารบรรณ อบต.ไร่ใต้</p>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-xl text-sm transition"><i class="fa-solid fa-print mr-1"></i> พิมพ์รายงาน A4</button>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto" id="printableArea">
+                            <table class="w-full text-left border-collapse">
+                                <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
+                                    <tr>
+                                        <th class="p-3">ประเภท</th>
+                                        <th class="p-3">เลขรับกองช่าง</th>
+                                        <th class="p-3">เรื่อง / ผู้ส่ง</th>
+                                        <th class="p-3">ผู้รับผิดชอบ</th>
+                                        <th class="p-3">สถานะ</th>
+                                        <th class="p-3 text-center">ไฟล์แนบ</th>
+                                        <th class="p-3 text-center">จัดการ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="allDocsTableBody" class="divide-y divide-gray-100 text-sm"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 8. OVERDUE TAB -->
+                <div id="view-overdue" class="tab-view hidden space-y-6">
+                    <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
+                        <h2 class="text-lg font-bold text-gray-800 mb-1">ติดตามงานเกินกำหนด (Overdue Tracker)</h2>
+                        <p class="text-xs text-gray-500 mb-5">รายการเอกสารที่เลยกำหนดเวลาแล้วเสร็จ ควรเร่งรัดติดตาม</p>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead class="bg-red-50 text-xs text-red-700 uppercase">
+                                    <tr>
+                                        <th class="p-3">เลขรับกองช่าง</th>
+                                        <th class="p-3">เรื่อง</th>
+                                        <th class="p-3">ผู้รับผิดชอบ</th>
+                                        <th class="p-3">กำหนดเสร็จ</th>
+                                        <th class="p-3 text-center">ไฟล์แนบ</th>
+                                        <th class="p-3 text-center">จัดการ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="overdueTableBody" class="divide-y divide-gray-100 text-sm"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Mobile Bottom Nav Bar -->
+    <div id="mobileBottomNav" class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-16 flex items-center justify-around px-2 z-40 shadow-lg">
+        <button onclick="switchTab('dashboard')" class="mobile-nav-btn flex flex-col items-center justify-center text-blue-600 flex-1 py-1" data-tab="dashboard">
+            <i class="fa-solid fa-chart-pie text-lg"></i>
+            <span class="text-[10px] mt-0.5">หน้าแรก</span>
+        </button>
+        <button onclick="switchTab('myInbox')" class="mobile-nav-btn flex flex-col items-center justify-center text-gray-400 flex-1 py-1 relative" data-tab="myInbox">
+            <i class="fa-solid fa-inbox text-lg"></i>
+            <span class="text-[10px] mt-0.5">งานของฉัน</span>
+        </button>
+        <button onclick="switchTab('incoming')" class="mobile-nav-btn flex flex-col items-center justify-center text-gray-400 flex-1 py-1" data-tab="incoming">
+            <i class="fa-solid fa-file-arrow-down text-lg"></i>
+            <span class="text-[10px] mt-0.5">รับ</span>
+        </button>
+        <button onclick="switchTab('outgoing')" class="mobile-nav-btn flex flex-col items-center justify-center text-gray-400 flex-1 py-1" data-tab="outgoing">
+            <i class="fa-solid fa-file-arrow-up text-lg"></i>
+            <span class="text-[10px] mt-0.5">ส่ง</span>
+        </button>
+        <button onclick="switchTab('allDocs')" class="mobile-nav-btn flex flex-col items-center justify-center text-gray-400 flex-1 py-1" data-tab="allDocs">
+            <i class="fa-solid fa-folder-tree text-lg"></i>
+            <span class="text-[10px] mt-0.5">ทั้งหมด</span>
+        </button>
+    </div>
+
+    <!-- ==================== MODAL: ADD / EDIT DOCUMENT ==================== -->
+    <div id="documentModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center hidden p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden my-8">
+            <div class="bg-blue-600 px-6 py-4 text-white flex justify-between items-center">
+                <h3 id="modalTitle" class="font-bold text-lg">ลงทะเบียนหนังสือใหม่</h3>
+                <button onclick="closeDocumentModal()" class="text-white/80 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="documentForm" onsubmit="saveDocument(event)" class="p-6 space-y-4">
+                <input type="hidden" id="editDocId">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">ประเภทหนังสือ</label>
+                        <select id="docType" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                            <option value="incoming">หนังสือรับ</option>
+                            <option value="outgoing">หนังสือส่ง</option>
+                            <option value="orders">คำสั่ง</option>
+                            <option value="memos">บันทึกข้อความ</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">ความเร่งด่วน</label>
+                        <select id="docUrgency" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                            <option value="ปกติ">ปกติ</option>
+                            <option value="ด่วน">ด่วน</option>
+                            <option value="ด่วนมาก">ด่วนมาก</option>
+                            <option value="ด่วนที่สุด">ด่วนที่สุด</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">เลขที่หนังสือ</label>
+                        <input type="text" id="docNumber" required placeholder="เช่น อบ 0023.23/ว 36" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">ลงวันที่</label>
+                        <input type="date" id="docDate" required class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">เรื่อง</label>
+                    <input type="text" id="docSubject" required placeholder="ระบุเรื่องหนังสือ" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">ผู้ส่ง / หน่วยงานต้นสังกัด</label>
+                        <input type="text" id="docSender" required placeholder="เช่น อำเภอพิบูลมังสาหาร" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">กำหนดวันเสร็จสิ้น</label>
+                        <input type="date" id="docDueDate" required class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">มอบหมายผู้รับผิดชอบ</label>
+                    <select id="docAssignee" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                        <option value="นิศาชล คงดี">นิศาชล คงดี (ผู้ดูแลระบบ)</option>
+                        <option value="นายสมชาย ช่างทอง">นายสมชาย ช่างทอง (ช่างโยธา)</option>
+                        <option value="นายวิศวกร ปฏิบัติการ">นายวิศวกร ปฏิบัติการ (วิศวกรโยธา)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">แนบไฟล์เอกสาร (PDF / รูปภาพ)</label>
+                    <input type="file" id="docFile" accept=".pdf,image/*" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm file:mr-4 file:py-1 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                    <p class="text-xs text-gray-400 mt-1">รองรับไฟล์ PDF หรือรูปภาพขนาดไม่เกิน 10MB</p>
+                </div>
+
+                <div class="flex justify-end space-x-3 pt-4 border-t border-gray-100">
+                    <button type="button" onclick="closeDocumentModal()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-sm transition">ยกเลิก</button>
+                    <button type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm transition font-medium">บันทึกข้อมูล</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+    <script>
+        let documents = [
+            {
+                id: 1,
+                type: 'incoming',
+                regNo: '5',
+                docNumber: 'อบ 0023.23/ว 36',
+                docDate: '2026-01-09',
+                subject: 'ขอหนังสือรับรองสิ่งปลูกสร้าง',
+                sender: 'นางสาวสลิลวา มีศรี',
+                assignee: 'นิศาชล คงดี',
+                urgency: 'ปกติ',
+                dueDate: '2026-02-15',
+                ackStatus: 'รับทราบแล้ว',
+                ackTime: '09 ม.ค. 2569 10:30',
+                status: 'กำลังดำเนินการ',
+                fileName: 'sample_doc_1.pdf',
+                fileData: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
+            },
+            {
+                id: 2,
+                type: 'incoming',
+                regNo: '6',
+                docNumber: 'อบ 0023.23/ว 36',
+                docDate: '2026-01-09',
+                subject: 'ซักซ้อมความเข้าใจเกี่ยวกับแนวทางปฏิบัติในการรับโอนภารกิจด้านแหล่งน้ำ',
+                sender: 'อำเภอพิบูลมังสาหาร',
+                assignee: 'นิศาชล คงดี',
+                urgency: 'ด่วน',
+                dueDate: '2026-02-20',
+                ackStatus: 'รอรับทราบ',
+                ackTime: '-',
+                status: 'รอรับทราบ',
+                fileName: 'sample_doc_2.pdf',
+                fileData: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
+            },
+            {
+                id: 3,
+                type: 'outgoing',
+                regNo: '1',
+                docNumber: 'อบ 0023.23/12',
+                docDate: '2026-01-10',
+                subject: 'รายงานผลการสำรวจซ่อมแซมถนนสายบ้านหนองไฮ',
+                sender: 'กองช่าง อบต.ไร่ใต้',
+                assignee: 'นายวิศวกร ปฏิบัติการ',
+                urgency: 'ปกติ',
+                dueDate: '2026-01-20',
+                ackStatus: 'รอรับทราบ',
+                ackTime: '-',
+                status: 'รอรับทราบ',
+                fileName: 'report_road.pdf',
+                fileData: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
+            },
+            {
+                id: 4,
+                type: 'orders',
+                regNo: '1',
+                docNumber: 'ที่ 5/2569',
+                docDate: '2026-01-05',
+                subject: 'คำสั่งแต่งตั้งคณะกรรมการตรวจการจ้างโครงการก่อสร้าง',
+                sender: 'กองช่าง อบต.ไร่ใต้',
+                assignee: 'นิศาชล คงดี',
+                urgency: 'ด่วนที่สุด',
+                dueDate: '2026-01-12',
+                ackStatus: 'รับทราบแล้ว',
+                ackTime: '05 ม.ค. 2569 09:00',
+                status: 'เสร็จสิ้น',
+                fileName: 'order_committee.pdf',
+                fileData: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
+            },
+            {
+                id: 5,
+                type: 'memos',
+                regNo: '1',
+                docNumber: 'วส 001/2569',
+                docDate: '2026-01-11',
+                subject: 'ขออนุมัติเบิกใช้น้ำมันเชื้อเพลิงยานพาหนะส่วนกลาง',
+                sender: 'ฝ่ายโยธา',
+                assignee: 'นิศาชล คงดี',
+                urgency: 'ปกติ',
+                dueDate: '2026-01-15',
+                ackStatus: 'รับทราบแล้ว',
+                ackTime: '11 ม.ค. 2569 14:15',
+                status: 'กำลังดำเนินการ',
+                fileName: 'memo_oil.pdf',
+                fileData: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
+            }
+        ];
+
+        let currentUser = {
+            username: "admin",
+            name: "นิศาชล คงดี",
+            role: "admin",
+            roleName: "ผู้ดูแลระบบ"
+        };
+
+        let typeChartInstance = null;
+        let statusChartInstance = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateUserInterface();
+            renderAll();
+        });
+
+        function loginAs(roleType) {
+            if (roleType === 'admin') {
+                currentUser = { username: "admin", name: "นิศาชล คงดี", role: "admin", roleName: "ผู้ดูแลระบบ" };
+            } else {
+                currentUser = { username: "staff", name: "นายวิศวกร ปฏิบัติการ", role: "staff", roleName: "บุคลากร / เจ้าหน้าที่" };
+            }
+            
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('appContent').classList.remove('hidden');
+            
+            updateUserInterface();
+            renderAll();
+
+            Swal.fire({
+                icon: 'success',
+                title: 'เข้าสู่ระบบสำเร็จ',
+                text: `ยินดีต้อนรับคุณ ${currentUser.name} (${currentUser.roleName})`,
+                timer: 1500,
+                showConfirmButton: false
+            });
+        }
+
+        function openLoginScreen() {
+            document.getElementById('loginScreen').classList.remove('hidden');
+        }
+
+        function logout() {
+            document.getElementById('appContent').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+        }
+
+        function updateUserInterface() {
+            const isAdmin = currentUser.role === 'admin';
+            document.getElementById('sidebarUserName').innerText = currentUser.name;
+            document.getElementById('sidebarUserRoleName').innerText = `สถานะ: ${currentUser.roleName}`;
+            document.getElementById('headerRoleName').innerText = currentUser.roleName;
+            document.getElementById('sidebarUserAvatar').innerText = currentUser.name.charAt(0);
+
+            const badgeColor = document.getElementById('headerRoleBadge');
+            if (isAdmin) {
+                badgeColor.className = "w-2.5 h-2.5 rounded-full bg-green-500";
+                document.getElementById('addDocBtn').classList.remove('hidden');
+            } else {
+                badgeColor.className = "w-2.5 h-2.5 rounded-full bg-amber-500";
+                document.getElementById('addDocBtn').classList.add('hidden');
+            }
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`view-${tabId}`).classList.remove('hidden');
+
+            document.querySelectorAll('.nav-link').forEach(el => {
+                el.classList.remove('bg-blue-600', 'text-white');
+                el.classList.add('text-slate-300');
+                if (el.getAttribute('data-tab') === tabId) {
+                    el.classList.add('bg-blue-600', 'text-white');
+                    el.classList.remove('text-slate-300');
+                }
+            });
+
+            document.querySelectorAll('.mobile-nav-btn').forEach(el => {
+                el.classList.remove('text-blue-600');
+                el.classList.add('text-gray-400');
+                if (el.getAttribute('data-tab') === tabId) {
+                    el.classList.add('text-blue-600');
+                    el.classList.remove('text-gray-400');
+                }
+            });
+
+            const titles = {
+                dashboard: 'แดชบอร์ดสรุปผลงานสารบรรณ',
+                myInbox: 'กล่องงานของฉัน (My Inbox)',
+                incoming: 'ทะเบียนหนังสือรับ',
+                outgoing: 'ทะเบียนหนังสือส่ง',
+                orders: 'ทะเบียนคำสั่ง',
+                memos: 'ทะเบียนบันทึกข้อความ',
+                allDocs: 'รวมทะเบียนเอกสารทั้งหมด',
+                overdue: 'ติดตามงานเกินกำหนด'
+            };
+            document.getElementById('pageTitle').innerText = titles[tabId] || 'ระบบสารบรรณ';
+            renderAll();
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobileDrawer').classList.toggle('hidden');
+        }
+
+        function renderAll() {
+            updateStats();
+            renderCharts();
+            renderTables();
+        }
+
+        function updateStats() {
+            const total = documents.length;
+            const pending = documents.filter(d => d.status === 'รอรับทราบ' || d.ackStatus === 'รอรับทราบ').length;
+            const progress = documents.filter(d => d.status === 'กำลังดำเนินการ').length;
+            const done = documents.filter(d => d.status === 'เสร็จสิ้น').length;
+            
+            const today = new Date().toISOString().split('T')[0];
+            const overdue = documents.filter(d => d.dueDate < today && d.status !== 'เสร็จสิ้น').length;
+
+            document.getElementById('statTotal').innerText = total;
+            document.getElementById('statPending').innerText = pending;
+            document.getElementById('statProgress').innerText = progress;
+            document.getElementById('statDone').innerText = done;
+            document.getElementById('statOverdue').innerText = overdue;
+            document.getElementById('badgeOverdue').innerText = overdue;
+
+            const myCount = documents.filter(d => d.assignee === currentUser.name).length;
+            document.getElementById('badgeMyInbox').innerText = myCount;
+        }
+
+        function renderCharts() {
+            const incomingCount = documents.filter(d => d.type === 'incoming').length;
+            const outgoingCount = documents.filter(d => d.type === 'outgoing').length;
+            const ordersCount = documents.filter(d => d.type === 'orders').length;
+            const memosCount = documents.filter(d => d.type === 'memos').length;
+
+            const pending = documents.filter(d => d.status === 'รอรับทราบ').length;
+            const progress = documents.filter(d => d.status === 'กำลังดำเนินการ').length;
+            const done = documents.filter(d => d.status === 'เสร็จสิ้น').length;
+
+            const ctxType = document.getElementById('typeChart').getContext('2d');
+            if (typeChartInstance) typeChartInstance.destroy();
+            typeChartInstance = new Chart(ctxType, {
+                type: 'doughnut',
+                data: {
+                    labels: ['หนังสือรับ', 'หนังสือส่ง', 'คำสั่ง', 'บันทึกข้อความ'],
+                    datasets: [{
+                        data: [incomingCount, outgoingCount, ordersCount, memosCount],
+                        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6']
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            const ctxStatus = document.getElementById('statusChart').getContext('2d');
+            if (statusChartInstance) statusChartInstance.destroy();
+            statusChartInstance = new Chart(ctxStatus, {
+                type: 'bar',
+                data: {
+                    labels: ['รอรับทราบ', 'กำลังดำเนินการ', 'เสร็จสิ้น'],
+                    datasets: [{
+                        label: 'จำนวนหนังสือ',
+                        data: [pending, progress, done],
+                        backgroundColor: ['#f59e0b', '#3b82f6', '#10b981']
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+            });
+        }
+
+        function renderTables() {
+            const isAdmin = currentUser.role === 'admin';
+
+            const getActionButtons = (doc) => {
+                let html = `<button onclick="viewDoc(${doc.id})" class="text-blue-600 hover:text-blue-800 p-1" title="ดูรายละเอียด"><i class="fa-solid fa-eye"></i></button>`;
+                if (isAdmin) {
+                    html += `
+                        <button onclick="editDoc(${doc.id})" class="text-amber-600 hover:text-amber-800 p-1 ml-2" title="แก้ไข"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button onclick="deleteDoc(${doc.id})" class="text-red-600 hover:text-red-800 p-1 ml-2" title="ลบ"><i class="fa-solid fa-trash"></i></button>
+                    `;
+                }
+                return html;
+            };
+
+            const getFileAttachmentButton = (doc) => {
+                if (doc.fileData) {
+                    return `<a href="${doc.fileData}" target="_blank" class="inline-flex items-center px-2.5 py-1 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg text-xs font-medium transition" title="${doc.fileName || 'เปิดดูเอกสารแนบ'}">
+                        <i class="fa-solid fa-paperclip mr-1"></i> เปิดดูไฟล์
+                    </a>`;
+                }
+                return `<span class="text-gray-400 text-xs">ไม่มีไฟล์</span>`;
+            };
+
+            const getStatusBadge = (status) => {
+                if (status === 'เสร็จสิ้น') return `<span class="bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full text-xs font-medium">เสร็จสิ้น</span>`;
+                if (status === 'กำลังดำเนินการ') return `<span class="bg-blue-100 text-blue-800 px-2.5 py-1 rounded-full text-xs font-medium">กำลังดำเนินการ</span>`;
+                return `<span class="bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full text-xs font-medium">รอรับทราบ</span>`;
+            };
+
+            const getUrgencyBadge = (urgency) => {
+                if (urgency === 'ด่วนที่สุด') return `<span class="bg-red-100 text-red-700 px-2 py-0.5 rounded text-xs font-bold">ด่วนที่สุด</span>`;
+                if (urgency === 'ด่วนมาก') return `<span class="bg-orange-100 text-orange-700 px-2 py-0.5 rounded text-xs font-bold">ด่วนมาก</span>`;
+                if (urgency === 'ด่วน') return `<span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded text-xs font-medium">ด่วน</span>`;
+                return `<span class="text-gray-500 text-xs">ปกติ</span>`;
+            };
+
+            // 1. Dashboard Table
+            document.getElementById('dashboardTableBody').innerHTML = documents.slice(0, 5).map(d => `
+                <tr class="hover:bg-gray-50">
+                    <td class="p-3 font-bold text-blue-600">${d.regNo}</td>
+                    <td class="p-3">
+                        <div class="font-medium text-gray-800 truncate max-w-xs">${d.subject}</div>
+                        <div class="text-xs text-gray-500">จาก: ${d.sender}</div>
+                    </td>
+                    <td class="p-3 text-gray-600">${d.assignee}</td>
+                    <td class="p-3">${getUrgencyBadge(d.urgency)}</td>
+                    <td class="p-3 text-gray-600">${d.dueDate}</td>
+                    <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
+                    <td class="p-3 text-center">${getActionButtons(d)}</td>
+                </tr>
+            `).join('');
+
+            // 2. My Inbox Table
+            const myDocs = documents.filter(d => d.assignee === currentUser.name);
+            document.getElementById('myInboxTableBody').innerHTML = myDocs.length ? myDocs.map(d => `
+                <tr class="hover:bg-gray-50">
+                    <td class="p-3 font-bold text-blue-600">${d.regNo}</td>
+                    <td class="p-3 uppercase text-xs font-semibold text-gray-500">${d.type}</td>
+                    <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div></td>
+                    <td class="p-3">
+                        ${d.ackStatus === 'รับทราบแล้ว' ? `<span class="text-emerald-600 text-xs font-medium"><i class="fa-solid fa-check-circle mr-1"></i>${d.ackTime}</span>` : `<button onclick="acknowledgeDoc(${d.id})" class="bg-amber-500 hover:bg-amber-600 text-white text-xs px-3 py-1 rounded-lg transition">กดรับทราบงาน</button>`}
+                    </td>
+                    <td class="p-3">${getStatusBadge(d.status)}</td>
+                    <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
+                    <td class="p-3 text-center">
+                        <button onclick="updateDocStatusPrompt(${d.id})" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2.5 py-1 rounded-lg transition">เปลี่ยนสถานะ</button>
+                    </td>
+                </tr>
+            `).join('') : `<tr><td colspan="7" class="p-6 text-center text-gray-400">ไม่มีงานที่ได้รับมอบหมายในขณะนี้</td></tr>`;
+
+            // 3. Incoming Table
+            const searchInc = document.getElementById('searchIncoming').value.toLowerCase();
+            const incDocs = documents.filter(d => d.type === 'incoming' && (d.subject.toLowerCase().includes(searchInc) || d.regNo.toLowerCase().includes(searchInc)));
+            document.getElementById('incomingTableBody').innerHTML = incDocs.map(d => `
+                <tr class="hover:bg-gray-50">
+                    <td class="p-3 font-bold text-blue-600">${d.regNo}</td>
+                    <td class="p-3 text-xs"><span class="font-semibold">${d.docNumber}</span><br><span class="text-gray-400">${d.docDate}</span></td>
+                    <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div><div class="text-xs text-gray-500">ผู้ส่ง: ${d.sender}</div></td>
+                    <td class="p-3 text-gray-600">${d.assignee}</td>
+                    <td class="p-3">${getStatusBadge(d.status)}</td>
+                    <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
+                    <td class="p-3 text-center">${getActionButtons(d)}</td>
+                </tr>
+            `).join('');
+
+            // 4. Outgoing Table
+            const searchOut = document.getElementById('searchOutgoing').value.toLowerCase();
+            const outDocs = documents.filter(d => d.type === 'outgoing' && (d.subject.toLowerCase().includes(searchOut) || d.regNo.toLowerCase().includes(searchOut)));
+            document.getElementById('outgoingTableBody').innerHTML = outDocs.map(d => `
+                <tr class="hover:bg-gray-50">
+                    <td class="p-3 font-bold text-emerald-600">${d.regNo}</td>
+                    <td class="p-3 text-xs"><span class="font-semibold">${d.docNumber}</span><br><span class="text-gray-400">${d.docDate}</span></td>
+                    <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div><div class="text-xs text-gray-500">ผู้รับ: ${d.sender}</div></td>
+                    <td class="p-3 text-gray-600">${d.assignee}</td>
+                    <td class="p-3">${getStatusBadge(d.status)}</td>
+                    <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
+                    <td class="p-3 text-center">${getActionButtons(d)}</td>
+                </tr>
+            `).join('');
+
+            // 5. Orders Table
+            const searchOrd = document.getElementById('searchOrders').value.toLowerCase();
+            const ordDocs = documents.filter(d => d.type === 'orders' && (d.subject.toLowerCase().includes(searchOrd) || d.regNo.toLowerCase().includes(searchOrd)));
+            document.getElementById('ordersTableBody').innerHTML = ordDocs.map(d => `
+                <tr class="hover:bg-gray-50">
+                    <td class="p-3 font-bold text-amber-600">${d.regNo}</td>
+                    <td class="p-3 text-gray-600">${d.docDate}</td>
+                    <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div></td>
+                    <td class="p-3 text-gray-600">${d.assignee}</td>
+                    <td class="p-3">${getStatusBadge(d.status)}</td>
+                    <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
+                    <td class="p-3 text-center">${getActionButtons(d)}</td>
+                </tr>
+            `).join('');
+
+            // 6. Memos Table
+            const searchMem = document.getElementById('searchMemos').value.toLowerCase();
+            const memDocs = documents.filter(d => d.type === 'memos' && (d.subject.toLowerCase().includes(searchMem) || d.regNo.toLowerCase().includes(searchMem)));
+            document.getElementById('memosTableBody').innerHTML = memDocs.map(d => `
+                <tr class="hover:bg-gray-50">
+                    <td class="p-3 font-bold text-purple-600">${d.regNo}</td>
+                    <td class="p-3 text-gray-600">${d.docDate}</td>
+                    <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div><div class="text-xs text-gray-500">โดย: ${d.sender}</div></td>
+                    <td class="p-3 text-gray-600">${d.assignee}</td>
+                    <td class="p-3">${getStatusBadge(d.status)}</td>
+                    <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
+                    <td class="p-3 text-center">${getActionButtons(d)}</td>
+                </tr>
+            `).join('');
+
+            // 7. All Docs Table
+            document.getElementById('allDocsTableBody').innerHTML = documents.map(d => `
+                <tr class="hover:bg-gray-50">
+                    <td class="p-3 uppercase text-xs font-semibold text-gray-500">${d.type}</td>
+                    <td class="p-3 font-bold text-blue-600">${d.regNo}</td>
+                    <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div></td>
+                    <td class="p-3 text-gray-600">${d.assignee}</td>
+                    <td class="p-3">${getStatusBadge(d.status)}</td>
+                    <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
+                    <td class="p-3 text-center">${getActionButtons(d)}</td>
+                </tr>
+            `).join('');
+
+            // 8. Overdue Table
+            const today = new Date().toISOString().split('T')[0];
+            const overdueDocs = documents.filter(d => d.dueDate < today && d.status !== 'เสร็จสิ้น');
+            document.getElementById('overdueTableBody').innerHTML = overdueDocs.length ? overdueDocs.map(d => `
+                <tr class="hover:bg-red-50/50">
+                    <td class="p-3 font-bold text-red-600">${d.regNo}</td>
+                    <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div></td>
+                    <td class="p-3 text-gray-600">${d.assignee}</td>
+                    <td class="p-3 text-red-600 font-semibold">${d.dueDate}</td>
+                    <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
+                    <td class="p-3 text-center">${getActionButtons(d)}</td>
+                </tr>
+            `).join('') : `<tr><td colspan="6" class="p-6 text-center text-gray-400">ไม่มีงานค้างเกินกำหนดในขณะนี้</td></tr>`;
+        }
+
+        function openDocumentModal() {
+            if (currentUser.role !== 'admin') {
+                Swal.fire('ไม่อนุญาต', 'คุณไม่มีสิทธิ์เพิ่มข้อมูล (เฉพาะผู้ดูแลระบบเท่านั้น)', 'warning');
+                return;
+            }
+            document.getElementById('modalTitle').innerText = 'ลงทะเบียนหนังสือใหม่';
+            document.getElementById('documentForm').reset();
+            document.getElementById('editDocId').value = '';
+            document.getElementById('documentModal').classList.remove('hidden');
+        }
+
+        function closeDocumentModal() {
+            document.getElementById('documentModal').classList.add('hidden');
+        }
+
+        function saveDocument(event) {
+            event.preventDefault();
+            if (currentUser.role !== 'admin') return;
+
+            const editId = document.getElementById('editDocId').value;
+            const type = document.getElementById('docType').value;
+            const urgency = document.getElementById('docUrgency').value;
+            const docNumber = document.getElementById('docNumber').value;
+            const docDate = document.getElementById('docDate').value;
+            const subject = document.getElementById('docSubject').value;
+            const sender = document.getElementById('docSender').value;
+            const dueDate = document.getElementById('docDueDate').value;
+            const assignee = document.getElementById('docAssignee').value;
+            const fileInput = document.getElementById('docFile');
+
+            let fileName = '';
+            let fileData = '';
+
+            if (fileInput.files && fileInput.files[0]) {
+                const file = fileInput.files[0];
+                fileName = file.name;
+                fileData = URL.createObjectURL(file);
+            }
+
+            if (editId) {
+                const doc = documents.find(d => d.id == editId);
+                if (doc) {
+                    doc.type = type;
+                    doc.urgency = urgency;
+                    doc.docNumber = docNumber;
+                    doc.docDate = docDate;
+                    doc.subject = subject;
+                    doc.sender = sender;
+                    doc.dueDate = dueDate;
+                    doc.assignee = assignee;
+                    if (fileName) {
+                        doc.fileName = fileName;
+                        doc.fileData = fileData;
+                    }
+                }
+                Swal.fire('สำเร็จ', 'อัปเดตข้อมูลหนังสือเรียบร้อยแล้ว', 'success');
+            } else {
+                const nextRegNo = documents.length + 1;
+
+                const newDoc = {
+                    id: Date.now(),
+                    type,
+                    regNo: nextRegNo.toString(),
+                    docNumber,
+                    docDate,
+                    subject,
+                    sender,
+                    assignee,
+                    urgency,
+                    dueDate,
+                    ackStatus: 'รอรับทราบ',
+                    ackTime: '-',
+                    status: 'รอรับทราบ',
+                    fileName: fileName || 'document_file.pdf',
+                    fileData: fileData || 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
+                };
+                documents.unshift(newDoc);
+                Swal.fire('สำเร็จ', `ลงทะเบียนหนังสือเรียบร้อย (เลขรับกองช่าง: ${nextRegNo})`, 'success');
+            }
+
+            closeDocumentModal();
+            renderAll();
+        }
+
+        function editDoc(id) {
+            if (currentUser.role !== 'admin') {
+                Swal.fire('ไม่อนุญาต', 'คุณไม่มีสิทธิ์แก้ไขข้อมูล', 'warning');
+                return;
+            }
+            const doc = documents.find(d => d.id === id);
+            if (!doc) return;
+
+            document.getElementById('modalTitle').innerText = 'แก้ไขข้อมูลหนังสือ';
+            document.getElementById('editDocId').value = doc.id;
+            document.getElementById('docType').value = doc.type;
+            document.getElementById('docUrgency').value = doc.urgency;
+            document.getElementById('docNumber').value = doc.docNumber;
+            document.getElementById('docDate').value = doc.docDate;
+            document.getElementById('docSubject').value = doc.subject;
+            document.getElementById('docSender').value = doc.sender;
+            document.getElementById('docDueDate').value = doc.dueDate;
+            document.getElementById('docAssignee').value = doc.assignee;
+
+            document.getElementById('documentModal').classList.remove('hidden');
+        }
+
+        function deleteDoc(id) {
+            if (currentUser.role !== 'admin') {
+                Swal.fire('ไม่อนุญาต', 'คุณไม่มีสิทธิ์ลบข้อมูล', 'warning');
+                return;
+            }
+            Swal.fire({
+                title: 'ยืนยันการลบ?',
+                text: 'คุณต้องการลบรายการหนังสือนี้ใช่หรือไม่',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonText: 'ยกเลิก',
+                confirmButtonText: 'ยืนยันลบ'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    documents = documents.filter(d => d.id !== id);
+                    renderAll();
+                    Swal.fire('ลบสำเร็จ', 'รายการถูกลบออกจากระบบแล้ว', 'success');
+                }
+            });
+        }
+
+        function viewDoc(id) {
+            const doc = documents.find(d => d.id === id);
+            if (!doc) return;
+
+            Swal.fire({
+                title: `รายละเอียด: เลขรับกองช่างที่ ${doc.regNo}`,
+                html: `
+                    <div class="text-left space-y-2 text-sm bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <p><b>ประเภท:</b> <span class="uppercase">${doc.type}</span></p>
+                        <p><b>เลขที่หนังสือ:</b> ${doc.docNumber} (ลงวันที่ ${doc.docDate})</p>
+                        <p><b>เรื่อง:</b> ${doc.subject}</p>
+                        <p><b>ผู้ส่ง/หน่วยงาน:</b> ${doc.sender}</p>
+                        <p><b>ผู้รับผิดชอบ:</b> ${doc.assignee}</p>
+                        <p><b>ความเร่งด่วน:</b> ${doc.urgency}</p>
+                        <p><b>กำหนดเสร็จ:</b> ${doc.dueDate}</p>
+                        <p><b>สถานะรับทราบ:</b> ${doc.ackStatus} (${doc.ackTime})</p>
+                        <p><b>สถานะงาน:</b> ${doc.status}</p>
+                        <div class="pt-2 border-t border-gray-200 flex items-center justify-between">
+                            <span><b>ไฟล์แนบ:</b> ${doc.fileName || 'ไม่มีเอกสาร'}</span>
+                            ${doc.fileData ? `<a href="${doc.fileData}" target="_blank" class="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-blue-700 transition"><i class="fa-solid fa-external-link-alt mr-1"></i> เปิดดูไฟล์</a>` : ''}
+                        </div>
+                    </div>
+                `,
+                confirmButtonText: 'ปิด'
+            });
+        }
+
+        function acknowledgeDoc(id) {
+            const doc = documents.find(d => d.id === id);
+            if (doc) {
+                const now = new Date();
+                doc.ackStatus = 'รับทราบแล้ว';
+                doc.ackTime = `${now.getDate()} ม.ค. ${now.getFullYear()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+                doc.status = 'กำลังดำเนินการ';
+                renderAll();
+                Swal.fire('สำเร็จ', 'กดรับทราบงานเรียบร้อยแล้ว', 'success');
+            }
+        }
+
+        function updateDocStatusPrompt(id) {
+            const doc = documents.find(d => d.id === id);
+            if (!doc) return;
+
+            Swal.fire({
+                title: 'เปลี่ยนสถานะการดำเนินงาน',
+                input: 'select',
+                inputOptions: {
+                    'รอรับทราบ': 'รอรับทราบ',
+                    'กำลังดำเนินการ': 'กำลังดำเนินการ',
+                    'เสร็จสิ้น': 'เสร็จสิ้น'
+                },
+                inputValue: doc.status,
+                showCancelButton: true,
+                confirmButtonText: 'บันทึก',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed && result.value) {
+                    doc.status = result.value;
+                    renderAll();
+                    Swal.fire('สำเร็จ', 'อัปเดตสถานะเรียบร้อยแล้ว', 'success');
+                }
+            });
+        }
+
+        function exportCSV(type) {
+            const filtered = documents.filter(d => d.type === type);
+            if (!filtered.length) {
+                Swal.fire('แจ้งเตือน', 'ไม่มีข้อมูลสำหรับส่งออก', 'info');
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF" + "เลขรับกองช่าง,เลขที่หนังสือ,วันที่,เรื่อง,ผู้ส่ง,ผู้รับผิดชอบ,สถานะ\n";
+            filtered.forEach(d => {
+                csvContent += `"${d.regNo}","${d.docNumber}","${d.docDate}","${d.subject}","${d.sender}","${d.assignee}","${d.status}"\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `saraban_${type}_2026.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>

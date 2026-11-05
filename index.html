@@ -774,13 +774,15 @@
                 badgeColor.className = "w-2.5 h-2.5 rounded-full bg-amber-500";
                 document.getElementById('addDocBtn').classList.add('hidden');
             }
-       const switchBtn = document.getElementById('switchRoleBtn');
-    if (switchBtn) {
+           const switchBtn = document.getElementById('switchRoleBtn');
+           const switchBtnMobile = document.getElementById('switchRoleBtnMobile');
+
         if (isAdmin) {
-            switchBtn.classList.remove('hidden');
-        } else {
-            switchBtn.classList.add('hidden');
-        }
+        if (switchBtn) switchBtn.classList.remove('hidden');
+        if (switchBtnMobile) switchBtnMobile.classList.remove('hidden');
+           } else {
+        if (switchBtn) switchBtn.classList.add('hidden');
+        if (switchBtnMobile) switchBtnMobile.classList.add('hidden');
     }
 }
 

@@ -632,9 +632,9 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">แนบไฟล์เอกสาร (PDF / รูปภาพ)</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">แนบไฟล์เอกสาร (PDF / รูปภาพ) - ไม่บังคับ</label>
                     <input type="file" id="docFile" accept=".pdf,image/*" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm file:mr-4 file:py-1 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                    <p class="text-xs text-gray-400 mt-1">รองรับไฟล์ PDF หรือรูปภาพขนาดไม่เกิน 10MB (ระบบจะอัปโหลดขึ้น Google Drive ให้อัตโนมัติ)</p>
+                    <p class="text-xs text-gray-400 mt-1">หากไม่เลือกไฟล์ ช่องไฟล์แนบในตารางจะเว้นว่างไว้</p>
                 </div>
 
                 <div class="flex justify-end space-x-3 pt-4 border-t border-gray-100">
@@ -648,11 +648,8 @@
     <!-- ==================== JAVASCRIPT LOGIC ==================== -->
     <script>
         const ADMIN_PASSWORD = "12345";
-        
-        // Google Apps Script Web App URL ที่คุณกำหนด
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxDo6zj8Jq89py3Hs46GeU5tJSejTT2GfrkahaVZBLXQszvdLd6piu-9M7M03sil32E9g/exec";
 
-        // เริ่มต้นด้วยรายการว่างเปล่าทันที
         let documents = JSON.parse(localStorage.getItem('saraban_docs')) || [];
 
         function saveToLocalStorage() {
@@ -1081,13 +1078,14 @@
                 return html;
             };
 
+            // แก้ไขจุดนี้: ถ้าไม่มี fileData จะคืนค่าว่างเปล่า (ไม่แสดงปุ่มใดๆ)
             const getFileAttachmentButton = (doc) => {
-                if (doc.fileData) {
+                if (doc.fileData && doc.fileData.trim() !== "") {
                     return `<a href="${doc.fileData}" target="_blank" class="inline-flex items-center px-2.5 py-1 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg text-xs font-medium transition" title="${doc.fileName || 'เปิดดูเอกสารแนบ'}">
                         <i class="fa-solid fa-paperclip mr-1"></i> เปิดดูไฟล์
                     </a>`;
                 }
-                return `<span class="text-gray-400 text-xs">ไม่มีไฟล์</span>`;
+                return ``; 
             };
 
             const getStatusBadge = (status) => {
@@ -1267,7 +1265,6 @@
             document.getElementById('documentModal').classList.add('hidden');
         }
 
-        // ฟังก์ชันแปลงไฟล์เป็น Base64
         function fileToBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -1289,15 +1286,14 @@
             let fileName = '';
             let fileData = '';
 
-            // แสดงหน้าต่างกำลังโหลดระหว่างอัปโหลดไฟล์ขึ้น Google Drive
-            Swal.fire({
-                title: 'กำลังบันทึกข้อมูลและอัปโหลดไฟล์...',
-                text: 'กรุณารอสักครู่ ระบบกำลังส่งไฟล์ขึ้น Google Drive',
-                allowOutsideClick: false,
-                didOpen: () => { Swal.showLoading(); }
-            });
-
             if (fileInput.files && fileInput.files[0]) {
+                Swal.fire({
+                    title: 'กำลังบันทึกข้อมูลและอัปโหลดไฟล์...',
+                    text: 'กรุณารอสักครู่ ระบบกำลังส่งไฟล์ขึ้น Google Drive',
+                    allowOutsideClick: false,
+                    didOpen: () => { Swal.showLoading(); }
+                });
+
                 const file = fileInput.files[0];
                 fileName = file.name;
 
@@ -1316,9 +1312,7 @@
 
                     const result = await response.json();
                     if (result.status === 'success') {
-                        fileData = result.fileUrl; // ได้ลิงก์ Google Drive ของจริงมาเก็บไว้
-                    } else {
-                        console.error('Drive Upload Error:', result.message);
+                        fileData = result.fileUrl;
                     }
                 } catch (error) {
                     console.error('Fetch Error:', error);
@@ -1366,7 +1360,7 @@
                         doc.fileData = fileData;
                     }
                 }
-                Swal.fire('สำเร็จ', 'อัปเดตข้อมูลหนังสือและไฟล์เรียบร้อยแล้ว', 'success');
+                Swal.fire('สำเร็จ', 'อัปเดตข้อมูลหนังสือเรียบร้อยแล้ว', 'success');
             } else {
                 const nextRegNo = type === 'incoming' ? getNextRegNoForYear('incoming', selectedYearStr) : '-';
 
@@ -1469,7 +1463,7 @@
                         <p><b>ผู้รับผิดชอบ:</b> ${doc.assignee}</p>
                         <div class="pt-2 border-t border-gray-200 flex items-center justify-between">
                             <span><b>ไฟล์แนบ:</b> ${doc.fileName || 'ไม่มีเอกสารแนบ'}</span>
-                            ${doc.fileData ? `<a href="${doc.fileData}" target="_blank" class="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-blue-700 transition"><i class="fa-solid fa-external-link-alt mr-1"></i> เปิดดูไฟล์</a>` : ''}
+                            ${doc.fileData && doc.fileData.trim() !== '' ? `<a href="${doc.fileData}" target="_blank" class="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-blue-700 transition"><i class="fa-solid fa-external-link-alt mr-1"></i> เปิดดูไฟล์</a>` : ''}
                         </div>
                     </div>
                 `,

@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ระบบจัดการงานสารบรรณและเอกสารภายในกองช่าง (e-Saraban) อบต.ไร่ใต้</title>
+
+    <!-- SheetJS Library สำหรับอ่านไฟล์ Excel -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -370,6 +373,10 @@
                                     <input type="text" id="searchIncoming" onkeyup="renderTables()" placeholder="ค้นหา ผู้ส่ง, เรื่อง, เลขที่..." class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                 </div>
                                 <button onclick="exportCSV('incoming')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
+                                <button onclick="document.getElementById('excelFileInput').click()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0">
+    <i class="fa-solid fa-file-excel mr-1"></i> นำเข้าจาก Excel
+</button>
+<input type="file" id="excelFileInput" accept=".xlsx, .xls, .csv" class="hidden" onchange="importExcelData(event)">
                             </div>
                         </div>
                         <div class="overflow-x-auto">
@@ -1660,6 +1667,124 @@
             link.click();
             document.body.removeChild(link);
         }
+
+            async function importExcelData(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (currentUser.role !== 'admin' || currentUser.name !== 'นิศาชล คงดี') {
+        Swal.fire('ไม่อนุญาต', 'เฉพาะผู้ดูแลระบบเท่านั้นที่มีสิทธิ์นำเข้าข้อมูล', 'warning');
+        event.target.value = '';
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+        try {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            const firstSheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[firstSheetName];
+            const rows = XLSX.utils.sheet_to_json(worksheet);
+
+            if (!rows || rows.length === 0) {
+                Swal.fire('แจ้งเตือน', 'ไม่พบข้อมูลภายในไฟล์ Excel ที่เลือก', 'warning');
+                return;
+            }
+
+            Swal.fire({
+                title: 'กำลังนำเข้าข้อมูล...',
+                text: `พบข้อมูลทั้งหมด ${rows.length} รายการ กำลังบันทึกลงฐานข้อมูล`,
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading(); }
+            });
+
+            let successCount =, errorCount = 0;
+            const selectedYearStr = document.getElementById('filterYearIncoming').value || '2569';
+
+            for (let row of rows) {
+                // กำหนดค่าตามชื่อคอลัมน์ใน Excel ของคุณ (ปรับแก้ชื่อคอลัมน์ให้ตรงกับหัวตารางจริง)
+                const centralRegNo = row['เลขรับส่วนกลาง'] || row['central_reg_no'] || '-';
+                const receiveDate = row['วันที่ลงรับ'] || row['receive_date'] || new Date().toISOString().split('T')[0];
+                const docNumber = row['เลขที่หนังสือ'] || row['doc_number'] || '-';
+                const docDate = row['ลงวันที่'] || row['doc_date'] || new Date().toISOString().split('T')[0];
+                const subject = row['เรื่อง'] || row['subject'] || 'ไม่มีชื่อเรื่อง';
+                const sender = row['ผู้ส่ง'] || row['sender'] || '-';
+                const urgency = row['ความเร่งด่วน'] || row['urgency'] || 'ปกติ';
+                const assignee = row['ผู้รับผิดชอบ'] || row['assignee'] || 'นิศาชล คงดี';
+                const dueDate = row['กำหนดเสร็จ'] || row['due_date'] || '';
+                const status = row['สถานะ'] || row['status'] || 'ลงรับแล้ว';
+
+                // คำนวณเลขรับกองช่างอัตโนมัติตามปี
+                const nextRegNo = getNextRegNoForYear('incoming', selectedYearStr);
+                const newId = Date.now() + Math.floor(Math.random() * 1000);
+
+                const insertPayload = {
+                    id: newId,
+                    type: 'incoming',
+                    reg_no: nextRegNo,
+                    year_str: selectedYearStr,
+                    central_reg_no: centralRegNo,
+                    receive_date: receiveDate,
+                    sender: sender,
+                    urgency: urgency,
+                    doc_number: docNumber,
+                    doc_date: docDate,
+                    subject: subject,
+                    status: status,
+                    assignee: assignee,
+                    due_date: dueDate,
+                    ack_status: 'รอรับทราบ',
+                    ack_time: '-',
+                    file_name: '',
+                    file_url: ''
+                };
+
+                // จำลองการเพิ่มเข้าไปใน Array ชั่วคราวก่อนบันทึกจริงเพื่อรันเลขต่อกันได้ถูกต้อง
+                documents.unshift({
+                    id: newId,
+                    type: 'incoming',
+                    reg_no: nextRegNo,
+                    yearStr: selectedYearStr,
+                    centralRegNo: centralRegNo,
+                    receiveDate: receiveDate,
+                    sender: sender,
+                    urgency: urgency,
+                    docNumber: docNumber,
+                    docDate: docDate,
+                    subject: subject,
+                    status: status,
+                    assignee: assignee,
+                    dueDate: dueDate,
+                    ackStatus: 'รอรับทราบ',
+                    ackTime: '-'
+                });
+
+                const { error } = await supabaseClient.from('documents').insert([insertPayload]);
+                if (error) {
+                    errorCount++;
+                } else {
+                    successCount++;
+                }
+            }
+
+            event.target.value = '';
+            loadDocumentsFromSupabase();
+
+            Swal.fire({
+                icon: 'success',
+                title: 'นำเข้าข้อมูลสำเร็จ',
+                text: `นำเข้าสำเร็จ ${successCount} รายการ ${errorCount > 0 ? '(ล้มเหลว ' + errorCount + ' รายการ)' : ''}`
+            });
+
+        } catch (err) {
+            console.error(err);
+            Swal.fire('เกิดข้อผิดพลาด', 'ไม่สามารถอ่านไฟล์ Excel ได้ กรุณาตรวจสอบรูปแบบไฟล์', 'error');
+            event.target.value = '';
+        }
+    };
+    reader.readAsArrayBuffer(file);
+}
     </script>
 </body>
 </html>

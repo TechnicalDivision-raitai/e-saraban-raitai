@@ -1647,6 +1647,27 @@
             });
         }
 
+        // ฟังก์ชันแปลง Serial Date ของ Excel เป็น YYYY-MM-DD
+        function excelDateToISOString(excelDate) {
+            if (!excelDate) return new Date().toISOString().split('T')[0];
+            // ถ้าเป็นข้อความอยู่แล้ว เช่น '2026-05-01' ให้คืนค่าเดิม
+            if (typeof excelDate === 'string' && excelDate.includes('-')) {
+                return excelDate;
+            }
+            // ถ้าเป็นตัวเลข Serial Number ของ Excel
+            const num = parseFloat(excelDate);
+            if (!isNaN(num)) {
+                const utc_days = Math.floor(num - 25569);
+                const utc_value = utc_days * 86400;
+                const date_info = new Date(utc_value * 1000);
+                const year = date_info.getFullYear();
+                const month = String(date_info.getMonth() + 1).padStart(2, '0');
+                const day = String(date_info.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+            return new Date().toISOString().split('T')[0];
+        }
+
         async function importExcelData(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -1683,20 +1704,21 @@
 
                     for (let row of rows) {
                         const centralRegNo = row['เลขรับส่วนกลาง'] || row['central_reg_no'] || '-';
-                        const receiveDate = row['วันที่ลงรับ'] || row['receive_date'] || new Date().toISOString().split('T')[0];
+                        const receiveDate = excelDateToISOString(row['วันที่ลงรับ'] || row['receive_date']);
                         const docNumber = row['เลขที่หนังสือ'] || row['doc_number'] || '-';
-                        const docDate = row['ลงวันที่'] || row['doc_date'] || new Date().toISOString().split('T')[0];
+                        const docDate = excelDateToISOString(row['ลงวันที่'] || row['doc_date']);
                         const subject = row['เรื่อง'] || row['subject'] || 'ไม่มีชื่อเรื่อง';
                         const sender = row['ผู้ส่ง'] || row['sender'] || '-';
                         const urgency = row['ความเร่งด่วน'] || row['urgency'] || 'ปกติ';
                         const assignee = row['ผู้รับผิดชอบ'] || row['assignee'] || 'นิศาชล คงดี';
-                        const dueDate = row['กำหนดเสร็จ'] || row['due_date'] || '';
+                        const dueDate = row['กำหนดเสร็จ'] ? excelDateToISOString(row['กำหนดเสร็จ']) : '';
                         const status = row['สถานะ'] || row['status'] || 'ลงรับแล้ว';
 
+                        // คำนวณเลขรับกองช่างและดันเข้าตารางชั่วคราวทันที เพื่อให้รอบถัดไปรันเลขเพิ่มขึ้นถูกต้อง
                         const nextRegNo = getNextRegNoForYear('incoming', selectedYearStr);
-                        const newId = Date.now() + Math.floor(Math.random() * 1000);
+                        const newId = Date.now() + Math.floor(Math.random() * 10000);
 
-                        const insertPayload = {
+                        const newDocObj = {
                             id: newId,
                             type: 'incoming',
                             reg_no: nextRegNo,
@@ -1717,10 +1739,11 @@
                             file_url: ''
                         };
 
+                        // บันทึกลงตัวแปร Global ฝั่ง client ทันที (เพื่อให้การวนรอบถัดไปมองเห็นเลขรับใหม่)
                         documents.unshift({
                             id: newId,
                             type: 'incoming',
-                            reg_no: nextRegNo,
+                            regNo: nextRegNo,
                             yearStr: selectedYearStr,
                             centralRegNo: centralRegNo,
                             receiveDate: receiveDate,
@@ -1736,7 +1759,7 @@
                             ackTime: '-'
                         });
 
-                        const { error } = await supabaseClient.from('documents').insert([insertPayload]);
+                        const { error } = await supabaseClient.from('documents').insert([newDocObj]);
                         if (error) {
                             errorCount++;
                         } else {
@@ -1750,7 +1773,7 @@
                     Swal.fire({
                         icon: 'success',
                         title: 'นำเข้าข้อมูลสำเร็จ',
-                        text: `นำเข้าสำเร็จ ${successCount} รายการ ${errorCount > 0 ? '(ล้มเหลว ' + errorCount + ' รายการ)' : ''}`
+                        text: `นำเข้าสำเร็จ ${successCount} รายการ ${errorCount > 0 ? '(ล้มเหลว ' + errorCount + ' รายการเช็คการเชื่อมต่อ Supabase)' : ''}`
                     });
 
                 } catch (err) {

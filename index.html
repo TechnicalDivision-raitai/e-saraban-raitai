@@ -1141,12 +1141,26 @@
             }
         }
 
-        // ฟังก์ชันสำหรับจัดรูปแบบวันที่จาก YYYY-MM-DD เป็น DD-MM-YYYY
+        // ฟังก์ชันแปลงวันที่จาก YYYY-MM-DD เป็น วัน-เดือน-ปี (พ.ศ.)
         function formatThaiDate(dateStr) {
             if (!dateStr || dateStr === '-') return '-';
-            const parts = dateStr.split('-');
+            
+            // กรณีรูปแบบเป็น YYYY-MM-DD หรือ YYYY/MM/DD
+            let parts = dateStr.split('T')[0].split('-');
+            if (parts.length !== 3) {
+                parts = dateStr.split('/');
+            }
+
             if (parts.length === 3) {
-                return `${parts[2]}-${parts[1]}-${parts[0]}`;
+                let year = parseInt(parts[0]);
+                let month = parts[1];
+                let day = parts[2];
+
+                // ถ้าตัวแรกเป็นปี ค.ศ. (มากกว่า 2400 แสดงว่าเป็น พ.ศ. อยู่แล้ว ถ้าไม่ใช่ให้บวก 543)
+                if (year < 2400) {
+                    year += 543;
+                }
+                return `${day}-${month}-${year}`;
             }
             return dateStr;
         }

@@ -157,6 +157,9 @@
                     <i class="fa-solid fa-note-sticky w-5 text-center text-purple-400"></i>
                     <span>บันทึกข้อความ (ปีงบฯ)</span>
                 </a>
+                <a href="#" onclick="switchTab('forms')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-tab="forms"><i class="fa-solid fa-file-lines w-5 text-center text-cyan-400"></i><span>แบบฟอร์ม</span></a>
+                <a href="#" onclick="switchTab('petitions')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-tab="petitions"><i class="fa-solid fa-money-check-dollar w-5 text-center text-orange-400"></i><span>งานฎีกา</span></a>
+                <a href="#" onclick="switchTab('petitionSummary')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-tab="petitionSummary"><i class="fa-solid fa-chart-column w-5 text-center text-green-400"></i><span>สรุปงานฎีกา</span></a>
                 <a href="#" onclick="switchTab('allDocs')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-tab="allDocs">
                     <i class="fa-solid fa-folder-tree w-5 text-center text-teal-400"></i>
                     <span>รวมทะเบียนทั้งหมด</span>
@@ -229,6 +232,9 @@
                         <a href="#" onclick="switchTab('outgoing'); toggleMobileMenu();" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800"><i class="fa-solid fa-file-arrow-up w-5 text-emerald-400"></i><span>หนังสือส่ง</span></a>
                         <a href="#" onclick="switchTab('orders'); toggleMobileMenu();" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800"><i class="fa-solid fa-gavel w-5 text-amber-400"></i><span>คำสั่ง</span></a>
                         <a href="#" onclick="switchTab('memos'); toggleMobileMenu();" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800"><i class="fa-solid fa-note-sticky w-5 text-purple-400"></i><span>บันทึกข้อความ</span></a>
+                        <a href="#" onclick="switchTab('forms'); toggleMobileMenu();" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800"><i class="fa-solid fa-file-lines w-5 text-cyan-400"></i><span>แบบฟอร์ม</span></a>
+                        <a href="#" onclick="switchTab('petitions'); toggleMobileMenu();" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800"><i class="fa-solid fa-money-check-dollar w-5 text-orange-400"></i><span>งานฎีกา</span></a>
+                        <a href="#" onclick="switchTab('petitionSummary'); toggleMobileMenu();" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800"><i class="fa-solid fa-chart-column w-5 text-green-400"></i><span>สรุปงานฎีกา</span></a>
                         <a href="#" onclick="switchTab('allDocs'); toggleMobileMenu();" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800"><i class="fa-solid fa-folder-tree w-5 text-teal-400"></i><span>รวมทะเบียนทั้งหมด</span></a>
                         <a href="#" onclick="switchTab('overdue'); toggleMobileMenu();" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800"><i class="fa-solid fa-triangle-exclamation w-5 text-red-400"></i><span>งานเกินกำหนด</span></a>
                     </nav>
@@ -562,6 +568,29 @@
                     </div>
                 </div>
 
+                <!-- แบบฟอร์ม -->
+                <div id="view-forms" class="tab-view hidden space-y-6">
+                    <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
+                        <div class="flex flex-wrap justify-between items-center gap-3 mb-5"><div><h2 class="text-lg font-bold">ทะเบียนแบบฟอร์ม</h2><p class="text-xs text-gray-500">ค้นหาจากงาน เลขที่แบบ หรือชื่อแบบฟอร์ม</p></div><input id="searchForms" onkeyup="renderTables()" placeholder="ค้นหา งาน / เลขที่แบบ / ชื่อแบบฟอร์ม" class="px-3 py-2 border rounded-xl text-sm w-full md:w-80"></div>
+                        <div class="overflow-x-auto"><table class="w-full text-left"><thead class="bg-gray-50 text-xs"><tr><th class="p-3">งาน</th><th class="p-3">เลขที่แบบ</th><th class="p-3">ชื่อแบบฟอร์ม</th><th class="p-3">ไฟล์แนบ</th><th class="p-3">จัดการ</th></tr></thead><tbody id="formsTableBody" class="divide-y text-sm"></tbody></table></div>
+                    </div>
+                </div>
+                <!-- งานฎีกา -->
+                <div id="view-petitions" class="tab-view hidden space-y-6">
+                    <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
+                        <div class="flex flex-wrap justify-between items-center gap-3 mb-5"><div><h2 class="text-lg font-bold">ทะเบียนงานฎีกา</h2><p class="text-xs text-gray-500">บันทึกและติดตามรายการฎีกา</p></div><input id="searchPetitions" onkeyup="renderTables()" placeholder="ค้นหาเลขที่ผู้เบิก / ผู้รับเงิน / โครงการ" class="px-3 py-2 border rounded-xl text-sm w-full md:w-80"></div>
+                        <div class="overflow-x-auto"><table class="w-full text-left"><thead class="bg-gray-50 text-xs"><tr><th class="p-3">วันที่จัดทำ</th><th class="p-3">ผู้จัดทำ</th><th class="p-3">เลขที่ผู้เบิก</th><th class="p-3">ประเภทฎีกา</th><th class="p-3">ผู้รับเงิน</th><th class="p-3 text-right">จำนวนเงิน</th><th class="p-3">ชื่อโครงการ</th><th class="p-3">จัดการ</th></tr></thead><tbody id="petitionsTableBody" class="divide-y text-sm"></tbody></table></div>
+                    </div>
+                </div>
+                <!-- สรุปงานฎีกา -->
+                <div id="view-petitionSummary" class="tab-view hidden space-y-6">
+                    <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
+                        <h2 class="text-lg font-bold mb-4">สรุปจำนวนเงินงานฎีกา</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5"><div class="p-4 rounded-xl bg-orange-50"><div class="text-sm text-orange-700">จำนวนเงินขอเบิกรวมทั้งหมด</div><div id="petitionGrandTotal" class="text-2xl font-bold text-orange-800">0.00 บาท</div></div><div class="p-4 rounded-xl bg-blue-50"><div class="text-sm text-blue-700">จำนวนรายการฎีกา</div><div id="petitionCount" class="text-2xl font-bold text-blue-800">0</div></div></div>
+                        <div class="overflow-x-auto"><table class="w-full text-left"><thead class="bg-gray-50 text-xs"><tr><th class="p-3">ประเภทฎีกา</th><th class="p-3 text-right">จำนวนรายการ</th><th class="p-3 text-right">รวมจำนวนเงินขอเบิก</th></tr></thead><tbody id="petitionSummaryBody" class="divide-y text-sm"></tbody></table></div>
+                    </div>
+                </div>
+
                 <!-- 8. OVERDUE TAB -->
                 <div id="view-overdue" class="tab-view hidden space-y-6">
                     <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
@@ -636,6 +665,8 @@
                             <option value="outgoing">หนังสือส่ง (ปีปฏิทิน)</option>
                             <option value="orders">คำสั่ง (ปีปฏิทิน)</option>
                             <option value="memos">บันทึกข้อความ (ปีงบประมาณ)</option>
+                            <option value="forms">แบบฟอร์ม</option>
+                            <option value="petitions">งานฎีกา</option>
                         </select>
                     </div>
                     <div>
@@ -721,7 +752,17 @@
                         ackStatus: d.ack_status || 'รอรับทราบ',
                         ackTime: d.ack_time || '-',
                         fileName: d.file_name || '',
-                        fileData: d.file_url || ''
+                        fileData: d.file_url || '',
+                        workName: d.work_name || '',
+                        formNo: d.form_no || '',
+                        formName: d.form_name || '',
+                        petitionDate: d.petition_date || '',
+                        creator: d.creator || '',
+                        withdrawalNo: d.withdrawal_no || '',
+                        petitionType: d.petition_type || '',
+                        payee: d.payee || '',
+                        amount: Number(d.amount || 0),
+                        projectName: d.project_name || ''
                     }));
                     renderAll();
                 }
@@ -864,6 +905,9 @@
                 outgoing: 'ทะเบียนหนังสือส่ง',
                 orders: 'ทะเบียนคำสั่ง',
                 memos: 'ทะเบียนบันทึกข้อความ',
+                forms: 'ทะเบียนแบบฟอร์ม',
+                petitions: 'ทะเบียนงานฎีกา',
+                petitionSummary: 'สรุปงานฎีกา',
                 allDocs: 'รวมทะเบียนเอกสารทั้งหมด',
                 overdue: 'ติดตามงานเกินกำหนด'
             };
@@ -906,6 +950,8 @@
             const outgoingCount = documents.filter(d => d.type === 'outgoing').length;
             const ordersCount = documents.filter(d => d.type === 'orders').length;
             const memosCount = documents.filter(d => d.type === 'memos').length;
+            const formsCount = documents.filter(d => d.type === 'forms').length;
+            const petitionsCount = documents.filter(d => d.type === 'petitions').length;
 
             const pending = documents.filter(d => d.status === 'รอรับทราบ' || d.status === 'ลงรับแล้ว').length;
             const progress = documents.filter(d => d.status === 'กำลังดำเนินการ' || d.status === 'เสนอเซนต์' || d.status === 'ออกเอกสาร').length;
@@ -916,10 +962,10 @@
             typeChartInstance = new Chart(ctxType, {
                 type: 'doughnut',
                 data: {
-                    labels: ['หนังสือรับ', 'หนังสือส่ง', 'คำสั่ง', 'บันทึกข้อความ'],
+                    labels: ['หนังสือรับ', 'หนังสือส่ง', 'คำสั่ง', 'บันทึกข้อความ', 'แบบฟอร์ม', 'งานฎีกา'],
                     datasets: [{
-                        data: [incomingCount, outgoingCount, ordersCount, memosCount],
-                        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6']
+                        data: [incomingCount, outgoingCount, ordersCount, memosCount, formsCount, petitionsCount],
+                        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#06b6d4', '#f97316']
                     }]
                 },
                 options: { responsive: true, maintainAspectRatio: false }
@@ -1109,6 +1155,29 @@
                         <label class="block text-sm font-medium text-gray-700 mb-1">เรื่อง</label>
                         <input type="text" id="fieldSubject" required placeholder="ระบุเรื่องบันทึกข้อความ" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
                     </div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-1">งาน</label><input type="text" id="fieldWorkName" placeholder="ระบุประเภท/ชื่องาน" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm"></div>
+                `;
+            } else if (type === 'forms') {
+                html = `
+                    <div><label class="block text-sm font-medium text-gray-700 mb-1">งาน</label><input id="fieldWorkName" required class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm" placeholder="ระบุงาน"></div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div><label class="block text-sm font-medium text-gray-700 mb-1">เลขที่แบบ</label><input id="fieldFormNo" required class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm"></div>
+                      <div><label class="block text-sm font-medium text-gray-700 mb-1">ชื่อแบบฟอร์ม</label><input id="fieldFormName" required class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm"></div>
+                    </div>
+                    <input type="hidden" id="fieldDocNumber"><input type="hidden" id="fieldDocDate"><input type="hidden" id="fieldSubject"><input type="hidden" id="fieldSender"><input type="hidden" id="fieldStatus" value="พร้อมใช้งาน">
+                `;
+            } else if (type === 'petitions') {
+                html = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div><label class="block text-sm font-medium text-gray-700 mb-1">วันที่จัดทำ</label><input type="date" id="fieldPetitionDate" required class="w-full px-3 py-2 border rounded-xl text-sm"></div>
+                      <div><label class="block text-sm font-medium text-gray-700 mb-1">ผู้จัดทำ</label><input id="fieldCreator" required class="w-full px-3 py-2 border rounded-xl text-sm"></div>
+                      <div><label class="block text-sm font-medium text-gray-700 mb-1">เลขที่ผู้เบิก</label><input id="fieldWithdrawalNo" required class="w-full px-3 py-2 border rounded-xl text-sm"></div>
+                      <div><label class="block text-sm font-medium text-gray-700 mb-1">ประเภทฎีกา</label><input id="fieldPetitionType" required class="w-full px-3 py-2 border rounded-xl text-sm" placeholder="เช่น ฎีกาจัดซื้อ / ฎีกาค่าจ้าง"></div>
+                      <div><label class="block text-sm font-medium text-gray-700 mb-1">ผู้รับเงิน</label><input id="fieldPayee" required class="w-full px-3 py-2 border rounded-xl text-sm"></div>
+                      <div><label class="block text-sm font-medium text-gray-700 mb-1">จำนวนเงินขอเบิก (บาท)</label><input type="number" min="0" step="0.01" id="fieldAmount" required class="w-full px-3 py-2 border rounded-xl text-sm"></div>
+                    </div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-1">ชื่อโครงการ</label><input id="fieldProjectName" class="w-full px-3 py-2 border rounded-xl text-sm"></div>
+                    <input type="hidden" id="fieldDocNumber"><input type="hidden" id="fieldDocDate"><input type="hidden" id="fieldSubject"><input type="hidden" id="fieldSender"><input type="hidden" id="fieldStatus" value="ลงทะเบียนแล้ว">
                 `;
             }
             container.innerHTML = html;
@@ -1223,7 +1292,7 @@
             document.getElementById('myInboxTableBody').innerHTML = myDocs.length ? myDocs.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-bold text-blue-600">${formatRegDisplay(d)}</td>
-                    <td class="p-3 uppercase text-xs font-semibold text-gray-500">${d.type}</td>
+                    <td class="p-3 uppercase text-xs font-semibold text-gray-500">${({incoming:'หนังสือรับ',outgoing:'หนังสือส่ง',orders:'คำสั่ง',memos:'บันทึกข้อความ',forms:'แบบฟอร์ม',petitions:'งานฎีกา'})[d.type] || d.type}</td>
                     <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div></td>
                     <td class="p-3">
                         ${d.ackStatus === 'รับทราบแล้ว' ? `<span class="text-emerald-600 text-xs font-medium"><i class="fa-solid fa-check-circle mr-1"></i>${d.ackTime}</span>` : `<button onclick="acknowledgeDoc(${d.id})" class="bg-amber-500 hover:bg-amber-600 text-white text-xs px-3 py-1 rounded-lg transition">กดรับทราบงาน</button>`}
@@ -1304,14 +1373,14 @@
             const memDocs = documents.filter(d => {
                 const matchType = (d.type === 'memos');
                 const matchYear = (!filterYearMem || String(d.yearStr) === String(filterYearMem));
-                const matchText = (d.subject.toLowerCase().includes(searchMem) || d.sender.toLowerCase().includes(searchMem) || d.docNumber.toLowerCase().includes(searchMem));
+                const matchText = (d.subject.toLowerCase().includes(searchMem) || d.sender.toLowerCase().includes(searchMem) || d.docNumber.toLowerCase().includes(searchMem) || (d.workName || '').toLowerCase().includes(searchMem));
                 return matchType && matchYear && matchText;
             });
             document.getElementById('memosTableBody').innerHTML = memDocs.length ? memDocs.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-bold text-purple-600">ปีงบฯ ${d.yearStr}</td>
                     <td class="p-3 text-xs"><span class="font-semibold">${d.docNumber}</span><br><span class="text-gray-400">${formatThaiDate(d.docDate)}</span></td>
-                    <td class="p-3"><div class="font-medium text-gray-800">เรียน: ${d.sender}</div><div class="text-xs text-gray-500">เรื่อง: ${d.subject}</div></td>
+                    <td class="p-3"><div class="font-medium text-gray-800">เรียน: ${d.sender}</div><div class="text-xs text-gray-500">เรื่อง: ${d.subject}</div><div class="text-xs text-purple-600">งาน: ${d.workName || '-'}</div></td>
                     <td class="p-3">${getStatusBadge(d.status)}</td>
                     <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
                     <td class="p-3 text-center">${getActionButtons(d)}</td>
@@ -1321,7 +1390,7 @@
             // 7. All Docs Table
             document.getElementById('allDocsTableBody').innerHTML = documents.length ? documents.map(d => `
                 <tr class="hover:bg-gray-50">
-                    <td class="p-3 uppercase text-xs font-semibold text-gray-500">${d.type}</td>
+                    <td class="p-3 uppercase text-xs font-semibold text-gray-500">${({incoming:'หนังสือรับ',outgoing:'หนังสือส่ง',orders:'คำสั่ง',memos:'บันทึกข้อความ',forms:'แบบฟอร์ม',petitions:'งานฎีกา'})[d.type] || d.type}</td>
                     <td class="p-3 font-bold text-gray-700">${d.yearStr}</td>
                     <td class="p-3 font-bold text-blue-600">${formatRegDisplay(d)} <span class="font-normal text-xs text-gray-500">(${d.docNumber})</span></td>
                     <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div></td>
@@ -1331,12 +1400,28 @@
                 </tr>
             `).join('') : `<tr><td colspan="7" class="p-6 text-center text-gray-400">ยังไม่มีเอกสารในระบบทั้งหมด</td></tr>`;
 
-            // 8. Overdue Table
+            // 8. Forms table
+            const formQuery = (document.getElementById('searchForms')?.value || '').toLowerCase();
+            const formDocs = documents.filter(d => d.type === 'forms' && [d.workName,d.formNo,d.formName].some(v => (v || '').toLowerCase().includes(formQuery)));
+            document.getElementById('formsTableBody').innerHTML = formDocs.length ? formDocs.map(d => `<tr><td class="p-3">${d.workName || '-'}</td><td class="p-3">${d.formNo || '-'}</td><td class="p-3">${d.formName || '-'}</td><td class="p-3">${getFileAttachmentButton(d)}</td><td class="p-3">${getActionButtons(d)}</td></tr>`).join('') : `<tr><td colspan="5" class="p-5 text-center text-gray-400">ไม่พบข้อมูลแบบฟอร์ม</td></tr>`;
+
+            // 9. Petitions table and grouped summary
+            const petitionQuery = (document.getElementById('searchPetitions')?.value || '').toLowerCase();
+            const petitionDocs = documents.filter(d => d.type === 'petitions' && [d.withdrawalNo,d.creator,d.petitionType,d.payee,d.projectName].some(v => (v || '').toLowerCase().includes(petitionQuery)));
+            document.getElementById('petitionsTableBody').innerHTML = petitionDocs.length ? petitionDocs.map(d => `<tr><td class="p-3">${formatThaiDate(d.petitionDate)}</td><td class="p-3">${d.creator || '-'}</td><td class="p-3">${d.withdrawalNo || '-'}</td><td class="p-3">${d.petitionType || '-'}</td><td class="p-3">${d.payee || '-'}</td><td class="p-3 text-right font-semibold">${Number(d.amount || 0).toLocaleString('th-TH',{minimumFractionDigits:2,maximumFractionDigits:2})}</td><td class="p-3">${d.projectName || '-'}</td><td class="p-3 whitespace-nowrap">${getActionButtons(d)}</td></tr>`).join('') : `<tr><td colspan="8" class="p-5 text-center text-gray-400">ไม่พบข้อมูลงานฎีกา</td></tr>`;
+            const petitionTotal = documents.filter(d => d.type === 'petitions');
+            const totalAmount = petitionTotal.reduce((sum,d) => sum + Number(d.amount || 0), 0);
+            document.getElementById('petitionGrandTotal').innerText = totalAmount.toLocaleString('th-TH',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' บาท';
+            document.getElementById('petitionCount').innerText = petitionTotal.length.toLocaleString('th-TH');
+            const groupedPetitions = petitionTotal.reduce((acc,d) => { const k = d.petitionType || 'ไม่ระบุประเภท'; if (!acc[k]) acc[k] = {count:0,total:0}; acc[k].count++; acc[k].total += Number(d.amount || 0); return acc; }, {});
+            document.getElementById('petitionSummaryBody').innerHTML = Object.keys(groupedPetitions).length ? Object.entries(groupedPetitions).sort((a,b)=>a[0].localeCompare(b[0],'th')).map(([k,v])=>`<tr><td class="p-3">${k}</td><td class="p-3 text-right">${v.count.toLocaleString('th-TH')}</td><td class="p-3 text-right font-semibold">${v.total.toLocaleString('th-TH',{minimumFractionDigits:2,maximumFractionDigits:2})} บาท</td></tr>`).join('') + `<tr class="bg-gray-50 font-bold"><td class="p-3">รวมทั้งหมด</td><td class="p-3 text-right">${petitionTotal.length}</td><td class="p-3 text-right">${totalAmount.toLocaleString('th-TH',{minimumFractionDigits:2,maximumFractionDigits:2})} บาท</td></tr>` : `<tr><td colspan="3" class="p-5 text-center text-gray-400">ยังไม่มีข้อมูลงานฎีกา</td></tr>`;
+
+            // 10. Overdue Table
             const today = new Date().toISOString().split('T')[0];
             const overdueDocs = documents.filter(d => d.dueDate && d.dueDate < today && d.status !== 'ดำเนินการแล้ว' && d.status !== 'เสร็จสิ้น');
             document.getElementById('overdueTableBody').innerHTML = overdueDocs.length ? overdueDocs.map(d => `
                 <tr class="hover:bg-red-50/50">
-                    <td class="p-3 uppercase text-xs font-semibold text-gray-500">${d.type}</td>
+                    <td class="p-3 uppercase text-xs font-semibold text-gray-500">${({incoming:'หนังสือรับ',outgoing:'หนังสือส่ง',orders:'คำสั่ง',memos:'บันทึกข้อความ',forms:'แบบฟอร์ม',petitions:'งานฎีกา'})[d.type] || d.type}</td>
                     <td class="p-3 font-bold text-red-600">${formatRegDisplay(d)}</td>
                     <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div></td>
                     <td class="p-3 text-gray-600">${d.assignee}</td>
@@ -1423,6 +1508,16 @@
             const docDate = document.getElementById('fieldDocDate') ? document.getElementById('fieldDocDate').value : '';
             const subject = document.getElementById('fieldSubject') ? document.getElementById('fieldSubject').value : '';
             const sender = document.getElementById('fieldSender') ? document.getElementById('fieldSender').value : '';
+            const workName = document.getElementById('fieldWorkName')?.value || '';
+            const formNo = document.getElementById('fieldFormNo')?.value || '';
+            const formName = document.getElementById('fieldFormName')?.value || '';
+            const petitionDate = document.getElementById('fieldPetitionDate')?.value || '';
+            const creator = document.getElementById('fieldCreator')?.value || '';
+            const withdrawalNo = document.getElementById('fieldWithdrawalNo')?.value || '';
+            const petitionType = document.getElementById('fieldPetitionType')?.value || '';
+            const payee = document.getElementById('fieldPayee')?.value || '';
+            const amount = Number(document.getElementById('fieldAmount')?.value || 0);
+            const projectName = document.getElementById('fieldProjectName')?.value || '';
             const status = document.getElementById('fieldStatus') ? document.getElementById('fieldStatus').value : 'ลงรับแล้ว';
             
             let centralRegNo = '-';
@@ -1457,7 +1552,17 @@
                     year_str: selectedYearStr,
                     central_reg_no: type === 'incoming' ? centralRegNo : '-',
                     receive_date: type === 'incoming' ? receiveDate : '-',
-                    urgency: type === 'incoming' ? urgency : 'ปกติ'
+                    urgency: type === 'incoming' ? urgency : 'ปกติ',
+                    work_name: workName,
+                    form_no: formNo,
+                    form_name: formName,
+                    petition_date: petitionDate,
+                    creator: creator,
+                    withdrawal_no: withdrawalNo,
+                    petition_type: petitionType,
+                    payee: payee,
+                    amount: amount,
+                    project_name: projectName
                 };
                 if (fileName && fileData) {
                     updatePayload.file_name = fileName;
@@ -1498,7 +1603,17 @@
                     ack_status: 'รอรับทราบ',
                     ack_time: '-',
                     file_name: fileName || '',
-                    file_url: fileData || ''
+                    file_url: fileData || '',
+                    work_name: workName,
+                    form_no: formNo,
+                    form_name: formName,
+                    petition_date: petitionDate,
+                    creator: creator,
+                    withdrawal_no: withdrawalNo,
+                    petition_type: petitionType,
+                    payee: payee,
+                    amount: amount,
+                    project_name: projectName
                 };
 
                 const { error } = await supabaseClient
@@ -1538,6 +1653,16 @@
                 if (document.getElementById('fieldCentralReg')) document.getElementById('fieldCentralReg').value = doc.centralRegNo || '';
                 if (document.getElementById('fieldReceiveDate')) document.getElementById('fieldReceiveDate').value = doc.receiveDate || '';
                 if (document.getElementById('fieldUrgency')) document.getElementById('fieldUrgency').value = doc.urgency || 'ปกติ';
+                if (document.getElementById('fieldWorkName')) document.getElementById('fieldWorkName').value = doc.workName || '';
+                if (document.getElementById('fieldFormNo')) document.getElementById('fieldFormNo').value = doc.formNo || '';
+                if (document.getElementById('fieldFormName')) document.getElementById('fieldFormName').value = doc.formName || '';
+                if (document.getElementById('fieldPetitionDate')) document.getElementById('fieldPetitionDate').value = doc.petitionDate || '';
+                if (document.getElementById('fieldCreator')) document.getElementById('fieldCreator').value = doc.creator || '';
+                if (document.getElementById('fieldWithdrawalNo')) document.getElementById('fieldWithdrawalNo').value = doc.withdrawalNo || '';
+                if (document.getElementById('fieldPetitionType')) document.getElementById('fieldPetitionType').value = doc.petitionType || '';
+                if (document.getElementById('fieldPayee')) document.getElementById('fieldPayee').value = doc.payee || '';
+                if (document.getElementById('fieldAmount')) document.getElementById('fieldAmount').value = doc.amount || '';
+                if (document.getElementById('fieldProjectName')) document.getElementById('fieldProjectName').value = doc.projectName || '';
                 if (document.getElementById('docAssignee')) document.getElementById('docAssignee').value = doc.assignee || '';
                 if (document.getElementById('docDueDate')) document.getElementById('docDueDate').value = doc.dueDate || '';
             }, 50);
@@ -1587,6 +1712,9 @@
                         ${doc.centralRegNo && doc.centralRegNo !== '-' ? `<p><b>เลขรับส่วนกลาง:</b> ${doc.centralRegNo}</p>` : ''}
                         <p><b>เลขที่หนังสือ:</b> ${doc.docNumber} (ลงวันที่ ${formatThaiDate(doc.docDate)})</p>
                         <p><b>เรื่อง:</b> ${doc.subject}</p>
+                        ${doc.workName ? `<p><b>งาน:</b> ${doc.workName}</p>` : ''}
+                        ${doc.type === 'forms' ? `<p><b>เลขที่แบบ:</b> ${doc.formNo || '-'}</p><p><b>ชื่อแบบฟอร์ม:</b> ${doc.formName || '-'}</p>` : ''}
+                        ${doc.type === 'petitions' ? `<p><b>วันที่จัดทำ:</b> ${formatThaiDate(doc.petitionDate)}</p><p><b>ผู้จัดทำ:</b> ${doc.creator || '-'}</p><p><b>เลขที่ผู้เบิก:</b> ${doc.withdrawalNo || '-'}</p><p><b>ประเภทฎีกา:</b> ${doc.petitionType || '-'}</p><p><b>ผู้รับเงิน:</b> ${doc.payee || '-'}</p><p><b>จำนวนเงินขอเบิก:</b> ${Number(doc.amount || 0).toLocaleString('th-TH',{minimumFractionDigits:2})} บาท</p><p><b>ชื่อโครงการ:</b> ${doc.projectName || '-'}</p>` : ''}
                         <p><b>ผู้ส่ง/ผู้รับ/เรียน:</b> ${doc.sender}</p>
                         <p><b>สถานะดำเนินการ:</b> <span class="text-blue-600 font-semibold">${doc.status}</span></p>
                         <p><b>ผู้รับผิดชอบ:</b> ${doc.assignee}</p>

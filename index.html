@@ -163,7 +163,7 @@
                 </a>
                 <a href="#" onclick="switchTab('vouchers')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-tab="vouchers">
                     <i class="fa-solid fa-receipt w-5 text-center text-rose-400"></i>
-                    <span>งานฎีกา</span>
+                    <span>งานฎีกา (ปีงบฯ)</span>
                 </a>
                 <a href="#" onclick="switchTab('allDocs')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-tab="allDocs">
                     <i class="fa-solid fa-folder-tree w-5 text-center text-teal-400"></i>
@@ -259,6 +259,31 @@
                 
                 <!-- 1. DASHBOARD TAB -->
                 <div id="view-dashboard" class="tab-view space-y-6">
+                    <!-- แถบเลือกปีสำหรับกรองภาพรวมแดชบอร์ด -->
+                    <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-xs flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+                                <i class="fa-solid fa-calendar-days"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-gray-800">เลือกปีสำหรับกรองภาพรวมแดชบอร์ด</h3>
+                                <p class="text-xs text-gray-500">แสดงผลสถิติและกราฟเฉพาะปีที่เลือก (หรือเลือกทั้งหมด)</p>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-auto">
+                            <select id="globalFilterYear" onchange="renderAll()" class="w-full md:w-48 px-3 py-2 border border-gray-300 rounded-xl text-sm font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none bg-blue-50/50 text-blue-900">
+                                <option value="">ทุกปี (All Years)</option>
+                                <option value="2569" selected>ปี 2569</option>
+                                <option value="2570">ปี 2570</option>
+                                <option value="2571">ปี 2571</option>
+                                <option value="2572">ปี 2572</option>
+                                <option value="2573">ปี 2573</option>
+                                <option value="2574">ปี 2574</option>
+                                <option value="2575">ปี 2575</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
                         <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-xs flex flex-col justify-between">
                             <span class="text-xs font-semibold text-gray-500 uppercase">หนังสือทั้งหมด</span>
@@ -578,25 +603,37 @@
                     </div>
                 </div>
 
-                <!-- 8. VOUCHERS TAB (งานฎีกา) -->
+                <!-- 8. VOUCHERS TAB (งานฎีกา - แยกตามปีงบประมาณ) -->
                 <div id="view-vouchers" class="tab-view hidden space-y-6">
                     <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5">
                             <div>
-                                <h2 class="text-lg font-bold text-gray-800">ทะเบียนงานฎีกา</h2>
-                                <p class="text-xs text-gray-500">จัดการและตรวจสอบการเบิกจ่ายงานฎีกา</p>
+                                <h2 class="text-lg font-bold text-gray-800">ทะเบียนงานฎีกา (ปีงบประมาณ)</h2>
+                                <p class="text-xs text-gray-500">จัดการและตรวจสอบการเบิกจ่ายงานฎีกา (ตัดรอบปีงบประมาณ 1 ต.ค. - 30 ก.ย.)</p>
                             </div>
                             <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                                <select id="filterYearVouchers" onchange="renderTables()" class="px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                    <option value="">ทุกปี (All Years)</option>
+                                    <option value="2569" selected>ปีงบฯ 2569</option>
+                                    <option value="2570">ปีงบฯ 2570</option>
+                                    <option value="2571">ปีงบฯ 2571</option>
+                                    <option value="2572">ปีงบฯ 2572</option>
+                                    <option value="2573">ปีงบฯ 2573</option>
+                                    <option value="2574">ปีงบฯ 2574</option>
+                                    <option value="2575">ปีงบฯ 2575</option>
+                                </select>
                                 <div class="relative w-full md:w-60">
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
                                     <input type="text" id="searchVouchers" onkeyup="renderTables()" placeholder="ค้นหา เลขผู้เบิก, ผู้รับเงิน, โครงการ..." class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                 </div>
+                                <button onclick="exportCSV('vouchers')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
                             </div>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse">
                                 <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                     <tr>
+                                        <th class="p-3">ปีงบประมาณ</th>
                                         <th class="p-3">วันที่จัดทำ</th>
                                         <th class="p-3">เลขที่ผู้เบิก / ผู้จัดทำ</th>
                                         <th class="p-3">ประเภทฎีกา / ชื่อโครงการ</th>
@@ -611,8 +648,33 @@
                     </div>
                 </div>
 
-                <!-- 9. VOUCHERS DASHBOARD SUMMARY TAB (แดชบอร์ดสรุปงานฎีกา - ดีไซน์ตามที่คุณต้องการ) -->
+                <!-- 9. VOUCHERS DASHBOARD SUMMARY TAB (แดชบอร์ดสรุปงานฎีกา) -->
                 <div id="view-vouchersSummary" class="tab-view hidden space-y-6">
+                    <!-- แถบเลือกปีสำหรับกรองงานฎีกา -->
+                    <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-xs flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center font-bold">
+                                <i class="fa-solid fa-filter"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-gray-800">กรองข้อมูลสรุปงานฎีกาตามปีงบประมาณ</h3>
+                                <p class="text-xs text-gray-500">เลือกปีงบประมาณเพื่อดูยอดเงิน สัดส่วน และรายการฎีกาเฉพาะปีนั้น</p>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-auto">
+                            <select id="filterSummaryYearVouchers" onchange="renderAll()" class="w-full md:w-48 px-3 py-2 border border-gray-300 rounded-xl text-sm font-semibold focus:ring-2 focus:ring-rose-500 focus:outline-none bg-rose-50/50 text-rose-900">
+                                <option value="">ทุกปีงบประมาณ (All Years)</option>
+                                <option value="2569" selected>ปีงบฯ 2569</option>
+                                <option value="2570">ปีงบฯ 2570</option>
+                                <option value="2571">ปีงบฯ 2571</option>
+                                <option value="2572">ปีงบฯ 2572</option>
+                                <option value="2573">ปีงบฯ 2573</option>
+                                <option value="2574">ปีงบฯ 2574</option>
+                                <option value="2575">ปีงบฯ 2575</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <!-- Cards สถิติด้านบน -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs flex flex-col justify-between">
@@ -789,7 +851,7 @@
                             <option value="orders">คำสั่ง (ปีปฏิทิน)</option>
                             <option value="memos">บันทึกข้อความ (ปีงบประมาณ)</option>
                             <option value="forms">แบบฟอร์ม</option>
-                            <option value="vouchers">งานฎีกา</option>
+                            <option value="vouchers">งานฎีกา (ปีงบประมาณ)</option>
                         </select>
                     </div>
                     <div id="yearSelectWrapper">
@@ -1052,13 +1114,16 @@
         }
 
         function updateStats() {
-            const total = documents.length;
-            const pending = documents.filter(d => d.status === 'รอรับทราบ' || d.ackStatus === 'รอรับทราบ').length;
-            const progress = documents.filter(d => d.status === 'กำลังดำเนินการ' || d.status === 'เสนอเซนต์').length;
-            const done = documents.filter(d => d.status === 'เสร็จสิ้น' || d.status === 'ดำเนินการแล้ว').length;
+            const globalYear = document.getElementById('globalFilterYear').value;
+            const filteredDocs = globalYear ? documents.filter(d => String(d.yearStr) === String(globalYear)) : documents;
+
+            const total = filteredDocs.length;
+            const pending = filteredDocs.filter(d => d.status === 'รอรับทราบ' || d.ackStatus === 'รอรับทราบ').length;
+            const progress = filteredDocs.filter(d => d.status === 'กำลังดำเนินการ' || d.status === 'เสนอเซนต์').length;
+            const done = filteredDocs.filter(d => d.status === 'เสร็จสิ้น' || d.status === 'ดำเนินการแล้ว').length;
             
             const today = new Date().toISOString().split('T')[0];
-            const overdue = documents.filter(d => d.dueDate && d.dueDate < today && d.status !== 'ดำเนินการแล้ว' && d.status !== 'เสร็จสิ้น').length;
+            const overdue = filteredDocs.filter(d => d.dueDate && d.dueDate < today && d.status !== 'ดำเนินการแล้ว' && d.status !== 'เสร็จสิ้น').length;
 
             document.getElementById('statTotal').innerText = total;
             document.getElementById('statPending').innerText = pending;
@@ -1072,16 +1137,19 @@
         }
 
         function renderCharts() {
-            const incomingCount = documents.filter(d => d.type === 'incoming').length;
-            const outgoingCount = documents.filter(d => d.type === 'outgoing').length;
-            const ordersCount = documents.filter(d => d.type === 'orders').length;
-            const memosCount = documents.filter(d => d.type === 'memos').length;
-            const formsCount = documents.filter(d => d.type === 'forms').length;
-            const vouchersCount = documents.filter(d => d.type === 'vouchers').length;
+            const globalYear = document.getElementById('globalFilterYear').value;
+            const filteredDocs = globalYear ? documents.filter(d => String(d.yearStr) === String(globalYear)) : documents;
 
-            const pending = documents.filter(d => d.status === 'รอรับทราบ' || d.status === 'ลงรับแล้ว').length;
-            const progress = documents.filter(d => d.status === 'กำลังดำเนินการ' || d.status === 'เสนอเซนต์' || d.status === 'ออกเอกสาร').length;
-            const done = documents.filter(d => d.status === 'เสร็จสิ้น' || d.status === 'ดำเนินการแล้ว').length;
+            const incomingCount = filteredDocs.filter(d => d.type === 'incoming').length;
+            const outgoingCount = filteredDocs.filter(d => d.type === 'outgoing').length;
+            const ordersCount = filteredDocs.filter(d => d.type === 'orders').length;
+            const memosCount = filteredDocs.filter(d => d.type === 'memos').length;
+            const formsCount = filteredDocs.filter(d => d.type === 'forms').length;
+            const vouchersCount = filteredDocs.filter(d => d.type === 'vouchers').length;
+
+            const pending = filteredDocs.filter(d => d.status === 'รอรับทราบ' || d.status === 'ลงรับแล้ว').length;
+            const progress = filteredDocs.filter(d => d.status === 'กำลังดำเนินการ' || d.status === 'เสนอเซนต์' || d.status === 'ออกเอกสาร').length;
+            const done = filteredDocs.filter(d => d.status === 'เสร็จสิ้น' || d.status === 'ดำเนินการแล้ว').length;
 
             const ctxType = document.getElementById('typeChart').getContext('2d');
             if (typeChartInstance) typeChartInstance.destroy();
@@ -1114,9 +1182,14 @@
         }
 
         function renderVoucherCharts() {
-            const allVouchers = documents.filter(d => d.type === 'vouchers');
-            const categoryData = {};
+            const summaryYear = document.getElementById('filterSummaryYearVouchers').value;
+            const allVouchers = documents.filter(d => {
+                const matchType = (d.type === 'vouchers');
+                const matchYear = (!summaryYear || String(d.yearStr) === String(summaryYear));
+                return matchType && matchYear;
+            });
 
+            const categoryData = {};
             allVouchers.forEach(v => {
                 const cat = v.voucherCategory || 'ไม่ระบุประเภท';
                 const amt = parseFloat(v.voucherAmount || 0);
@@ -1185,15 +1258,11 @@
                 yearWrapper.style.display = 'none';
                 standardMeta.style.display = 'none';
                 fileWrapper.style.display = 'block';
-            } else if (type === 'vouchers') {
-                yearWrapper.style.display = 'none';
-                standardMeta.style.display = 'none';
-                fileWrapper.style.display = 'none';
             } else {
                 yearWrapper.style.display = 'block';
                 standardMeta.style.display = 'grid';
                 fileWrapper.style.display = 'block';
-                if (type === 'memos') {
+                if (type === 'memos' || type === 'vouchers') {
                     yearLabel.innerText = 'ปีงบประมาณ';
                 } else {
                     yearLabel.innerText = 'ปีปฏิทิน';
@@ -1492,8 +1561,11 @@
                 return `-`;
             };
 
-            // 1. Dashboard Table
-            const dashDocs = documents.slice(0, 5);
+            // 1. Dashboard Table (กรองตามปี Global Filter)
+            const globalYear = document.getElementById('globalFilterYear').value;
+            const filteredDashDocs = globalYear ? documents.filter(d => String(d.yearStr) === String(globalYear)) : documents;
+            const dashDocs = filteredDashDocs.slice(0, 5);
+
             document.getElementById('dashboardTableBody').innerHTML = dashDocs.length ? dashDocs.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-bold text-blue-600">${formatRegDisplay(d)}</td>
@@ -1507,7 +1579,7 @@
                     <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
                     <td class="p-3 text-center">${getActionButtons(d)}</td>
                 </tr>
-            `).join('') : `<tr><td colspan="7" class="p-6 text-center text-gray-400">ยังไม่มีข้อมูลในระบบ</td></tr>`;
+            `).join('') : `<tr><td colspan="7" class="p-6 text-center text-gray-400">ยังไม่มีข้อมูลในระบบสำหรับปีนี้</td></tr>`;
 
             // 2. My Inbox Table
             const myDocs = documents.filter(d => d.assignee === currentUser.name);
@@ -1630,17 +1702,20 @@
                 </tr>
             `).join('') : `<tr><td colspan="5" class="p-6 text-center text-gray-400">ไม่พบข้อมูลแบบฟอร์ม</td></tr>`;
 
-            // 8. Vouchers Table
+            // 8. Vouchers Table (แยกตามปีงบประมาณ)
+            const filterYearVouch = document.getElementById('filterYearVouchers').value;
             const searchVoucher = document.getElementById('searchVouchers') ? document.getElementById('searchVouchers').value.toLowerCase() : '';
             const voucherDocs = documents.filter(d => {
                 const matchType = (d.type === 'vouchers');
+                const matchYear = (!filterYearVouch || String(d.yearStr) === String(filterYearVouch));
                 const matchText = ((d.voucherNo && d.voucherNo.toLowerCase().includes(searchVoucher)) || (d.voucherMaker && d.voucherMaker.toLowerCase().includes(searchVoucher)) || (d.voucherPayee && d.voucherPayee.toLowerCase().includes(searchVoucher)) || (d.voucherProject && d.voucherProject.toLowerCase().includes(searchVoucher)) || (d.voucherCategory && d.voucherCategory.toLowerCase().includes(searchVoucher)));
-                return matchType && matchText;
+                return matchType && matchYear && matchText;
             });
             document.getElementById('vouchersTableBody').innerHTML = voucherDocs.length ? voucherDocs.map(d => `
                 <tr class="hover:bg-gray-50">
+                    <td class="p-3 font-bold text-rose-600">ปีงบฯ ${d.yearStr || '-'}</td>
                     <td class="p-3 text-xs text-gray-600">${formatThaiDate(d.voucherDate)}</td>
-                    <td class="p-3 text-xs"><span class="font-bold text-rose-600">${d.voucherNo}</span><br><span class="text-gray-400">ผู้จัดทำ: ${d.voucherMaker}</span></td>
+                    <td class="p-3 text-xs"><span class="font-bold text-rose-700">${d.voucherNo}</span><br><span class="text-gray-400">ผู้จัดทำ: ${d.voucherMaker}</span></td>
                     <td class="p-3">
                         <span class="inline-block bg-rose-100 text-rose-800 text-[10px] px-2 py-0.5 rounded-full font-semibold mb-1">${d.voucherCategory}</span>
                         <div class="font-medium text-gray-800">${d.voucherProject}</div>
@@ -1649,10 +1724,16 @@
                     <td class="p-3 text-right font-bold text-rose-700">${Number(d.voucherAmount || 0).toLocaleString('th-TH', {minimumFractionDigits: 2})}</td>
                     <td class="p-3 text-center">${getActionButtons(d)}</td>
                 </tr>
-            `).join('') : `<tr><td colspan="6" class="p-6 text-center text-gray-400">ไม่พบข้อมูลงานฎีกา</td></tr>`;
+            `).join('') : `<tr><td colspan="7" class="p-6 text-center text-gray-400">ไม่พบข้อมูลงานฎีกาสำหรับปีนี้</td></tr>`;
 
-            // 9. Vouchers Summary & Dashboard Data Rendering
-            const allVouchers = documents.filter(d => d.type === 'vouchers');
+            // 9. Vouchers Summary & Dashboard Data Rendering (กรองตามปีงบประมาณที่เลือกในหน้าสรุป)
+            const summaryYear = document.getElementById('filterSummaryYearVouchers').value;
+            const allVouchers = documents.filter(d => {
+                const matchType = (d.type === 'vouchers');
+                const matchYear = (!summaryYear || String(d.yearStr) === String(summaryYear));
+                return matchType && matchYear;
+            });
+
             let grandTotal = 0;
             const categorySummary = {};
             allVouchers.forEach(v => {
@@ -1677,7 +1758,7 @@
                     <td class="p-3 text-center font-semibold text-gray-600">${categorySummary[cat].count} รายการ</td>
                     <td class="p-3 text-right font-bold text-rose-700">${categorySummary[cat].total.toLocaleString('th-TH', {minimumFractionDigits: 2})} บาท</td>
                 </tr>
-            `).join('') : `<tr><td colspan="3" class="p-6 text-center text-gray-400">ยังไม่มีข้อมูลสำหรับสรุปงานฎีกา</td></tr>`;
+            `).join('') : `<tr><td colspan="3" class="p-6 text-center text-gray-400">ยังไม่มีข้อมูลสำหรับสรุปงานฎีกาในปีนี้</td></tr>`;
 
             const recentTbody = document.getElementById('vouchersRecentTableBody');
             recentTbody.innerHTML = allVouchers.length ? allVouchers.slice(0, 5).map(v => `
@@ -1689,7 +1770,7 @@
                     </td>
                     <td class="p-3 text-right font-bold text-rose-700 text-xs">${Number(v.voucherAmount || 0).toLocaleString('th-TH', {minimumFractionDigits: 2})}</td>
                 </tr>
-            `).join('') : `<tr><td colspan="3" class="p-6 text-center text-gray-400">ไม่มีรายการงานฎีกา</td></tr>`;
+            `).join('') : `<tr><td colspan="3" class="p-6 text-center text-gray-400">ไม่มีรายการงานฎีกาในปีนี้</td></tr>`;
 
             // 10. All Docs Table
             document.getElementById('allDocsTableBody').innerHTML = documents.length ? documents.map(d => `
@@ -1997,18 +2078,18 @@
 
             let extraHtml = '';
             if (doc.type === 'memos') {
-                extraHtml = `<p><b>งาน:</b> ${doc.memoWork || '-'}</p>`;
+                extraHtml = `<p><b>ปีงบประมาณ:</b> ${doc.yearStr || '-'}</p><p><b>งาน:</b> ${doc.memoWork || '-'}</p>`;
             } else if (doc.type === 'forms') {
                 extraHtml = `<p><b>งาน:</b> ${doc.memoWork || '-'}</p><p><b>เลขที่แบบ:</b> ${doc.formCode || '-'}</p><p><b>ชื่อแบบฟอร์ม:</b> ${doc.formName || '-'}</p>`;
             } else if (doc.type === 'vouchers') {
-                extraHtml = `<p><b>วันที่จัดทำ:</b> ${formatThaiDate(doc.voucherDate)}</p><p><b>ผู้จัดทำ:</b> ${doc.voucherMaker || '-'}</p><p><b>เลขที่ผู้เบิก:</b> ${doc.voucherNo || '-'}</p><p><b>ประเภทฎีกา:</b> ${doc.voucherCategory || '-'}</p><p><b>ผู้รับเงิน:</b> ${doc.voucherPayee || '-'}</p><p><b>จำนวนเงินขอเบิก:</b> ${Number(doc.voucherAmount || 0).toLocaleString('th-TH', {minimumFractionDigits: 2})} บาท</p><p><b>ชื่อโครงการ:</b> ${doc.voucherProject || '-'}</p>`;
+                extraHtml = `<p><b>ปีงบประมาณ:</b> ${doc.yearStr || '-'}</p><p><b>วันที่จัดทำ:</b> ${formatThaiDate(doc.voucherDate)}</p><p><b>ผู้จัดทำ:</b> ${doc.voucherMaker || '-'}</p><p><b>เลขที่ผู้เบิก:</b> ${doc.voucherNo || '-'}</p><p><b>ประเภทฎีกา:</b> ${doc.voucherCategory || '-'}</p><p><b>ผู้รับเงิน:</b> ${doc.voucherPayee || '-'}</p><p><b>จำนวนเงินขอเบิก:</b> ${Number(doc.voucherAmount || 0).toLocaleString('th-TH', {minimumFractionDigits: 2})} บาท</p><p><b>ชื่อโครงการ:</b> ${doc.voucherProject || '-'}</p>`;
             }
 
             Swal.fire({
                 title: `รายละเอียดเอกสาร (${doc.type.toUpperCase()})`,
                 html: `
                     <div class="text-left space-y-2 text-sm bg-gray-50 p-4 rounded-xl border border-gray-200">
-                        ${doc.regNo && doc.regNo !== '-' ? `<p><b>เลขรับกองช่าง:</b> ${doc.regNo} - ${doc.yearStr}</p>` : (doc.yearStr ? `<p><b>ปี:</b> ${doc.yearStr}</p>` : '')}
+                        ${doc.regNo && doc.regNo !== '-' ? `<p><b>เลขรับกองช่าง:</b> ${doc.regNo} - ${doc.yearStr}</p>` : (doc.type !== 'memos' && doc.type !== 'vouchers' && doc.yearStr ? `<p><b>ปี:</b> ${doc.yearStr}</p>` : '')}
                         ${extraHtml}
                         ${doc.docNumber ? `<p><b>เลขที่หนังสือ:</b> ${doc.docNumber} (ลงวันที่ ${formatThaiDate(doc.docDate)})</p>` : ''}
                         ${doc.subject ? `<p><b>เรื่อง:</b> ${doc.subject}</p>` : ''}

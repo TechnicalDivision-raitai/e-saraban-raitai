@@ -22,12 +22,12 @@
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- Supabase Client SDK -->
+    <!-- Supabase Client SDK (ใช้ชื่อ supabaseClient ป้องกันการชนกัน) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         const SUPABASE_URL = 'https://wkhbkvxewrihmpjrkjql.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_6heN0SRJYr7mHV00heafpQ_vnIAR4Kj';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     </script>
 
     <style>
@@ -662,7 +662,7 @@
 
         async function loadDocumentsFromSupabase() {
             try {
-                const { data, error } = await supabase
+                const { data, error } = await supabaseClient
                     .from('documents')
                     .select('*')
                     .order('id', { ascending: false });
@@ -1404,7 +1404,7 @@
                     updatePayload.file_url = fileData;
                 }
 
-                const { error } = await supabase
+                const { error } = await supabaseClient
                     .from('documents')
                     .update(updatePayload)
                     .eq('id', editId);
@@ -1441,7 +1441,7 @@
                     file_url: fileData || ''
                 };
 
-                const { error } = await supabase
+                const { error } = await supabaseClient
                     .from('documents')
                     .insert([insertPayload]);
 
@@ -1500,7 +1500,7 @@
                 confirmButtonText: 'ยืนยันลบ'
             }).then(async (result) => {
                 if (result.isConfirmed) {
-                    const { error } = await supabase
+                    const { error } = await supabaseClient
                         .from('documents')
                         .delete()
                         .eq('id', id);
@@ -1546,7 +1546,7 @@
                 const now = new Date();
                 const ackTimeStr = `${now.getDate()} ม.ค. ${now.getFullYear()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
                 
-                const { error } = await supabase
+                const { error } = await supabaseClient
                     .from('documents')
                     .update({
                         ack_status: 'รับทราบแล้ว',
@@ -1586,7 +1586,7 @@
                 cancelButtonText: 'ยกเลิก'
             }).then(async (result) => {
                 if (result.isConfirmed && result.value) {
-                    const { error } = await supabase
+                    const { error } = await supabaseClient
                         .from('documents')
                         .update({ status: result.value })
                         .eq('id', id);

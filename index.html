@@ -131,8 +131,13 @@
             <nav class="flex-1 px-3 space-y-1 overflow-y-auto py-2">
                 <a href="#" onclick="switchTab('dashboard')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition active-tab bg-blue-600 text-white" data-tab="dashboard">
                     <i class="fa-solid fa-chart-pie w-5 text-center"></i>
-                    <span>แดชบอร์ด</span>
+                    <span>สรุปงานสารบรรณ</span>
                 </a>
+                <a href="#" onclick="switchTab('vouchersSummary')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-tab="vouchersSummary">
+                    <i class="fa-solid fa-chart-pie w-5 text-center text-pink-400"></i>
+                    <span>สรุปงานฎีกา</span>
+                </a>
+
                 <a href="#" onclick="switchTab('myInbox')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-tab="myInbox">
                     <i class="fa-solid fa-inbox w-5 text-center"></i>
                     <span>กล่องงานของฉัน</span>
@@ -157,13 +162,13 @@
                     <i class="fa-solid fa-note-sticky w-5 text-center text-purple-400"></i>
                     <span>บันทึกข้อความ (ปีงบฯ)</span>
                 </a>
-                <a href="#" onclick="switchTab('forms')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-tab="forms">
-                    <i class="fa-solid fa-file-lines w-5 text-center text-cyan-400"></i>
-                    <span>แบบฟอร์ม</span>
-                </a>
                 <a href="#" onclick="switchTab('vouchers')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-tab="vouchers">
                     <i class="fa-solid fa-receipt w-5 text-center text-rose-400"></i>
                     <span>งานฎีกา (ปีงบฯ)</span>
+                </a>
+		<a href="#" onclick="switchTab('forms')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-tab="forms">
+                    <i class="fa-solid fa-file-lines w-5 text-center text-cyan-400"></i>
+                    <span>แบบฟอร์ม</span>
                 </a>
                 <a href="#" onclick="switchTab('allDocs')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-tab="allDocs">
                     <i class="fa-solid fa-folder-tree w-5 text-center text-teal-400"></i>
@@ -171,10 +176,6 @@
                 </a>
 
                 <div class="pt-4 pb-1 px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">รายงานและติดตาม</div>
-                <a href="#" onclick="switchTab('vouchersSummary')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-tab="vouchersSummary">
-                    <i class="fa-solid fa-chart-pie w-5 text-center text-pink-400"></i>
-                    <span>แดชบอร์ดสรุปงานฎีกา</span>
-                </a>
                 <a href="#" onclick="switchTab('overdue')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-tab="overdue">
                     <i class="fa-solid fa-triangle-exclamation w-5 text-center text-red-400"></i>
                     <span>งานเกินกำหนด</span>
@@ -204,7 +205,7 @@
                     <button onclick="toggleMobileMenu()" class="md:hidden text-gray-600 hover:text-gray-900 focus:outline-none text-xl">
                         <i class="fa-solid fa-bars"></i>
                     </button>
-                    <h1 id="pageTitle" class="text-lg md:text-xl font-bold text-gray-800">แดชบอร์ดสรุปผลงานสารบรรณ</h1>
+                    <h1 id="pageTitle" class="text-lg md:text-xl font-bold text-gray-800">สรุปผลงานสารบรรณ</h1>
                 </div>
 
                 <div class="flex items-center space-x-3">

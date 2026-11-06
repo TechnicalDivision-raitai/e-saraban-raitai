@@ -22,6 +22,14 @@
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <!-- Supabase Client SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://wkhbkvxewrihmpjrkjql.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_6heN0SRJYr7mHV00heafpQ_vnIAR4Kj';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    </script>
+
     <style>
         body {
             font-family: 'Kanit', sans-serif;
@@ -650,10 +658,43 @@
         const ADMIN_PASSWORD = "12345";
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxDo6zj8Jq89py3Hs46GeU5tJSejTT2GfrkahaVZBLXQszvdLd6piu-9M7M03sil32E9g/exec";
 
-        let documents = JSON.parse(localStorage.getItem('saraban_docs')) || [];
+        let documents = [];
 
-        function saveToLocalStorage() {
-            localStorage.setItem('saraban_docs', JSON.stringify(documents));
+        async function loadDocumentsFromSupabase() {
+            try {
+                const { data, error } = await supabase
+                    .from('documents')
+                    .select('*')
+                    .order('id', { ascending: false });
+                
+                if (error) {
+                    console.error('Error loading documents from Supabase:', error);
+                } else {
+                    documents = (data || []).map(d => ({
+                        id: d.id,
+                        type: d.type,
+                        regNo: d.reg_no,
+                        yearStr: d.year_str,
+                        centralRegNo: d.central_reg_no,
+                        receiveDate: d.receive_date,
+                        sender: d.sender,
+                        urgency: d.urgency,
+                        docNumber: d.doc_number,
+                        docDate: d.doc_date,
+                        subject: d.subject,
+                        status: d.status,
+                        assignee: d.assignee,
+                        dueDate: d.due_date,
+                        ackStatus: d.ack_status || 'รอรับทราบ',
+                        ackTime: d.ack_time || '-',
+                        fileName: d.file_name || '',
+                        fileData: d.file_url || ''
+                    }));
+                    renderAll();
+                }
+            } catch (err) {
+                console.error('Connection error:', err);
+            }
         }
 
         let currentUser = {
@@ -668,7 +709,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             updateUserInterface();
-            renderAll();
+            loadDocumentsFromSupabase();
             toggleFormFields();
         });
 
@@ -694,7 +735,7 @@
                     document.getElementById('loginScreen').classList.add('hidden');
                     document.getElementById('appContent').classList.remove('hidden');
                     updateUserInterface();
-                    renderAll();
+                    loadDocumentsFromSupabase();
 
                     Swal.fire({
                         icon: 'success',
@@ -716,7 +757,7 @@
                 document.getElementById('loginScreen').classList.add('hidden');
                 document.getElementById('appContent').classList.remove('hidden');
                 updateUserInterface();
-                renderAll();
+                loadDocumentsFromSupabase();
 
                 Swal.fire({
                     icon: 'success',
@@ -1078,7 +1119,6 @@
                 return html;
             };
 
-            // แก้ไขจุดนี้: ถ้าไม่มี fileData จะคืนค่าว่างเปล่า (ไม่แสดงปุ่มใดๆ)
             const getFileAttachmentButton = (doc) => {
                 if (doc.fileData && doc.fileData.trim() !== "") {
                     return `<a href="${doc.fileData}" target="_blank" class="inline-flex items-center px-2.5 py-1 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg text-xs font-medium transition" title="${doc.fileName || 'เปิดดูเอกสารแนบ'}">
@@ -1136,13 +1176,13 @@
                 </tr>
             `).join('') : `<tr><td colspan="7" class="p-6 text-center text-gray-400">ไม่มีงานที่ได้รับมอบหมายในขณะนี้</td></tr>`;
 
-            // 3. Incoming Table (กรองตามปีที่เลือก)
+            // 3. Incoming Table
             const filterYearInc = document.getElementById('filterYearIncoming').value;
             const searchInc = document.getElementById('searchIncoming').value.toLowerCase();
             const incDocs = documents.filter(d => {
                 const matchType = (d.type === 'incoming');
                 const matchYear = (!filterYearInc || d.yearStr === filterYearInc);
-                const matchText = (d.subject.toLowerCase().includes(searchInc) || d.sender.toLowerCase().includes(searchInc) || d.docNumber.toLowerCase().includes(searchInc) || d.centralRegNo.toLowerCase().includes(searchInc));
+                const matchText = (d.subject.toLowerCase().includes(searchInc) || d.sender.toLowerCase().includes(searchInc) || d.docNumber.toLowerCase().includes(searchInc) || (d.centralRegNo && d.centralRegNo.toLowerCase().includes(searchInc)));
                 return matchType && matchYear && matchText;
             });
             document.getElementById('incomingTableBody').innerHTML = incDocs.length ? incDocs.map(d => `
@@ -1158,7 +1198,7 @@
                 </tr>
             `).join('') : `<tr><td colspan="8" class="p-6 text-center text-gray-400">ไม่พบข้อมูลหนังสือรับ</td></tr>`;
 
-            // 4. Outgoing Table (กรองตามปีที่เลือก)
+            // 4. Outgoing Table
             const filterYearOut = document.getElementById('filterYearOutgoing').value;
             const searchOut = document.getElementById('searchOutgoing').value.toLowerCase();
             const outDocs = documents.filter(d => {
@@ -1178,7 +1218,7 @@
                 </tr>
             `).join('') : `<tr><td colspan="6" class="p-6 text-center text-gray-400">ไม่พบข้อมูลหนังสือส่ง</td></tr>`;
 
-            // 5. Orders Table (กรองตามปีที่เลือก)
+            // 5. Orders Table
             const filterYearOrd = document.getElementById('filterYearOrders').value;
             const searchOrd = document.getElementById('searchOrders').value.toLowerCase();
             const ordDocs = documents.filter(d => {
@@ -1198,7 +1238,7 @@
                 </tr>
             `).join('') : `<tr><td colspan="6" class="p-6 text-center text-gray-400">ไม่พบข้อมูลคำสั่ง</td></tr>`;
 
-            // 6. Memos Table (กรองตามปีงบประมาณที่เลือก)
+            // 6. Memos Table
             const filterYearMem = document.getElementById('filterYearMemos').value;
             const searchMem = document.getElementById('searchMemos').value.toLowerCase();
             const memDocs = documents.filter(d => {
@@ -1288,7 +1328,7 @@
 
             if (fileInput.files && fileInput.files[0]) {
                 Swal.fire({
-                    title: 'กำลังบันทึกข้อมูลและอัปโหลดไฟล์...',
+                    title: 'กำลังอัปโหลดไฟล์แนบ...',
                     text: 'กรุณารอสักครู่ ระบบกำลังส่งไฟล์ขึ้น Google Drive',
                     allowOutsideClick: false,
                     didOpen: () => { Swal.showLoading(); }
@@ -1338,59 +1378,81 @@
             const assignee = document.getElementById('docAssignee').value;
             const dueDate = document.getElementById('docDueDate').value;
 
+            Swal.fire({
+                title: 'กำลังบันทึกข้อมูล...',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading(); }
+            });
+
             if (editId) {
-                const doc = documents.find(d => d.id == editId);
-                if (doc) {
-                    doc.type = type;
-                    doc.docNumber = docNumber;
-                    doc.docDate = docDate;
-                    doc.subject = subject;
-                    doc.sender = sender;
-                    doc.status = status;
-                    doc.assignee = assignee;
-                    doc.dueDate = dueDate;
-                    doc.yearStr = selectedYearStr;
-                    if (type === 'incoming') {
-                        doc.centralRegNo = centralRegNo;
-                        doc.receiveDate = receiveDate;
-                        doc.urgency = urgency;
-                    }
-                    if (fileName && fileData) {
-                        doc.fileName = fileName;
-                        doc.fileData = fileData;
-                    }
+                const updatePayload = {
+                    type: type,
+                    doc_number: docNumber,
+                    doc_date: docDate,
+                    subject: subject,
+                    sender: sender,
+                    status: status,
+                    assignee: assignee,
+                    due_date: dueDate,
+                    year_str: selectedYearStr,
+                    central_reg_no: type === 'incoming' ? centralRegNo : '-',
+                    receive_date: type === 'incoming' ? receiveDate : '-',
+                    urgency: type === 'incoming' ? urgency : 'ปกติ'
+                };
+                if (fileName && fileData) {
+                    updatePayload.file_name = fileName;
+                    updatePayload.file_url = fileData;
                 }
-                Swal.fire('สำเร็จ', 'อัปเดตข้อมูลหนังสือเรียบร้อยแล้ว', 'success');
+
+                const { error } = await supabase
+                    .from('documents')
+                    .update(updatePayload)
+                    .eq('id', editId);
+
+                if (error) {
+                    Swal.fire('เกิดข้อผิดพลาด', error.message, 'error');
+                } else {
+                    Swal.fire('สำเร็จ', 'อัปเดตข้อมูลหนังสือเรียบร้อยแล้ว', 'success');
+                    closeDocumentModal();
+                    loadDocumentsFromSupabase();
+                }
             } else {
                 const nextRegNo = type === 'incoming' ? getNextRegNoForYear('incoming', selectedYearStr) : '-';
+                const newId = Date.now();
 
-                const newDoc = {
-                    id: Date.now(),
-                    type,
-                    regNo: nextRegNo,
-                    yearStr: selectedYearStr,
-                    centralRegNo,
-                    receiveDate,
-                    sender,
-                    urgency,
-                    docNumber,
-                    docDate,
-                    subject,
-                    status,
-                    assignee,
-                    dueDate,
-                    ackStatus: 'รอรับทราบ',
-                    ackTime: '-',
-                    fileName: fileName || '',
-                    fileData: fileData || ''
+                const insertPayload = {
+                    id: newId,
+                    type: type,
+                    reg_no: nextRegNo,
+                    year_str: selectedYearStr,
+                    central_reg_no: type === 'incoming' ? centralRegNo : '-',
+                    receive_date: type === 'incoming' ? receiveDate : '-',
+                    sender: sender,
+                    urgency: type === 'incoming' ? urgency : 'ปกติ',
+                    doc_number: docNumber,
+                    doc_date: docDate,
+                    subject: subject,
+                    status: status,
+                    assignee: assignee,
+                    due_date: dueDate,
+                    ack_status: 'รอรับทราบ',
+                    ack_time: '-',
+                    file_name: fileName || '',
+                    file_url: fileData || ''
                 };
-                documents.unshift(newDoc);
-                Swal.fire('สำเร็จ', `ลงทะเบียนหนังสือเรียบร้อย ${nextRegNo !== '-' ? '(เลขรับกองช่าง: ' + nextRegNo + ' - ' + selectedYearStr + ')' : ''}`, 'success');
-            }
 
-            saveToLocalStorage();
-            closeDocumentModal();
-            renderAll();
+                const { error } = await supabase
+                    .from('documents')
+                    .insert([insertPayload]);
+
+                if (error) {
+                    Swal.fire('เกิดข้อผิดพลาด', error.message, 'error');
+                } else {
+                    Swal.fire('สำเร็จ', `ลงทะเบียนหนังสือเรียบร้อย ${nextRegNo !== '-' ? '(เลขรับกองช่าง: ' + nextRegNo + ' - ' + selectedYearStr + ')' : ''}`, 'success');
+                    closeDocumentModal();
+                    loadDocumentsFromSupabase();
+                }
+            }
         }
 
         function editDoc(id) {
@@ -1436,12 +1498,19 @@
                 confirmButtonColor: '#d33',
                 cancelButtonText: 'ยกเลิก',
                 confirmButtonText: 'ยืนยันลบ'
-            }).then((result) => {
+            }).then(async (result) => {
                 if (result.isConfirmed) {
-                    documents = documents.filter(d => d.id !== id);
-                    saveToLocalStorage();
-                    renderAll();
-                    Swal.fire('ลบสำเร็จ', 'รายการถูกลบออกจากระบบแล้ว', 'success');
+                    const { error } = await supabase
+                        .from('documents')
+                        .delete()
+                        .eq('id', id);
+
+                    if (error) {
+                        Swal.fire('เกิดข้อผิดพลาด', error.message, 'error');
+                    } else {
+                        loadDocumentsFromSupabase();
+                        Swal.fire('ลบสำเร็จ', 'รายการถูกลบออกจากระบบแล้ว', 'success');
+                    }
                 }
             });
         }
@@ -1471,16 +1540,27 @@
             });
         }
 
-        function acknowledgeDoc(id) {
+        async function acknowledgeDoc(id) {
             const doc = documents.find(d => d.id === id);
             if (doc) {
                 const now = new Date();
-                doc.ackStatus = 'รับทราบแล้ว';
-                doc.ackTime = `${now.getDate()} ม.ค. ${now.getFullYear()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-                doc.status = 'กำลังดำเนินการ';
-                saveToLocalStorage();
-                renderAll();
-                Swal.fire('สำเร็จ', 'กดรับทราบงานเรียบร้อยแล้ว', 'success');
+                const ackTimeStr = `${now.getDate()} ม.ค. ${now.getFullYear()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+                
+                const { error } = await supabase
+                    .from('documents')
+                    .update({
+                        ack_status: 'รับทราบแล้ว',
+                        ack_time: ackTimeStr,
+                        status: 'กำลังดำเนินการ'
+                    })
+                    .eq('id', id);
+
+                if (error) {
+                    Swal.fire('เกิดข้อผิดพลาด', error.message, 'error');
+                } else {
+                    loadDocumentsFromSupabase();
+                    Swal.fire('สำเร็จ', 'กดรับทราบงานเรียบร้อยแล้ว', 'success');
+                }
             }
         }
 
@@ -1504,12 +1584,19 @@
                 showCancelButton: true,
                 confirmButtonText: 'บันทึก',
                 cancelButtonText: 'ยกเลิก'
-            }).then((result) => {
+            }).then(async (result) => {
                 if (result.isConfirmed && result.value) {
-                    doc.status = result.value;
-                    saveToLocalStorage();
-                    renderAll();
-                    Swal.fire('สำเร็จ', 'อัปเดตสถานะเรียบร้อยแล้ว', 'success');
+                    const { error } = await supabase
+                        .from('documents')
+                        .update({ status: result.value })
+                        .eq('id', id);
+
+                    if (error) {
+                        Swal.fire('เกิดข้อผิดพลาด', error.message, 'error');
+                    } else {
+                        loadDocumentsFromSupabase();
+                        Swal.fire('สำเร็จ', 'อัปเดตสถานะเรียบร้อยแล้ว', 'success');
+                    }
                 }
             });
         }

@@ -396,7 +396,7 @@
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5">
                             <div>
                                 <h2 class="text-lg font-bold text-gray-800">ทะเบียนหนังสือรับ (ปีปฏิทิน)</h2>
-                                <p class="text-xs text-gray-500">จัดการและตรวจสอบหนังสือรับเข้ากองช่าง อบต.ไร่ใต้ ทั้งหมด</p>
+                                <p class="text-xs text-gray-500">จัดการและตรวจสอบหนังสือรับเข้ากองช่าง อบต.ไร่ใต้ (เรียงตามเลขรับกองช่าง จากมากไปหาน้อย)</p>
                             </div>
                             <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
                                 <select id="filterYearIncoming" onchange="renderTables()" class="px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
@@ -413,7 +413,7 @@
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
                                     <input type="text" id="searchIncoming" onkeyup="renderTables()" placeholder="ค้นหา ผู้ส่ง, เรื่อง, เลขที่..." class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                 </div>
-                                <button onclick="triggerExcelImport('incoming')" class="excel-import-btn bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0" title="นำเข้าข้อมูลจากไฟล์ Excel">
+                                <button id="btnImportIncoming" onclick="triggerExcelImport('incoming')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0" title="นำเข้าข้อมูลจากไฟล์ Excel">
                                     <i class="fa-solid fa-file-excel mr-1"></i> นำเข้า Excel
                                 </button>
                                 <button onclick="exportCSV('incoming')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
@@ -445,7 +445,7 @@
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5">
                             <div>
                                 <h2 class="text-lg font-bold text-gray-800">ทะเบียนหนังสือส่ง (ปีปฏิทิน)</h2>
-                                <p class="text-xs text-gray-500">จัดการและตรวจสอบหนังสือส่งออกจากกองช่าง อบต.ไร่ใต้</p>
+                                <p class="text-xs text-gray-500">จัดการและตรวจสอบหนังสือส่งออกจากกองช่าง อบต.ไร่ใต้ (เรียงตามวันที่ จากล่าสุดย้อนไป)</p>
                             </div>
                             <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
                                 <select id="filterYearOutgoing" onchange="renderTables()" class="px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
@@ -462,7 +462,7 @@
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
                                     <input type="text" id="searchOutgoing" onkeyup="renderTables()" placeholder="ค้นหา ผู้รับ, เรื่อง, เลขที่..." class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                 </div>
-                                <button onclick="triggerExcelImport('outgoing')" class="excel-import-btn bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0" title="นำเข้าข้อมูลจากไฟล์ Excel">
+                                <button id="btnImportOutgoing" onclick="triggerExcelImport('outgoing')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0" title="นำเข้าข้อมูลจากไฟล์ Excel">
                                     <i class="fa-solid fa-file-excel mr-1"></i> นำเข้า Excel
                                 </button>
                                 <button onclick="exportCSV('outgoing')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
@@ -492,7 +492,7 @@
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5">
                             <div>
                                 <h2 class="text-lg font-bold text-gray-800">ทะเบียนคำสั่ง (ปีปฏิทิน)</h2>
-                                <p class="text-xs text-gray-500">คำสั่งและประกาศภายในกองช่าง อบต.ไร่ใต้</p>
+                                <p class="text-xs text-gray-500">คำสั่งและประกาศภายในกองช่าง อบต.ไร่ใต้ (เรียงตามเลขที่คำสั่ง จากมากไปน้อย)</p>
                             </div>
                             <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
                                 <select id="filterYearOrders" onchange="renderTables()" class="px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
@@ -509,7 +509,7 @@
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
                                     <input type="text" id="searchOrders" onkeyup="renderTables()" placeholder="ค้นหาเรื่อง, เลขที่..." class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                 </div>
-                                <button onclick="triggerExcelImport('orders')" class="excel-import-btn bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0" title="นำเข้าข้อมูลจากไฟล์ Excel">
+                                <button id="btnImportOrders" onclick="triggerExcelImport('orders')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0" title="นำเข้าข้อมูลจากไฟล์ Excel">
                                     <i class="fa-solid fa-file-excel mr-1"></i> นำเข้า Excel
                                 </button>
                                 <button onclick="exportCSV('orders')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
@@ -539,7 +539,7 @@
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5">
                             <div>
                                 <h2 class="text-lg font-bold text-gray-800">ทะเบียนบันทึกข้อความ (ปีงบประมาณ)</h2>
-                                <p class="text-xs text-gray-500">บันทึกข้อความภายในและระหว่างกอง (ตัดรอบปีงบประมาณ 1 ต.ค. - 30 ก.ย.)</p>
+                                <p class="text-xs text-gray-500">บันทึกข้อความภายในและระหว่างกอง (เรียงตามวันที่ จากล่าสุดย้อนไป)</p>
                             </div>
                             <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
                                 <select id="filterYearMemos" onchange="renderTables()" class="px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
@@ -556,7 +556,7 @@
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
                                     <input type="text" id="searchMemos" onkeyup="renderTables()" placeholder="ค้นหา งาน, เรียน, เรื่อง, เลขที่..." class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                 </div>
-                                <button onclick="triggerExcelImport('memos')" class="excel-import-btn bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0" title="นำเข้าข้อมูลจากไฟล์ Excel">
+                                <button id="btnImportMemos" onclick="triggerExcelImport('memos')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0" title="นำเข้าข้อมูลจากไฟล์ Excel">
                                     <i class="fa-solid fa-file-excel mr-1"></i> นำเข้า Excel
                                 </button>
                                 <button onclick="exportCSV('memos')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
@@ -618,7 +618,7 @@
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5">
                             <div>
                                 <h2 class="text-lg font-bold text-gray-800">ทะเบียนงานฎีกา (ปีงบประมาณ)</h2>
-                                <p class="text-xs text-gray-500">จัดการและตรวจสอบการเบิกจ่ายงานฎีกา (ตัดรอบปีงบประมาณ 1 ต.ค. - 30 ก.ย.)</p>
+                                <p class="text-xs text-gray-500">จัดการและตรวจสอบการเบิกจ่ายงานฎีกา (เรียงตามวันที่ จากล่าสุดย้อนไป)</p>
                             </div>
                             <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
                                 <select id="filterYearVouchers" onchange="renderTables()" class="px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
@@ -635,7 +635,7 @@
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
                                     <input type="text" id="searchVouchers" onkeyup="renderTables()" placeholder="ค้นหา เลขผู้เบิก, ผู้รับเงิน, โครงการ..." class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                 </div>
-                                <button onclick="triggerExcelImport('vouchers')" class="excel-import-btn bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0" title="นำเข้าข้อมูลจากไฟล์ Excel">
+                                <button id="btnImportVouchers" onclick="triggerExcelImport('vouchers')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0" title="นำเข้าข้อมูลจากไฟล์ Excel">
                                     <i class="fa-solid fa-file-excel mr-1"></i> นำเข้า Excel
                                 </button>
                                 <button onclick="exportCSV('vouchers')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
@@ -1062,12 +1062,22 @@
             document.getElementById('headerRoleName').innerText = currentUser.roleName;
             document.getElementById('sidebarUserAvatar').innerText = currentUser.name.charAt(0);
 
-            // ปุ่มนำเข้า Excel แสดงเฉพาะผู้ดูแลระบบ ไม่แสดงในหน้าเจ้าหน้าที่ทุกหมวดงาน
-            document.querySelectorAll('.excel-import-btn').forEach(btn => btn.classList.toggle('hidden', !isAdmin));
-
             const badgeColor = document.getElementById('headerRoleBadge');
             const switchBtn = document.getElementById('switchRoleBtn');
             const switchBtnMobile = document.getElementById('switchRoleBtnMobile');
+
+            // ควบคุมการแสดงผลปุ่ม "นำเข้า Excel" สำหรับทุกงาน (ซ่อนในหน้า staff และแสดงเฉพาะ admin)
+            const importBtnIds = ['btnImportIncoming', 'btnImportOutgoing', 'btnImportOrders', 'btnImportMemos', 'btnImportVouchers'];
+            importBtnIds.forEach(id => {
+                const btnEl = document.getElementById(id);
+                if (btnEl) {
+                    if (isAdmin) {
+                        btnEl.classList.remove('hidden');
+                    } else {
+                        btnEl.classList.add('hidden');
+                    }
+                }
+            });
 
             if (isAdmin) {
                 badgeColor.className = "w-2.5 h-2.5 rounded-full bg-green-500";
@@ -1223,7 +1233,6 @@
             const counts = labels.map(l => categoryData[l].count);
             const amounts = labels.map(l => categoryData[l].total);
 
-            // กราฟวงกลม สัดส่วนจำนวนรายการ
             const ctxVouchType = document.getElementById('voucherTypeChart').getContext('2d');
             if (voucherTypeChartInstance) voucherTypeChartInstance.destroy();
             voucherTypeChartInstance = new Chart(ctxVouchType, {
@@ -1238,7 +1247,6 @@
                 options: { responsive: true, maintainAspectRatio: false }
             });
 
-            // กราฟแท่ง ยอดเงินขอเบิก
             const ctxVouchAmt = document.getElementById('voucherAmountChart').getContext('2d');
             if (voucherAmountChartInstance) voucherAmountChartInstance.destroy();
             voucherAmountChartInstance = new Chart(ctxVouchAmt, {
@@ -1543,30 +1551,6 @@
             return dateStr;
         }
 
-        // เรียงเลขทะเบียน/เลขที่แบบรองรับตัวเลขที่มีขีดหรือข้อความนำหน้า
-        function compareNumberLikeDesc(a, b) {
-            return String(b ?? '').localeCompare(String(a ?? ''), 'th', { numeric: true, sensitivity: 'base' });
-        }
-
-        // รองรับวันที่รูปแบบ YYYY-MM-DD และ DD/MM/YYYY (ปี พ.ศ.)
-        function dateSortValue(value) {
-            if (!value) return 0;
-            const raw = String(value).trim();
-            let d = new Date(raw);
-            if (!Number.isNaN(d.getTime())) return d.getTime();
-            const m = raw.match(/^(\d{1,2})[\/. -](\d{1,2})[\/. -](\d{4})$/);
-            if (m) {
-                let year = Number(m[3]);
-                if (year > 2400) year -= 543;
-                d = new Date(year, Number(m[2]) - 1, Number(m[1]));
-                if (!Number.isNaN(d.getTime())) return d.getTime();
-            }
-            return 0;
-        }
-        function compareDateDesc(a, b, field) {
-            return dateSortValue(b[field]) - dateSortValue(a[field]);
-        }
-
         function renderTables() {
             const isAdmin = currentUser.role === 'admin' && currentUser.name === 'นิศาชล คงดี';
 
@@ -1642,7 +1626,7 @@
                 </tr>
             `).join('') : `<tr><td colspan="7" class="p-6 text-center text-gray-400">ไม่มีงานที่ได้รับมอบหมายในขณะนี้</td></tr>`;
 
-            // 3. Incoming Table
+            // 3. Incoming Table (1. หนังสือรับ: เรียงตาม เลขรับกองช่าง จากมากไปหาน้อย)
             const filterYearInc = document.getElementById('filterYearIncoming').value;
             const searchInc = document.getElementById('searchIncoming').value.toLowerCase();
             const incDocs = documents.filter(d => {
@@ -1650,8 +1634,8 @@
                 const matchYear = (!filterYearInc || String(d.yearStr) === String(filterYearInc));
                 const matchText = ((d.subject && d.subject.toLowerCase().includes(searchInc)) || (d.sender && d.sender.toLowerCase().includes(searchInc)) || (d.docNumber && d.docNumber.toLowerCase().includes(searchInc)) || (d.centralRegNo && d.centralRegNo.toLowerCase().includes(searchInc)));
                 return matchType && matchYear && matchText;
-            });
-            incDocs.sort((a, b) => compareNumberLikeDesc(a.regNo, b.regNo));
+            }).sort((a, b) => parseInt(b.regNo || 0) - parseInt(a.regNo || 0));
+
             document.getElementById('incomingTableBody').innerHTML = incDocs.length ? incDocs.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-bold text-blue-600">${d.regNo} - ${d.yearStr}</td>
@@ -1665,7 +1649,7 @@
                 </tr>
             `).join('') : `<tr><td colspan="8" class="p-6 text-center text-gray-400">ไม่พบข้อมูลหนังสือรับ</td></tr>`;
 
-            // 4. Outgoing Table
+            // 4. Outgoing Table (2. หนังสือส่ง: เรียงตาม วันที่ จากล่าสุดย้อนไป)
             const filterYearOut = document.getElementById('filterYearOutgoing').value;
             const searchOut = document.getElementById('searchOutgoing').value.toLowerCase();
             const outDocs = documents.filter(d => {
@@ -1673,8 +1657,8 @@
                 const matchYear = (!filterYearOut || String(d.yearStr) === String(filterYearOut));
                 const matchText = ((d.subject && d.subject.toLowerCase().includes(searchOut)) || (d.sender && d.sender.toLowerCase().includes(searchOut)) || (d.docNumber && d.docNumber.toLowerCase().includes(searchOut)));
                 return matchType && matchYear && matchText;
-            });
-            outDocs.sort((a, b) => compareDateDesc(a, b, 'docDate'));
+            }).sort((a, b) => new Date(b.docDate || 0) - new Date(a.docDate || 0));
+
             document.getElementById('outgoingTableBody').innerHTML = outDocs.length ? outDocs.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-bold text-emerald-600">ปี ${d.yearStr}</td>
@@ -1686,7 +1670,7 @@
                 </tr>
             `).join('') : `<tr><td colspan="6" class="p-6 text-center text-gray-400">ไม่พบข้อมูลหนังสือส่ง</td></tr>`;
 
-            // 5. Orders Table
+            // 5. Orders Table (3. คำสั่ง: เรียงตาม เลขที่คำสั่ง จากมากไปน้อย)
             const filterYearOrd = document.getElementById('filterYearOrders').value;
             const searchOrd = document.getElementById('searchOrders').value.toLowerCase();
             const ordDocs = documents.filter(d => {
@@ -1694,8 +1678,12 @@
                 const matchYear = (!filterYearOrd || String(d.yearStr) === String(filterYearOrd));
                 const matchText = ((d.subject && d.subject.toLowerCase().includes(searchOrd)) || (d.docNumber && d.docNumber.toLowerCase().includes(searchOrd)));
                 return matchType && matchYear && matchText;
+            }).sort((a, b) => {
+                const numA = parseInt((a.docNumber || '').replace(/[^0-9]/g, '')) || 0;
+                const numB = parseInt((b.docNumber || '').replace(/[^0-9]/g, '')) || 0;
+                return numB - numA;
             });
-            ordDocs.sort((a, b) => compareNumberLikeDesc(a.docNumber, b.docNumber));
+
             document.getElementById('ordersTableBody').innerHTML = ordDocs.length ? ordDocs.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-bold text-amber-600">ปี ${d.yearStr}</td>
@@ -1707,7 +1695,7 @@
                 </tr>
             `).join('') : `<tr><td colspan="6" class="p-6 text-center text-gray-400">ไม่พบข้อมูลคำสั่ง</td></tr>`;
 
-            // 6. Memos Table
+            // 6. Memos Table (4. บันทึกข้อความ: เรียงตาม วันที่ จากล่าสุดย้อนไป)
             const filterYearMem = document.getElementById('filterYearMemos').value;
             const searchMem = document.getElementById('searchMemos').value.toLowerCase();
             const memDocs = documents.filter(d => {
@@ -1715,8 +1703,8 @@
                 const matchYear = (!filterYearMem || String(d.yearStr) === String(filterYearMem));
                 const matchText = ((d.subject && d.subject.toLowerCase().includes(searchMem)) || (d.sender && d.sender.toLowerCase().includes(searchMem)) || (d.docNumber && d.docNumber.toLowerCase().includes(searchMem)) || (d.memoWork && d.memoWork.toLowerCase().includes(searchMem)));
                 return matchType && matchYear && matchText;
-            });
-            memDocs.sort((a, b) => compareDateDesc(a, b, 'docDate'));
+            }).sort((a, b) => new Date(b.docDate || 0) - new Date(a.docDate || 0));
+
             document.getElementById('memosTableBody').innerHTML = memDocs.length ? memDocs.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-bold text-purple-600">ปีงบฯ ${d.yearStr}</td>
@@ -1749,7 +1737,7 @@
                 </tr>
             `).join('') : `<tr><td colspan="5" class="p-6 text-center text-gray-400">ไม่พบข้อมูลแบบฟอร์ม</td></tr>`;
 
-            // 8. Vouchers Table (แยกตามปีงบประมาณ)
+            // 8. Vouchers Table (5. ฎีกา: เรียงตาม วันที่ จากล่าสุดย้อนไป)
             const filterYearVouch = document.getElementById('filterYearVouchers').value;
             const searchVoucher = document.getElementById('searchVouchers') ? document.getElementById('searchVouchers').value.toLowerCase() : '';
             const voucherDocs = documents.filter(d => {
@@ -1757,8 +1745,8 @@
                 const matchYear = (!filterYearVouch || String(d.yearStr) === String(filterYearVouch));
                 const matchText = ((d.voucherNo && d.voucherNo.toLowerCase().includes(searchVoucher)) || (d.voucherMaker && d.voucherMaker.toLowerCase().includes(searchVoucher)) || (d.voucherPayee && d.voucherPayee.toLowerCase().includes(searchVoucher)) || (d.voucherProject && d.voucherProject.toLowerCase().includes(searchVoucher)) || (d.voucherCategory && d.voucherCategory.toLowerCase().includes(searchVoucher)));
                 return matchType && matchYear && matchText;
-            });
-            voucherDocs.sort((a, b) => compareDateDesc(a, b, 'voucherDate'));
+            }).sort((a, b) => new Date(b.voucherDate || 0) - new Date(a.voucherDate || 0));
+
             document.getElementById('vouchersTableBody').innerHTML = voucherDocs.length ? voucherDocs.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-bold text-rose-600">ปีงบฯ ${d.yearStr || '-'}</td>
@@ -1780,7 +1768,7 @@
                 const matchType = (d.type === 'vouchers');
                 const matchYear = (!summaryYear || String(d.yearStr) === String(summaryYear));
                 return matchType && matchYear;
-            });
+            }).sort((a, b) => new Date(b.voucherDate || 0) - new Date(a.voucherDate || 0));
 
             let grandTotal = 0;
             const categorySummary = {};
@@ -1809,7 +1797,6 @@
             `).join('') : `<tr><td colspan="3" class="p-6 text-center text-gray-400">ยังไม่มีข้อมูลสำหรับสรุปงานฎีกาในปีนี้</td></tr>`;
 
             const recentTbody = document.getElementById('vouchersRecentTableBody');
-            allVouchers.sort((a, b) => compareDateDesc(a, b, 'voucherDate'));
             recentTbody.innerHTML = allVouchers.length ? allVouchers.slice(0, 5).map(v => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-bold text-rose-600 text-xs">${v.voucherNo}</td>
@@ -2354,24 +2341,80 @@
         }
 
         function exportCSV(type) {
+            const columnsByType = {
+                incoming: [
+                    ['เลขรับกองช่าง', d => d.regNo],
+                    ['เลขรับส่วนกลาง', d => d.centralRegNo],
+                    ['วันที่ลงรับ', d => d.receiveDate],
+                    ['เลขที่หนังสือ', d => d.docNumber],
+                    ['ลงวันที่', d => d.docDate],
+                    ['เรื่อง', d => d.subject],
+                    ['ผู้ส่ง', d => d.sender],
+                    ['ความเร่งด่วน', d => d.urgency],
+                    ['สถานะ', d => d.status]
+                ],
+                outgoing: [
+                    ['เลขที่หนังสือส่ง', d => d.docNumber],
+                    ['ลงวันที่', d => d.docDate],
+                    ['เรื่อง', d => d.subject],
+                    ['ผู้รับ', d => d.sender],
+                    ['สถานะ', d => d.status]
+                ],
+                orders: [
+                    ['เลขที่คำสั่ง', d => d.docNumber],
+                    ['ลงวันที่', d => d.docDate],
+                    ['เรื่อง', d => d.subject],
+                    ['สถานะ', d => d.status]
+                ],
+                memos: [
+                    ['งาน', d => d.memoWork],
+                    ['เลขที่บันทึก', d => d.docNumber],
+                    ['ลงวันที่', d => d.docDate],
+                    ['เรียน', d => d.sender],
+                    ['เรื่อง', d => d.subject],
+                    ['สถานะ', d => d.status]
+                ],
+                vouchers: [
+                    ['วันที่จัดทำ', d => d.voucherDate],
+                    ['ผู้จัดทำ', d => d.voucherMaker],
+                    ['เลขที่ผู้เบิก', d => d.voucherNo],
+                    ['ประเภทฎีกา', d => d.voucherCategory],
+                    ['ผู้รับเงิน', d => d.voucherPayee],
+                    ['จำนวนเงิน', d => d.voucherAmount],
+                    ['ชื่อโครงการ', d => d.voucherProject]
+                ]
+            };
+
+            const columns = columnsByType[type];
+            if (!columns) {
+                Swal.fire('แจ้งเตือน', 'ไม่พบรูปแบบการส่งออกของทะเบียนนี้', 'warning');
+                return;
+            }
+
             const filtered = documents.filter(d => d.type === type);
             if (!filtered.length) {
                 Swal.fire('แจ้งเตือน', 'ไม่มีข้อมูลสำหรับส่งออก', 'info');
                 return;
             }
 
-            let csvContent = "data:text/csv;charset=utf-8,\uFEFF" + "ปี,เลขทะเบียน/เลขที่,วันที่,เรื่อง,ผู้ส่ง/ผู้รับ,สถานะ\n";
-            filtered.forEach(d => {
-                csvContent += `"${d.yearStr}","${d.docNumber || d.voucherNo || '-'}","${d.docDate || d.voucherDate || '-'}","${d.subject || d.voucherProject || '-'}","${d.sender || d.voucherPayee || '-'}","${d.status || '-'}"\n`;
-            });
-
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", `saraban_${type}_2026.csv`);
+            const escapeCSV = value => {
+                const text = value === null || value === undefined ? '' : String(value);
+                return '"' + text.replace(/"/g, '""') + '"';
+            };
+            const rows = [
+                columns.map(([heading]) => escapeCSV(heading)).join(','),
+                ...filtered.map(record => columns.map(([, getter]) => escapeCSV(getter(record))).join(','))
+            ];
+            const csvContent = '\uFEFF' + rows.join('\r\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `saraban_${type}_${new Date().toISOString().slice(0, 10)}.csv`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+            URL.revokeObjectURL(url);
         }
     </script>
 </body>

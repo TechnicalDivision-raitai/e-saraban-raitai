@@ -152,7 +152,7 @@
                 </a>
                 <a href="#" onclick="switchTab('memos')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-tab="memos">
                     <i class="fa-solid fa-note-sticky w-5 text-center text-purple-400"></i>
-                    <span>บันทึกข้อความ (ปีงบฯ)</span>
+                    <span>บันทึกข้อความ</span>
                 </a>
                 <a href="#" onclick="switchTab('allDocs')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-tab="allDocs">
                     <i class="fa-solid fa-folder-tree w-5 text-center text-teal-400"></i>
@@ -189,7 +189,7 @@
                     <button onclick="toggleMobileMenu()" class="md:hidden text-gray-600 hover:text-gray-900 focus:outline-none text-xl">
                         <i class="fa-solid fa-bars"></i>
                     </button>
-                    <h1 id="pageTitle" class="text-lg md:text-xl font-bold text-gray-800">แดชบอร์ดสรุปผลงานสารบรรณ</h1>
+                    <h1 id="pageTitle" class="text-lg md:text-xl font-bold text-gray-800">สรุปผลงานสารบรรณ</h1>
                 </div>
 
                 <div class="flex items-center space-x-3">
@@ -213,7 +213,7 @@
                             <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center">
                                 <i class="fa-solid fa-book-bookmark"></i>
                             </div>
-                            <span class="font-bold">e-Saraban อบต.ไร่ใต้</span>
+                            <span class="font-bold">E-Saraban อบต.ไร่ใต้</span>
                         </div>
                         <button onclick="toggleMobileMenu()" class="text-slate-400 hover:text-white text-lg">
                             <i class="fa-solid fa-xmark"></i>
@@ -351,7 +351,7 @@
                     <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5">
                             <div>
-                                <h2 class="text-lg font-bold text-gray-800">ทะเบียนหนังสือรับ (ปีปฏิทิน)</h2>
+                                <h2 class="text-lg font-bold text-gray-800">ทะเบียนหนังสือรับ</h2>
                                 <p class="text-xs text-gray-500">จัดการและตรวจสอบหนังสือรับเข้ากองช่าง อบต.ไร่ใต้ ทั้งหมด</p>
                             </div>
                             <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
@@ -393,7 +393,7 @@
                     <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5">
                             <div>
-                                <h2 class="text-lg font-bold text-gray-800">ทะเบียนหนังสือส่ง (ปีปฏิทิน)</h2>
+                                <h2 class="text-lg font-bold text-gray-800">ทะเบียนหนังสือส่ง</h2>
                                 <p class="text-xs text-gray-500">จัดการและตรวจสอบหนังสือส่งออกจากกองช่าง อบต.ไร่ใต้</p>
                             </div>
                             <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
@@ -414,7 +414,7 @@
                             <table class="w-full text-left border-collapse">
                                 <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                     <tr>
-                                        <th class="p-3">ปีปฏิทิน</th>
+                                        <th class="p-3">ปี</th>
                                         <th class="p-3">เลขที่หนังสือส่ง / วันที่</th>
                                         <th class="p-3">เรื่อง / ผู้รับ</th>
                                         <th class="p-3">สถานะดำเนินการ</th>
@@ -433,15 +433,15 @@
                     <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5">
                             <div>
-                                <h2 class="text-lg font-bold text-gray-800">ทะเบียนคำสั่ง (ปีปฏิทิน)</h2>
+                                <h2 class="text-lg font-bold text-gray-800">ทะเบียนคำสั่ง</h2>
                                 <p class="text-xs text-gray-500">คำสั่งและประกาศภายในกองช่าง อบต.ไร่ใต้</p>
                             </div>
                             <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
                                 <select id="filterYearOrders" onchange="renderTables()" class="px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                     <option value="">ทุกปี (All Years)</option>
                                     <option value="2569" selected>ปี 2569</option>
-                                    <option value="2568">ปี 2570</option>
-                                    <option value="2570">ปี 2571</option>
+                                    <option value="2570">ปี 2570</option>
+                                    <option value="2571">ปี 2571</option>
                                 </select>
                                 <div class="relative w-full md:w-60">
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
@@ -454,7 +454,7 @@
                             <table class="w-full text-left border-collapse">
                                 <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                     <tr>
-                                        <th class="p-3">ปีปฏิทิน</th>
+                                        <th class="p-3">ปี</th>
                                         <th class="p-3">เลขที่คำสั่ง / วันที่</th>
                                         <th class="p-3">เรื่องคำสั่ง</th>
                                         <th class="p-3">สถานะดำเนินการ</th>
@@ -473,15 +473,15 @@
                     <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5">
                             <div>
-                                <h2 class="text-lg font-bold text-gray-800">ทะเบียนบันทึกข้อความ (ปีงบประมาณ)</h2>
+                                <h2 class="text-lg font-bold text-gray-800">ทะเบียนบันทึกข้อความ</h2>
                                 <p class="text-xs text-gray-500">บันทึกข้อความภายในและระหว่างกอง (ตัดรอบปีงบประมาณ 1 ต.ค. - 30 ก.ย.)</p>
                             </div>
                             <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
                                 <select id="filterYearMemos" onchange="renderTables()" class="px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                     <option value="">ทุกปี (All Years)</option>
                                     <option value="2569" selected>ปีงบฯ 2569</option>
-                                    <option value="2568">ปีงบฯ 2570</option>
-                                    <option value="2570">ปีงบฯ 2571</option>
+                                    <option value="2570">ปีงบฯ 2570</option>
+                                    <option value="2571">ปีงบฯ 2571</option>
                                 </select>
                                 <div class="relative w-full md:w-60">
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
@@ -494,7 +494,7 @@
                             <table class="w-full text-left border-collapse">
                                 <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                     <tr>
-                                        <th class="p-3">ปีงบประมาณ</th>
+                                        <th class="p-3">ปี</th>
                                         <th class="p-3">เลขที่บันทึก / วันที่</th>
                                         <th class="p-3">เรียน / เรื่อง</th>
                                         <th class="p-3">สถานะดำเนินการ</th>
@@ -609,18 +609,18 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">ประเภทหนังสือ</label>
                         <select id="docType" onchange="toggleFormFields()" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm font-semibold">
-                            <option value="incoming">หนังสือรับ (ปีปฏิทิน)</option>
-                            <option value="outgoing">หนังสือส่ง (ปีปฏิทิน)</option>
-                            <option value="orders">คำสั่ง (ปีปฏิทิน)</option>
-                            <option value="memos">บันทึกข้อความ (ปีงบประมาณ)</option>
+                            <option value="incoming">หนังสือรับ</option>
+                            <option value="outgoing">หนังสือส่ง</option>
+                            <option value="orders">คำสั่ง</option>
+                            <option value="memos">บันทึกข้อความ</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1"><span id="yearLabelName">ปีปฏิทิน</span></label>
                         <select id="selectedYear" onchange="updateModalRegPreview()" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm font-semibold text-blue-900 bg-blue-50">
                             <option value="2569">2569</option>
-                            <option value="2568">2570</option>
-                            <option value="2570">2571</option>
+                            <option value="2570">2570</option>
+                            <option value="2571">2571</option>
                         </select>
                     </div>
                 </div>

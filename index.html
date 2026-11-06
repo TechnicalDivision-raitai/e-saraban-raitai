@@ -131,7 +131,7 @@
             <nav class="flex-1 px-3 space-y-1 overflow-y-auto py-2">
                 <a href="#" onclick="switchTab('dashboard')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition active-tab bg-blue-600 text-white" data-tab="dashboard">
                     <i class="fa-solid fa-chart-pie w-5 text-center"></i>
-                    <span>สรุปงานสารบรรณ</span>
+                    <span>สรุปผลงานสารบรรณ</span>
                 </a>
                 <a href="#" onclick="switchTab('vouchersSummary')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-tab="vouchersSummary">
                     <i class="fa-solid fa-chart-pie w-5 text-center text-pink-400"></i>
@@ -413,10 +413,9 @@
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
                                     <input type="text" id="searchIncoming" onkeyup="renderTables()" placeholder="ค้นหา ผู้ส่ง, เรื่อง, เลขที่..." class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                 </div>
-                                <button onclick="document.getElementById('excelFileInput').click()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0" title="นำเข้าข้อมูลจากไฟล์ Excel">
+                                <button onclick="triggerExcelImport('incoming')" class="excel-import-btn bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0" title="นำเข้าข้อมูลจากไฟล์ Excel">
                                     <i class="fa-solid fa-file-excel mr-1"></i> นำเข้า Excel
                                 </button>
-                                <input type="file" id="excelFileInput" accept=".xlsx, .xls, .csv" class="hidden" onchange="importExcelData(event)">
                                 <button onclick="exportCSV('incoming')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
                             </div>
                         </div>
@@ -463,6 +462,9 @@
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
                                     <input type="text" id="searchOutgoing" onkeyup="renderTables()" placeholder="ค้นหา ผู้รับ, เรื่อง, เลขที่..." class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                 </div>
+                                <button onclick="triggerExcelImport('outgoing')" class="excel-import-btn bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0" title="นำเข้าข้อมูลจากไฟล์ Excel">
+                                    <i class="fa-solid fa-file-excel mr-1"></i> นำเข้า Excel
+                                </button>
                                 <button onclick="exportCSV('outgoing')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
                             </div>
                         </div>
@@ -507,6 +509,9 @@
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
                                     <input type="text" id="searchOrders" onkeyup="renderTables()" placeholder="ค้นหาเรื่อง, เลขที่..." class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                 </div>
+                                <button onclick="triggerExcelImport('orders')" class="excel-import-btn bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0" title="นำเข้าข้อมูลจากไฟล์ Excel">
+                                    <i class="fa-solid fa-file-excel mr-1"></i> นำเข้า Excel
+                                </button>
                                 <button onclick="exportCSV('orders')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
                             </div>
                         </div>
@@ -551,6 +556,9 @@
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
                                     <input type="text" id="searchMemos" onkeyup="renderTables()" placeholder="ค้นหา งาน, เรียน, เรื่อง, เลขที่..." class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                 </div>
+                                <button onclick="triggerExcelImport('memos')" class="excel-import-btn bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0" title="นำเข้าข้อมูลจากไฟล์ Excel">
+                                    <i class="fa-solid fa-file-excel mr-1"></i> นำเข้า Excel
+                                </button>
                                 <button onclick="exportCSV('memos')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
                             </div>
                         </div>
@@ -627,6 +635,9 @@
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
                                     <input type="text" id="searchVouchers" onkeyup="renderTables()" placeholder="ค้นหา เลขผู้เบิก, ผู้รับเงิน, โครงการ..." class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                 </div>
+                                <button onclick="triggerExcelImport('vouchers')" class="excel-import-btn bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0" title="นำเข้าข้อมูลจากไฟล์ Excel">
+                                    <i class="fa-solid fa-file-excel mr-1"></i> นำเข้า Excel
+                                </button>
                                 <button onclick="exportCSV('vouchers')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
                             </div>
                         </div>
@@ -648,6 +659,9 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Global Hidden File Input สำหรับรองรับการนำเข้า Excel ทุกหมวดหมู่ -->
+                <input type="file" id="globalExcelFileInput" accept=".xlsx, .xls, .csv" class="hidden" onchange="importExcelData(event)">
 
                 <!-- 9. VOUCHERS DASHBOARD SUMMARY TAB (แดชบอร์ดสรุปงานฎีกา) -->
                 <div id="view-vouchersSummary" class="tab-view hidden space-y-6">
@@ -911,6 +925,7 @@
         let documents = [];
         let voucherTypeChartInstance = null;
         let voucherAmountChartInstance = null;
+        let currentImportType = 'incoming'; // ตัวแปรเก็บประเภทปัจจุบันที่จะนำเข้า Excel
 
         async function loadDocumentsFromSupabase() {
             try {
@@ -1046,6 +1061,9 @@
             document.getElementById('sidebarUserRoleName').innerText = `สถานะ: ${currentUser.roleName}`;
             document.getElementById('headerRoleName').innerText = currentUser.roleName;
             document.getElementById('sidebarUserAvatar').innerText = currentUser.name.charAt(0);
+
+            // ปุ่มนำเข้า Excel แสดงเฉพาะผู้ดูแลระบบ ไม่แสดงในหน้าเจ้าหน้าที่ทุกหมวดงาน
+            document.querySelectorAll('.excel-import-btn').forEach(btn => btn.classList.toggle('hidden', !isAdmin));
 
             const badgeColor = document.getElementById('headerRoleBadge');
             const switchBtn = document.getElementById('switchRoleBtn');
@@ -1525,6 +1543,30 @@
             return dateStr;
         }
 
+        // เรียงเลขทะเบียน/เลขที่แบบรองรับตัวเลขที่มีขีดหรือข้อความนำหน้า
+        function compareNumberLikeDesc(a, b) {
+            return String(b ?? '').localeCompare(String(a ?? ''), 'th', { numeric: true, sensitivity: 'base' });
+        }
+
+        // รองรับวันที่รูปแบบ YYYY-MM-DD และ DD/MM/YYYY (ปี พ.ศ.)
+        function dateSortValue(value) {
+            if (!value) return 0;
+            const raw = String(value).trim();
+            let d = new Date(raw);
+            if (!Number.isNaN(d.getTime())) return d.getTime();
+            const m = raw.match(/^(\d{1,2})[\/. -](\d{1,2})[\/. -](\d{4})$/);
+            if (m) {
+                let year = Number(m[3]);
+                if (year > 2400) year -= 543;
+                d = new Date(year, Number(m[2]) - 1, Number(m[1]));
+                if (!Number.isNaN(d.getTime())) return d.getTime();
+            }
+            return 0;
+        }
+        function compareDateDesc(a, b, field) {
+            return dateSortValue(b[field]) - dateSortValue(a[field]);
+        }
+
         function renderTables() {
             const isAdmin = currentUser.role === 'admin' && currentUser.name === 'นิศาชล คงดี';
 
@@ -1609,6 +1651,7 @@
                 const matchText = ((d.subject && d.subject.toLowerCase().includes(searchInc)) || (d.sender && d.sender.toLowerCase().includes(searchInc)) || (d.docNumber && d.docNumber.toLowerCase().includes(searchInc)) || (d.centralRegNo && d.centralRegNo.toLowerCase().includes(searchInc)));
                 return matchType && matchYear && matchText;
             });
+            incDocs.sort((a, b) => compareNumberLikeDesc(a.regNo, b.regNo));
             document.getElementById('incomingTableBody').innerHTML = incDocs.length ? incDocs.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-bold text-blue-600">${d.regNo} - ${d.yearStr}</td>
@@ -1631,6 +1674,7 @@
                 const matchText = ((d.subject && d.subject.toLowerCase().includes(searchOut)) || (d.sender && d.sender.toLowerCase().includes(searchOut)) || (d.docNumber && d.docNumber.toLowerCase().includes(searchOut)));
                 return matchType && matchYear && matchText;
             });
+            outDocs.sort((a, b) => compareDateDesc(a, b, 'docDate'));
             document.getElementById('outgoingTableBody').innerHTML = outDocs.length ? outDocs.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-bold text-emerald-600">ปี ${d.yearStr}</td>
@@ -1651,6 +1695,7 @@
                 const matchText = ((d.subject && d.subject.toLowerCase().includes(searchOrd)) || (d.docNumber && d.docNumber.toLowerCase().includes(searchOrd)));
                 return matchType && matchYear && matchText;
             });
+            ordDocs.sort((a, b) => compareNumberLikeDesc(a.docNumber, b.docNumber));
             document.getElementById('ordersTableBody').innerHTML = ordDocs.length ? ordDocs.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-bold text-amber-600">ปี ${d.yearStr}</td>
@@ -1671,6 +1716,7 @@
                 const matchText = ((d.subject && d.subject.toLowerCase().includes(searchMem)) || (d.sender && d.sender.toLowerCase().includes(searchMem)) || (d.docNumber && d.docNumber.toLowerCase().includes(searchMem)) || (d.memoWork && d.memoWork.toLowerCase().includes(searchMem)));
                 return matchType && matchYear && matchText;
             });
+            memDocs.sort((a, b) => compareDateDesc(a, b, 'docDate'));
             document.getElementById('memosTableBody').innerHTML = memDocs.length ? memDocs.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-bold text-purple-600">ปีงบฯ ${d.yearStr}</td>
@@ -1712,6 +1758,7 @@
                 const matchText = ((d.voucherNo && d.voucherNo.toLowerCase().includes(searchVoucher)) || (d.voucherMaker && d.voucherMaker.toLowerCase().includes(searchVoucher)) || (d.voucherPayee && d.voucherPayee.toLowerCase().includes(searchVoucher)) || (d.voucherProject && d.voucherProject.toLowerCase().includes(searchVoucher)) || (d.voucherCategory && d.voucherCategory.toLowerCase().includes(searchVoucher)));
                 return matchType && matchYear && matchText;
             });
+            voucherDocs.sort((a, b) => compareDateDesc(a, b, 'voucherDate'));
             document.getElementById('vouchersTableBody').innerHTML = voucherDocs.length ? voucherDocs.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-bold text-rose-600">ปีงบฯ ${d.yearStr || '-'}</td>
@@ -1762,6 +1809,7 @@
             `).join('') : `<tr><td colspan="3" class="p-6 text-center text-gray-400">ยังไม่มีข้อมูลสำหรับสรุปงานฎีกาในปีนี้</td></tr>`;
 
             const recentTbody = document.getElementById('vouchersRecentTableBody');
+            allVouchers.sort((a, b) => compareDateDesc(a, b, 'voucherDate'));
             recentTbody.innerHTML = allVouchers.length ? allVouchers.slice(0, 5).map(v => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-bold text-rose-600 text-xs">${v.voucherNo}</td>
@@ -2192,15 +2240,18 @@
             return new Date().toISOString().split('T')[0];
         }
 
+        function triggerExcelImport(type) {
+            if (currentUser.role !== 'admin' || currentUser.name !== 'นิศาชล คงดี') {
+                Swal.fire('ไม่อนุญาต', 'เฉพาะผู้ดูแลระบบเท่านั้นที่มีสิทธิ์นำเข้าข้อมูล', 'warning');
+                return;
+            }
+            currentImportType = type;
+            document.getElementById('globalExcelFileInput').click();
+        }
+
         async function importExcelData(event) {
             const file = event.target.files[0];
             if (!file) return;
-
-            if (currentUser.role !== 'admin' || currentUser.name !== 'นิศาชล คงดี') {
-                Swal.fire('ไม่อนุญาต', 'เฉพาะผู้ดูแลระบบเท่านั้นที่มีสิทธิ์นำเข้าข้อมูล', 'warning');
-                event.target.value = '';
-                return;
-            }
 
             const reader = new FileReader();
             reader.onload = async function(e) {
@@ -2224,62 +2275,57 @@
                     });
 
                     let successCount = 0, errorCount = 0;
-                    const selectedYearStr = document.getElementById('filterYearIncoming').value || '2569';
+                    let selectedYearStr = '2569';
+                    if (currentImportType === 'incoming') selectedYearStr = document.getElementById('filterYearIncoming').value || '2569';
+                    else if (currentImportType === 'outgoing') selectedYearStr = document.getElementById('filterYearOutgoing').value || '2569';
+                    else if (currentImportType === 'orders') selectedYearStr = document.getElementById('filterYearOrders').value || '2569';
+                    else if (currentImportType === 'memos') selectedYearStr = document.getElementById('filterYearMemos').value || '2569';
+                    else if (currentImportType === 'vouchers') selectedYearStr = document.getElementById('filterYearVouchers').value || '2569';
 
                     for (let row of rows) {
-                        const centralRegNo = row['เลขรับส่วนกลาง'] || row['central_reg_no'] || '-';
-                        const receiveDate = excelDateToISOString(row['วันที่ลงรับ'] || row['receive_date']);
-                        const docNumber = row['เลขที่หนังสือ'] || row['doc_number'] || '-';
-                        const docDate = excelDateToISOString(row['ลงวันที่'] || row['doc_date']);
-                        const subject = row['เรื่อง'] || row['subject'] || 'ไม่มีชื่อเรื่อง';
-                        const sender = row['ผู้ส่ง'] || row['sender'] || '-';
-                        const urgency = row['ความเร่งด่วน'] || row['urgency'] || 'ปกติ';
-                        const assignee = row['ผู้รับผิดชอบ'] || row['assignee'] || 'นิศาชล คงดี';
-                        const dueDate = row['กำหนดเสร็จ'] ? excelDateToISOString(row['กำหนดเสร็จ']) : '';
-                        const status = row['สถานะ'] || row['status'] || 'ลงรับแล้ว';
-
-                        const nextRegNo = getNextRegNoForYear('incoming', selectedYearStr);
                         const newId = Date.now() + Math.floor(Math.random() * 10000);
+                        let newDocObj = { id: newId, type: currentImportType, year_str: selectedYearStr, status: 'ลงรับแล้ว', assignee: 'นิศาชล คงดี', due_date: '', ack_status: 'รอรับทราบ', ack_time: '-', file_name: '', file_url: '' };
 
-                        const newDocObj = {
-                            id: newId,
-                            type: 'incoming',
-                            reg_no: nextRegNo,
-                            year_str: selectedYearStr,
-                            central_reg_no: centralRegNo,
-                            receive_date: receiveDate,
-                            sender: sender,
-                            urgency: urgency,
-                            doc_number: docNumber,
-                            doc_date: docDate,
-                            subject: subject,
-                            status: status,
-                            assignee: assignee,
-                            due_date: dueDate,
-                            ack_status: 'รอรับทราบ',
-                            ack_time: '-',
-                            file_name: '',
-                            file_url: ''
-                        };
-
-                        documents.unshift({
-                            id: newId,
-                            type: 'incoming',
-                            regNo: nextRegNo,
-                            yearStr: selectedYearStr,
-                            centralRegNo: centralRegNo,
-                            receiveDate: receiveDate,
-                            sender: sender,
-                            urgency: urgency,
-                            docNumber: docNumber,
-                            docDate: docDate,
-                            subject: subject,
-                            status: status,
-                            assignee: assignee,
-                            dueDate: dueDate,
-                            ackStatus: 'รอรับทราบ',
-                            ackTime: '-'
-                        });
+                        if (currentImportType === 'incoming') {
+                            newDocObj.reg_no = getNextRegNoForYear('incoming', selectedYearStr);
+                            newDocObj.central_reg_no = row['เลขรับส่วนกลาง'] || row['central_reg_no'] || '-';
+                            newDocObj.receive_date = excelDateToISOString(row['วันที่ลงรับ'] || row['receive_date']);
+                            newDocObj.doc_number = row['เลขที่หนังสือ'] || row['doc_number'] || '-';
+                            newDocObj.doc_date = excelDateToISOString(row['ลงวันที่'] || row['doc_date']);
+                            newDocObj.subject = row['เรื่อง'] || row['subject'] || 'ไม่มีชื่อเรื่อง';
+                            newDocObj.sender = row['ผู้ส่ง'] || row['sender'] || '-';
+                            newDocObj.urgency = row['ความเร่งด่วน'] || row['urgency'] || 'ปกติ';
+                        } else if (currentImportType === 'outgoing') {
+                            newDocObj.reg_no = '-';
+                            newDocObj.doc_number = row['เลขที่หนังสือส่ง'] || row['doc_number'] || '-';
+                            newDocObj.doc_date = excelDateToISOString(row['ลงวันที่'] || row['doc_date']);
+                            newDocObj.subject = row['เรื่อง'] || row['subject'] || 'ไม่มีชื่อเรื่อง';
+                            newDocObj.sender = row['ผู้รับ'] || row['sender'] || '-';
+                            newDocObj.status = row['สถานะ'] || row['status'] || 'ออกเอกสาร';
+                        } else if (currentImportType === 'orders') {
+                            newDocObj.reg_no = '-';
+                            newDocObj.doc_number = row['เลขที่คำสั่ง'] || row['doc_number'] || '-';
+                            newDocObj.doc_date = excelDateToISOString(row['ลงวันที่'] || row['doc_date']);
+                            newDocObj.subject = row['เรื่อง'] || row['subject'] || 'ไม่มีชื่อเรื่อง';
+                            newDocObj.status = row['สถานะ'] || row['status'] || 'ออกเอกสาร';
+                        } else if (currentImportType === 'memos') {
+                            newDocObj.reg_no = '-';
+                            newDocObj.memo_work = row['งาน'] || row['memo_work'] || 'งานสารบรรณ';
+                            newDocObj.doc_number = row['เลขที่บันทึก'] || row['doc_number'] || '-';
+                            newDocObj.doc_date = excelDateToISOString(row['ลงวันที่'] || row['doc_date']);
+                            newDocObj.sender = row['เรียน'] || row['sender'] || '-';
+                            newDocObj.subject = row['เรื่อง'] || row['subject'] || 'ไม่มีชื่อเรื่อง';
+                            newDocObj.status = row['สถานะ'] || row['status'] || 'ออกเอกสาร';
+                        } else if (currentImportType === 'vouchers') {
+                            newDocObj.reg_no = '-';
+                            newDocObj.voucher_date = excelDateToISOString(row['วันที่จัดทำ'] || row['voucher_date']);
+                            newDocObj.voucher_maker = row['ผู้จัดทำ'] || row['voucher_maker'] || '-';
+                            newDocObj.voucher_no = row['เลขที่ผู้เบิก'] || row['voucher_no'] || '-';
+                            newDocObj.voucher_category = row['ประเภทฎีกา'] || row['voucher_category'] || '-';
+                            newDocObj.voucher_payee = row['ผู้รับเงิน'] || row['voucher_payee'] || '-';
+                            newDocObj.voucher_amount = parseFloat(row['จำนวนเงิน'] || row['voucher_amount'] || 0);
+                            newDocObj.voucher_project = row['ชื่อโครงการ'] || row['voucher_project'] || '-';
+                        }
 
                         const { error } = await supabaseClient.from('documents').insert([newDocObj]);
                         if (error) {
@@ -2314,9 +2360,9 @@
                 return;
             }
 
-            let csvContent = "data:text/csv;charset=utf-8,\uFEFF" + "ปี,เลขรับกองช่าง,เลขที่หนังสือ,วันที่,เรื่อง,ผู้ส่ง/ผู้รับ,สถานะ\n";
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF" + "ปี,เลขทะเบียน/เลขที่,วันที่,เรื่อง,ผู้ส่ง/ผู้รับ,สถานะ\n";
             filtered.forEach(d => {
-                csvContent += `"${d.yearStr}","${d.regNo && d.regNo !== '-' ? d.regNo + ' - ' + d.yearStr : '-'}","${d.docNumber}","${d.docDate}","${d.subject}","${d.sender}","${d.status}"\n`;
+                csvContent += `"${d.yearStr}","${d.docNumber || d.voucherNo || '-'}","${d.docDate || d.voucherDate || '-'}","${d.subject || d.voucherProject || '-'}","${d.sender || d.voucherPayee || '-'}","${d.status || '-'}"\n`;
             });
 
             const encodedUri = encodeURI(csvContent);

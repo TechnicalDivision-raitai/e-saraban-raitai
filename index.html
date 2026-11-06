@@ -111,7 +111,7 @@
             <div class="p-4 mx-3 my-3 bg-slate-800/80 rounded-xl border border-slate-700/60 flex items-center space-x-3">
                 <div id="sidebarUserAvatar" class="w-9 h-9 rounded-full bg-blue-500 flex items-center justify-center font-bold text-sm">น</div>
                 <div class="overflow-hidden">
-                    <div id="sidebarUserName" class="text-sm font-medium truncate">นิศาชล  คงดี</div>
+                    <div id="sidebarUserName" class="text-sm font-medium truncate">นิศาชล คงดี</div>
                     <div id="sidebarUserRoleName" class="text-xs text-blue-400">สถานะ: ผู้ดูแลระบบ</div>
                 </div>
             </div>
@@ -350,8 +350,8 @@
                                 <select id="filterYearIncoming" onchange="renderTables()" class="px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                     <option value="">ทุกปี (All Years)</option>
                                     <option value="2569" selected>ปี 2569</option>
+                                    <option value="2568">ปี 2568</option>
                                     <option value="2570">ปี 2570</option>
-                                    <option value="2571">ปี 2571</option>
                                 </select>
                                 <div class="relative w-full md:w-60">
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
@@ -392,8 +392,8 @@
                                 <select id="filterYearOutgoing" onchange="renderTables()" class="px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                     <option value="">ทุกปี (All Years)</option>
                                     <option value="2569" selected>ปี 2569</option>
+                                    <option value="2568">ปี 2568</option>
                                     <option value="2570">ปี 2570</option>
-                                    <option value="2571">ปี 2571</option>
                                 </select>
                                 <div class="relative w-full md:w-60">
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
@@ -432,8 +432,8 @@
                                 <select id="filterYearOrders" onchange="renderTables()" class="px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                     <option value="">ทุกปี (All Years)</option>
                                     <option value="2569" selected>ปี 2569</option>
+                                    <option value="2568">ปี 2568</option>
                                     <option value="2570">ปี 2570</option>
-                                    <option value="2571">ปี 2571</option>
                                 </select>
                                 <div class="relative w-full md:w-60">
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
@@ -472,8 +472,8 @@
                                 <select id="filterYearMemos" onchange="renderTables()" class="px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                     <option value="">ทุกปี (All Years)</option>
                                     <option value="2569" selected>ปีงบฯ 2569</option>
+                                    <option value="2568">ปีงบฯ 2568</option>
                                     <option value="2570">ปีงบฯ 2570</option>
-                                    <option value="2571">ปีงบฯ 2571</option>
                                 </select>
                                 <div class="relative w-full md:w-60">
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
@@ -607,8 +607,8 @@
                         <label class="block text-sm font-medium text-gray-700 mb-1"><span id="yearLabelName">ปีปฏิทิน</span></label>
                         <select id="selectedYear" onchange="updateModalRegPreview()" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm font-semibold text-blue-900 bg-blue-50">
                             <option value="2569">2569</option>
+                            <option value="2568">2568</option>
                             <option value="2570">2570</option>
-                            <option value="2571">2571</option>
                         </select>
                     </div>
                 </div>
@@ -632,9 +632,9 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">แนบไฟล์เอกสาร (PDF / รูปภาพ) - ไม่บังคับ</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">แนบไฟล์เอกสาร (PDF / รูปภาพ)</label>
                     <input type="file" id="docFile" accept=".pdf,image/*" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm file:mr-4 file:py-1 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                    <p class="text-xs text-gray-400 mt-1">หากไม่เลือกไฟล์ ช่องไฟล์แนบในตารางจะเว้นว่างไว้</p>
+                    <p class="text-xs text-gray-400 mt-1">รองรับไฟล์ PDF หรือรูปภาพขนาดไม่เกิน 10MB (ระบบจะอัปโหลดขึ้น Google Drive ให้อัตโนมัติ)</p>
                 </div>
 
                 <div class="flex justify-end space-x-3 pt-4 border-t border-gray-100">
@@ -648,9 +648,16 @@
     <!-- ==================== JAVASCRIPT LOGIC ==================== -->
     <script>
         const ADMIN_PASSWORD = "12345";
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxy69IVmXNUd-GYtVZ3qX98wwvm2Cf2cp2NcL1DuSfl_b05SNru1gG9eo8Y4H_bULub/exec";
+        
+        // Google Apps Script Web App URL ที่คุณกำหนด
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxDo6zj8Jq89py3Hs46GeU5tJSejTT2GfrkahaVZBLXQszvdLd6piu-9M7M03sil32E9g/exec";
 
-        let documents = []; // ดึงข้อมูลจาก Google Sheets
+        // เริ่มต้นด้วยรายการว่างเปล่าทันที
+        let documents = JSON.parse(localStorage.getItem('saraban_docs')) || [];
+
+        function saveToLocalStorage() {
+            localStorage.setItem('saraban_docs', JSON.stringify(documents));
+        }
 
         let currentUser = {
             username: "admin",
@@ -662,35 +669,11 @@
         let typeChartInstance = null;
         let statusChartInstance = null;
 
-        document.addEventListener('DOMContentLoaded', async () => {
+        document.addEventListener('DOMContentLoaded', () => {
             updateUserInterface();
-            await loadDocumentsFromSheet();
+            renderAll();
             toggleFormFields();
         });
-
-        async function loadDocumentsFromSheet() {
-            Swal.fire({
-                title: 'กำลังโหลดข้อมูลจาก Google Sheets...',
-                text: 'โปรดรอสักครู่',
-                allowOutsideClick: false,
-                didOpen: () => { Swal.showLoading(); }
-            });
-
-            try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: "getDocs" })
-                });
-                const result = await response.json();
-                if (result.status === 'success') {
-                    documents = result.docs || [];
-                }
-            } catch (error) {
-                console.error('Load Error:', error);
-            }
-            Swal.close();
-            renderAll();
-        }
 
         async function loginAs(roleType) {
             if (roleType === 'admin') {
@@ -890,7 +873,7 @@
         function getNextRegNoForYear(type, yearStr) {
             const matched = documents.filter(d => d.type === type && d.yearStr === yearStr);
             if (matched.length === 0) return 1;
-            const maxNo = Math.max(...matched.map(d => typeof d.regNo === 'number' ? d.regNo : (parseInt(d.regNo) || 0)));
+            const maxNo = Math.max(...matched.map(d => typeof d.regNo === 'number' ? d.regNo : 0));
             return maxNo + 1;
         }
 
@@ -1088,23 +1071,23 @@
             const isAdmin = currentUser.role === 'admin' && currentUser.name === 'นิศาชล คงดี';
 
             const getActionButtons = (doc) => {
-                let html = `<button onclick="viewDoc('${doc.id}')" class="text-blue-600 hover:text-blue-800 p-1" title="ดูรายละเอียด"><i class="fa-solid fa-eye"></i></button>`;
+                let html = `<button onclick="viewDoc(${doc.id})" class="text-blue-600 hover:text-blue-800 p-1" title="ดูรายละเอียด"><i class="fa-solid fa-eye"></i></button>`;
                 if (isAdmin) {
                     html += `
-                        <button onclick="editDoc('${doc.id}')" class="text-amber-600 hover:text-amber-800 p-1 ml-2" title="แก้ไข"><i class="fa-solid fa-pen-to-square"></i></button>
-                        <button onclick="deleteDoc('${doc.id}')" class="text-red-600 hover:text-red-800 p-1 ml-2" title="ลบ"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="editDoc(${doc.id})" class="text-amber-600 hover:text-amber-800 p-1 ml-2" title="แก้ไข"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button onclick="deleteDoc(${doc.id})" class="text-red-600 hover:text-red-800 p-1 ml-2" title="ลบ"><i class="fa-solid fa-trash"></i></button>
                     `;
                 }
                 return html;
             };
 
             const getFileAttachmentButton = (doc) => {
-                if (doc.fileData && doc.fileData.trim() !== "") {
+                if (doc.fileData) {
                     return `<a href="${doc.fileData}" target="_blank" class="inline-flex items-center px-2.5 py-1 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg text-xs font-medium transition" title="${doc.fileName || 'เปิดดูเอกสารแนบ'}">
                         <i class="fa-solid fa-paperclip mr-1"></i> เปิดดูไฟล์
                     </a>`;
                 }
-                return ``; 
+                return `<span class="text-gray-400 text-xs">ไม่มีไฟล์</span>`;
             };
 
             const getStatusBadge = (status) => {
@@ -1145,12 +1128,12 @@
                     <td class="p-3 uppercase text-xs font-semibold text-gray-500">${d.type}</td>
                     <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div></td>
                     <td class="p-3">
-                        ${d.ackStatus === 'รับทราบแล้ว' ? `<span class="text-emerald-600 text-xs font-medium"><i class="fa-solid fa-check-circle mr-1"></i>${d.ackTime}</span>` : `<button onclick="acknowledgeDoc('${d.id}')" class="bg-amber-500 hover:bg-amber-600 text-white text-xs px-3 py-1 rounded-lg transition">กดรับทราบงาน</button>`}
+                        ${d.ackStatus === 'รับทราบแล้ว' ? `<span class="text-emerald-600 text-xs font-medium"><i class="fa-solid fa-check-circle mr-1"></i>${d.ackTime}</span>` : `<button onclick="acknowledgeDoc(${d.id})" class="bg-amber-500 hover:bg-amber-600 text-white text-xs px-3 py-1 rounded-lg transition">กดรับทราบงาน</button>`}
                     </td>
                     <td class="p-3">${getStatusBadge(d.status)}</td>
                     <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
                     <td class="p-3 text-center">
-                        <button onclick="updateDocStatusPrompt('${d.id}')" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2.5 py-1 rounded-lg transition">เปลี่ยนสถานะ</button>
+                        <button onclick="updateDocStatusPrompt(${d.id})" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2.5 py-1 rounded-lg transition">เปลี่ยนสถานะ</button>
                     </td>
                 </tr>
             `).join('') : `<tr><td colspan="7" class="p-6 text-center text-gray-400">ไม่มีงานที่ได้รับมอบหมายในขณะนี้</td></tr>`;
@@ -1161,7 +1144,7 @@
             const incDocs = documents.filter(d => {
                 const matchType = (d.type === 'incoming');
                 const matchYear = (!filterYearInc || d.yearStr === filterYearInc);
-                const matchText = ((d.subject || '').toLowerCase().includes(searchInc) || (d.sender || '').toLowerCase().includes(searchInc) || (d.docNumber || '').toLowerCase().includes(searchInc) || (d.centralRegNo || '').toLowerCase().includes(searchInc));
+                const matchText = (d.subject.toLowerCase().includes(searchInc) || d.sender.toLowerCase().includes(searchInc) || d.docNumber.toLowerCase().includes(searchInc) || d.centralRegNo.toLowerCase().includes(searchInc));
                 return matchType && matchYear && matchText;
             });
             document.getElementById('incomingTableBody').innerHTML = incDocs.length ? incDocs.map(d => `
@@ -1183,7 +1166,7 @@
             const outDocs = documents.filter(d => {
                 const matchType = (d.type === 'outgoing');
                 const matchYear = (!filterYearOut || d.yearStr === filterYearOut);
-                const matchText = ((d.subject || '').toLowerCase().includes(searchOut) || (d.sender || '').toLowerCase().includes(searchOut) || (d.docNumber || '').toLowerCase().includes(searchOut));
+                const matchText = (d.subject.toLowerCase().includes(searchOut) || d.sender.toLowerCase().includes(searchOut) || d.docNumber.toLowerCase().includes(searchOut));
                 return matchType && matchYear && matchText;
             });
             document.getElementById('outgoingTableBody').innerHTML = outDocs.length ? outDocs.map(d => `
@@ -1203,7 +1186,7 @@
             const ordDocs = documents.filter(d => {
                 const matchType = (d.type === 'orders');
                 const matchYear = (!filterYearOrd || d.yearStr === filterYearOrd);
-                const matchText = ((d.subject || '').toLowerCase().includes(searchOrd) || (d.docNumber || '').toLowerCase().includes(searchOrd));
+                const matchText = (d.subject.toLowerCase().includes(searchOrd) || d.docNumber.toLowerCase().includes(searchOrd));
                 return matchType && matchYear && matchText;
             });
             document.getElementById('ordersTableBody').innerHTML = ordDocs.length ? ordDocs.map(d => `
@@ -1223,7 +1206,7 @@
             const memDocs = documents.filter(d => {
                 const matchType = (d.type === 'memos');
                 const matchYear = (!filterYearMem || d.yearStr === filterYearMem);
-                const matchText = ((d.subject || '').toLowerCase().includes(searchMem) || (d.sender || '').toLowerCase().includes(searchMem) || (d.docNumber || '').toLowerCase().includes(searchMem));
+                const matchText = (d.subject.toLowerCase().includes(searchMem) || d.sender.toLowerCase().includes(searchMem) || d.docNumber.toLowerCase().includes(searchMem));
                 return matchType && matchYear && matchText;
             });
             document.getElementById('memosTableBody').innerHTML = memDocs.length ? memDocs.map(d => `
@@ -1284,6 +1267,7 @@
             document.getElementById('documentModal').classList.add('hidden');
         }
 
+        // ฟังก์ชันแปลงไฟล์เป็น Base64
         function fileToBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -1305,9 +1289,10 @@
             let fileName = '';
             let fileData = '';
 
+            // แสดงหน้าต่างกำลังโหลดระหว่างอัปโหลดไฟล์ขึ้น Google Drive
             Swal.fire({
-                title: 'กำลังบันทึกข้อมูล...',
-                text: 'กรุณารอสักครู่ ระบบกำลังอัปเดตฐานข้อมูลบน Google Sheets',
+                title: 'กำลังบันทึกข้อมูลและอัปโหลดไฟล์...',
+                text: 'กรุณารอสักครู่ ระบบกำลังส่งไฟล์ขึ้น Google Drive',
                 allowOutsideClick: false,
                 didOpen: () => { Swal.showLoading(); }
             });
@@ -1323,7 +1308,6 @@
                     const response = await fetch(GOOGLE_SCRIPT_URL, {
                         method: 'POST',
                         body: JSON.stringify({
-                            action: "uploadFile",
                             fileData: base64Data,
                             mimeType: file.type,
                             fileName: fileName
@@ -1332,10 +1316,12 @@
 
                     const result = await response.json();
                     if (result.status === 'success') {
-                        fileData = result.fileUrl;
+                        fileData = result.fileUrl; // ได้ลิงก์ Google Drive ของจริงมาเก็บไว้
+                    } else {
+                        console.error('Drive Upload Error:', result.message);
                     }
                 } catch (error) {
-                    console.error('File Upload Error:', error);
+                    console.error('Fetch Error:', error);
                 }
             }
 
@@ -1358,34 +1344,34 @@
             const assignee = document.getElementById('docAssignee').value;
             const dueDate = document.getElementById('docDueDate').value;
 
-            let targetDoc = {};
-
             if (editId) {
-                const existing = documents.find(d => d.id == editId);
-                targetDoc = {
-                    id: editId,
-                    type,
-                    regNo: existing ? existing.regNo : '-',
-                    yearStr: selectedYearStr,
-                    centralRegNo,
-                    receiveDate,
-                    sender,
-                    urgency,
-                    docNumber,
-                    docDate,
-                    subject,
-                    status,
-                    assignee,
-                    dueDate,
-                    ackStatus: existing ? existing.ackStatus : 'รอรับทราบ',
-                    ackTime: existing ? existing.ackTime : '-',
-                    fileName: (fileName && fileData) ? fileName : (existing ? existing.fileName : ''),
-                    fileData: (fileName && fileData) ? fileData : (existing ? existing.fileData : '')
-                };
+                const doc = documents.find(d => d.id == editId);
+                if (doc) {
+                    doc.type = type;
+                    doc.docNumber = docNumber;
+                    doc.docDate = docDate;
+                    doc.subject = subject;
+                    doc.sender = sender;
+                    doc.status = status;
+                    doc.assignee = assignee;
+                    doc.dueDate = dueDate;
+                    doc.yearStr = selectedYearStr;
+                    if (type === 'incoming') {
+                        doc.centralRegNo = centralRegNo;
+                        doc.receiveDate = receiveDate;
+                        doc.urgency = urgency;
+                    }
+                    if (fileName && fileData) {
+                        doc.fileName = fileName;
+                        doc.fileData = fileData;
+                    }
+                }
+                Swal.fire('สำเร็จ', 'อัปเดตข้อมูลหนังสือและไฟล์เรียบร้อยแล้ว', 'success');
             } else {
                 const nextRegNo = type === 'incoming' ? getNextRegNoForYear('incoming', selectedYearStr) : '-';
-                targetDoc = {
-                    id: 'doc_' + Date.now(),
+
+                const newDoc = {
+                    id: Date.now(),
                     type,
                     regNo: nextRegNo,
                     yearStr: selectedYearStr,
@@ -1404,29 +1390,13 @@
                     fileName: fileName || '',
                     fileData: fileData || ''
                 };
+                documents.unshift(newDoc);
+                Swal.fire('สำเร็จ', `ลงทะเบียนหนังสือเรียบร้อย ${nextRegNo !== '-' ? '(เลขรับกองช่าง: ' + nextRegNo + ' - ' + selectedYearStr + ')' : ''}`, 'success');
             }
 
-            try {
-                const res = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        action: "saveDoc",
-                        doc: targetDoc
-                    })
-                });
-                const resJson = await res.json();
-
-                if (resJson.status === 'success') {
-                    await loadDocumentsFromSheet();
-                    closeDocumentModal();
-                    Swal.fire('สำเร็จ', 'บันทึกข้อมูลลง Google Sheets เรียบร้อยแล้ว', 'success');
-                } else {
-                    Swal.fire('เกิดข้อผิดพลาด', 'ไม่สามารถบันทึกข้อมูลได้: ' + (resJson.message || ''), 'error');
-                }
-            } catch (error) {
-                console.error('Save Error:', error);
-                Swal.fire('เกิดข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อกับ Google Sheets ได้', 'error');
-            }
+            saveToLocalStorage();
+            closeDocumentModal();
+            renderAll();
         }
 
         function editDoc(id) {
@@ -1434,7 +1404,7 @@
                 Swal.fire('ไม่อนุญาต', 'คุณไม่มีสิทธิ์แก้ไขข้อมูล', 'warning');
                 return;
             }
-            const doc = documents.find(d => d.id == id);
+            const doc = documents.find(d => d.id === id);
             if (!doc) return;
 
             document.getElementById('modalTitle').innerText = 'แก้ไขข้อมูลหนังสือ';
@@ -1459,48 +1429,35 @@
             document.getElementById('documentModal').classList.remove('hidden');
         }
 
-        async function deleteDoc(id) {
+        function deleteDoc(id) {
             if (currentUser.role !== 'admin' || currentUser.name !== 'นิศาชล คงดี') {
                 Swal.fire('ไม่อนุญาต', 'คุณไม่มีสิทธิ์ลบข้อมูล', 'warning');
                 return;
             }
             Swal.fire({
                 title: 'ยืนยันการลบ?',
-                text: 'คุณต้องการลบรายการหนังสือนี้ออกจาก Google Sheets ใช่หรือไม่',
+                text: 'คุณต้องการลบรายการหนังสือนี้ใช่หรือไม่',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
                 cancelButtonText: 'ยกเลิก',
                 confirmButtonText: 'ยืนยันลบ'
-            }).then(async (result) => {
+            }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.fire({
-                        title: 'กำลังลบข้อมูล...',
-                        allowOutsideClick: false,
-                        didOpen: () => { Swal.showLoading(); }
-                    });
-
-                    try {
-                        await fetch(GOOGLE_SCRIPT_URL, {
-                            method: 'POST',
-                            body: JSON.stringify({ action: "deleteDoc", id: id })
-                        });
-                        await loadDocumentsFromSheet();
-                        Swal.fire('ลบสำเร็จ', 'รายการถูกลบออกจาก Google Sheets แล้ว', 'success');
-                    } catch (error) {
-                        console.error('Delete Error:', error);
-                        Swal.fire('เกิดข้อผิดพลาด', 'ไม่สามารถลบข้อมูลได้', 'error');
-                    }
+                    documents = documents.filter(d => d.id !== id);
+                    saveToLocalStorage();
+                    renderAll();
+                    Swal.fire('ลบสำเร็จ', 'รายการถูกลบออกจากระบบแล้ว', 'success');
                 }
             });
         }
 
         function viewDoc(id) {
-            const doc = documents.find(d => d.id == id);
+            const doc = documents.find(d => d.id === id);
             if (!doc) return;
 
             Swal.fire({
-                title: `รายละเอียดเอกสาร (${(doc.type || '').toUpperCase()})`,
+                title: `รายละเอียดเอกสาร (${doc.type.toUpperCase()})`,
                 html: `
                     <div class="text-left space-y-2 text-sm bg-gray-50 p-4 rounded-xl border border-gray-200">
                         ${doc.regNo && doc.regNo !== '-' ? `<p><b>เลขรับกองช่าง:</b> ${doc.regNo} - ${doc.yearStr}</p>` : `<p><b>ปี (${doc.type === 'memos' ? 'ปีงบประมาณ' : 'ปีปฏิทิน'}):</b> ${doc.yearStr}</p>`}
@@ -1512,7 +1469,7 @@
                         <p><b>ผู้รับผิดชอบ:</b> ${doc.assignee}</p>
                         <div class="pt-2 border-t border-gray-200 flex items-center justify-between">
                             <span><b>ไฟล์แนบ:</b> ${doc.fileName || 'ไม่มีเอกสารแนบ'}</span>
-                            ${doc.fileData && doc.fileData.trim() !== '' ? `<a href="${doc.fileData}" target="_blank" class="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-blue-700 transition"><i class="fa-solid fa-external-link-alt mr-1"></i> เปิดดูไฟล์</a>` : ''}
+                            ${doc.fileData ? `<a href="${doc.fileData}" target="_blank" class="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-blue-700 transition"><i class="fa-solid fa-external-link-alt mr-1"></i> เปิดดูไฟล์</a>` : ''}
                         </div>
                     </div>
                 `,
@@ -1520,29 +1477,21 @@
             });
         }
 
-        async function acknowledgeDoc(id) {
-            const doc = documents.find(d => d.id == id);
+        function acknowledgeDoc(id) {
+            const doc = documents.find(d => d.id === id);
             if (doc) {
                 const now = new Date();
                 doc.ackStatus = 'รับทราบแล้ว';
                 doc.ackTime = `${now.getDate()} ม.ค. ${now.getFullYear()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
                 doc.status = 'กำลังดำเนินการ';
-
-                try {
-                    await fetch(GOOGLE_SCRIPT_URL, {
-                        method: 'POST',
-                        body: JSON.stringify({ action: "saveDoc", doc: doc })
-                    });
-                    await loadDocumentsFromSheet();
-                    Swal.fire('สำเร็จ', 'กดรับทราบงานเรียบร้อยแล้ว', 'success');
-                } catch (error) {
-                    console.error('Ack Error:', error);
-                }
+                saveToLocalStorage();
+                renderAll();
+                Swal.fire('สำเร็จ', 'กดรับทราบงานเรียบร้อยแล้ว', 'success');
             }
         }
 
-        async function updateDocStatusPrompt(id) {
-            const doc = documents.find(d => d.id == id);
+        function updateDocStatusPrompt(id) {
+            const doc = documents.find(d => d.id === id);
             if (!doc) return;
 
             Swal.fire({
@@ -1561,19 +1510,12 @@
                 showCancelButton: true,
                 confirmButtonText: 'บันทึก',
                 cancelButtonText: 'ยกเลิก'
-            }).then(async (result) => {
+            }).then((result) => {
                 if (result.isConfirmed && result.value) {
                     doc.status = result.value;
-                    try {
-                        await fetch(GOOGLE_SCRIPT_URL, {
-                            method: 'POST',
-                            body: JSON.stringify({ action: "saveDoc", doc: doc })
-                        });
-                        await loadDocumentsFromSheet();
-                        Swal.fire('สำเร็จ', 'อัปเดตสถานะเรียบร้อยแล้ว', 'success');
-                    } catch (error) {
-                        console.error('Status Update Error:', error);
-                    }
+                    saveToLocalStorage();
+                    renderAll();
+                    Swal.fire('สำเร็จ', 'อัปเดตสถานะเรียบร้อยแล้ว', 'success');
                 }
             });
         }

@@ -358,8 +358,12 @@
                                 <select id="filterYearIncoming" onchange="renderTables()" class="px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                     <option value="">ทุกปี (All Years)</option>
                                     <option value="2569" selected>ปี 2569</option>
-                                    <option value="2568">ปี 2570</option>
-                                    <option value="2570">ปี 2571</option>
+                                    <option value="2570">ปี 2570</option>
+                                    <option value="2571">ปี 2571</option>
+                                    <option value="2572">ปี 2572</option>
+                                    <option value="2573">ปี 2573</option>
+                                    <option value="2574">ปี 2574</option>
+                                    <option value="2575">ปี 2575</option>
                                 </select>
                                 <div class="relative w-full md:w-60">
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
@@ -400,8 +404,12 @@
                                 <select id="filterYearOutgoing" onchange="renderTables()" class="px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                     <option value="">ทุกปี (All Years)</option>
                                     <option value="2569" selected>ปี 2569</option>
-                                    <option value="2568">ปี 2570</option>
-                                    <option value="2570">ปี 2571</option>
+                                    <option value="2570">ปี 2570</option>
+                                    <option value="2571">ปี 2571</option>
+                                    <option value="2572">ปี 2572</option>
+                                    <option value="2573">ปี 2573</option>
+                                    <option value="2574">ปี 2574</option>
+                                    <option value="2575">ปี 2575</option>
                                 </select>
                                 <div class="relative w-full md:w-60">
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
@@ -440,8 +448,12 @@
                                 <select id="filterYearOrders" onchange="renderTables()" class="px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                     <option value="">ทุกปี (All Years)</option>
                                     <option value="2569" selected>ปี 2569</option>
-                                    <option value="2568">ปี 2570</option>
-                                    <option value="2570">ปี 2571</option>
+                                    <option value="2570">ปี 2570</option>
+                                    <option value="2571">ปี 2571</option>
+                                    <option value="2572">ปี 2572</option>
+                                    <option value="2573">ปี 2573</option>
+                                    <option value="2574">ปี 2574</option>
+                                    <option value="2575">ปี 2575</option>
                                 </select>
                                 <div class="relative w-full md:w-60">
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
@@ -480,8 +492,12 @@
                                 <select id="filterYearMemos" onchange="renderTables()" class="px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                     <option value="">ทุกปี (All Years)</option>
                                     <option value="2569" selected>ปีงบฯ 2569</option>
-                                    <option value="2568">ปีงบฯ 2570</option>
-                                    <option value="2570">ปีงบฯ 2571</option>
+                                    <option value="2570">ปีงบฯ 2570</option>
+                                    <option value="2571">ปีงบฯ 2571</option>
+                                    <option value="2572">ปีงบฯ 2572</option>
+                                    <option value="2573">ปีงบฯ 2573</option>
+                                    <option value="2574">ปีงบฯ 2574</option>
+                                    <option value="2575">ปีงบฯ 2575</option>
                                 </select>
                                 <div class="relative w-full md:w-60">
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
@@ -619,8 +635,12 @@
                         <label class="block text-sm font-medium text-gray-700 mb-1"><span id="yearLabelName">ปีปฏิทิน</span></label>
                         <select id="selectedYear" onchange="updateModalRegPreview()" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm font-semibold text-blue-900 bg-blue-50">
                             <option value="2569">2569</option>
-                            <option value="2568">2570</option>
-                            <option value="2570">2571</option>
+                            <option value="2570">2570</option>
+                            <option value="2571">2571</option>
+                            <option value="2572">2572</option>
+                            <option value="2573">2573</option>
+                            <option value="2574">2574</option>
+                            <option value="2575">2575</option>
                         </select>
                     </div>
                 </div>
@@ -915,9 +935,12 @@
         }
 
         function getNextRegNoForYear(type, yearStr) {
-            const matched = documents.filter(d => d.type === type && d.yearStr === yearStr);
+            const matched = documents.filter(d => d.type === type && String(d.yearStr) === String(yearStr));
             if (matched.length === 0) return 1;
-            const maxNo = Math.max(...matched.map(d => typeof d.regNo === 'number' ? d.regNo : 0));
+            const maxNo = Math.max(...matched.map(d => {
+                const num = parseInt(d.regNo);
+                return isNaN(num) ? 0 : num;
+            }));
             return maxNo + 1;
         }
 
@@ -1112,195 +1135,195 @@
         }
 
         // ฟังก์ชันสำหรับจัดรูปแบบวันที่จาก YYYY-MM-DD เป็น DD-MM-YYYY
-function formatThaiDate(dateStr) {
-    if (!dateStr || dateStr === '-') return '-';
-    const parts = dateStr.split('-');
-    if (parts.length === 3) {
-        return `${parts[2]}-${parts[1]}-${parts[0]}`;
-    }
-    return dateStr;
-}
-
-function renderTables() {
-    const isAdmin = currentUser.role === 'admin' && currentUser.name === 'นิศาชล คงดี';
-
-    const getActionButtons = (doc) => {
-        let html = `<button onclick="viewDoc(${doc.id})" class="text-blue-600 hover:text-blue-800 p-1" title="ดูรายละเอียด"><i class="fa-solid fa-eye"></i></button>`;
-        if (isAdmin) {
-            html += `
-                <button onclick="editDoc(${doc.id})" class="text-amber-600 hover:text-amber-800 p-1 ml-2" title="แก้ไข"><i class="fa-solid fa-pen-to-square"></i></button>
-                <button onclick="deleteDoc(${doc.id})" class="text-red-600 hover:text-red-800 p-1 ml-2" title="ลบ"><i class="fa-solid fa-trash"></i></button>
-            `;
+        function formatThaiDate(dateStr) {
+            if (!dateStr || dateStr === '-') return '-';
+            const parts = dateStr.split('-');
+            if (parts.length === 3) {
+                return `${parts[2]}-${parts[1]}-${parts[0]}`;
+            }
+            return dateStr;
         }
-        return html;
-    };
 
-    const getFileAttachmentButton = (doc) => {
-        if (doc.fileData && doc.fileData.trim() !== "") {
-            return `<a href="${doc.fileData}" target="_blank" class="inline-flex items-center px-2.5 py-1 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg text-xs font-medium transition" title="${doc.fileName || 'เปิดดูเอกสารแนบ'}">
-                <i class="fa-solid fa-paperclip mr-1"></i> เปิดดูไฟล์
-            </a>`;
-        }
-        return ``; 
-    };
+        function renderTables() {
+            const isAdmin = currentUser.role === 'admin' && currentUser.name === 'นิศาชล คงดี';
 
-    const getStatusBadge = (status) => {
-        if (status === 'ดำเนินการแล้ว' || status === 'เสร็จสิ้น') return `<span class="bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full text-xs font-medium">${status}</span>`;
-        if (status === 'เสนอเซนต์' || status === 'กำลังดำเนินการ' || status === 'ออกเอกสาร') return `<span class="bg-blue-100 text-blue-800 px-2.5 py-1 rounded-full text-xs font-medium">${status}</span>`;
-        return `<span class="bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full text-xs font-medium">${status}</span>`;
-    };
+            const getActionButtons = (doc) => {
+                let html = `<button onclick="viewDoc(${doc.id})" class="text-blue-600 hover:text-blue-800 p-1" title="ดูรายละเอียด"><i class="fa-solid fa-eye"></i></button>`;
+                if (isAdmin) {
+                    html += `
+                        <button onclick="editDoc(${doc.id})" class="text-amber-600 hover:text-amber-800 p-1 ml-2" title="แก้ไข"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button onclick="deleteDoc(${doc.id})" class="text-red-600 hover:text-red-800 p-1 ml-2" title="ลบ"><i class="fa-solid fa-trash"></i></button>
+                    `;
+                }
+                return html;
+            };
 
-    const formatRegDisplay = (doc) => {
-        if (doc.regNo && doc.regNo !== '-') {
-            return `${doc.regNo} - ${doc.yearStr}`;
-        }
-        return `-`;
-    };
+            const getFileAttachmentButton = (doc) => {
+                if (doc.fileData && doc.fileData.trim() !== "") {
+                    return `<a href="${doc.fileData}" target="_blank" class="inline-flex items-center px-2.5 py-1 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg text-xs font-medium transition" title="${doc.fileName || 'เปิดดูเอกสารแนบ'}">
+                        <i class="fa-solid fa-paperclip mr-1"></i> เปิดดูไฟล์
+                    </a>`;
+                }
+                return ``; 
+            };
 
-    // 1. Dashboard Table
-    const dashDocs = documents.slice(0, 5);
-    document.getElementById('dashboardTableBody').innerHTML = dashDocs.length ? dashDocs.map(d => `
-        <tr class="hover:bg-gray-50">
-            <td class="p-3 font-bold text-blue-600">${formatRegDisplay(d)}</td>
-            <td class="p-3">
-                <div class="font-medium text-gray-800 truncate max-w-xs">${d.subject}</div>
-                <div class="text-xs text-gray-500">จาก/ถึง: ${d.sender}</div>
-            </td>
-            <td class="p-3 text-gray-600">${d.assignee}</td>
-            <td class="p-3"><span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded text-xs font-medium">${d.urgency || 'ปกติ'}</span></td>
-            <td class="p-3 text-gray-600">${formatThaiDate(d.dueDate)}</td>
-            <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
-            <td class="p-3 text-center">${getActionButtons(d)}</td>
-        </tr>
-    `).join('') : `<tr><td colspan="7" class="p-6 text-center text-gray-400">ยังไม่มีข้อมูลในระบบ</td></tr>`;
+            const getStatusBadge = (status) => {
+                if (status === 'ดำเนินการแล้ว' || status === 'เสร็จสิ้น') return `<span class="bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full text-xs font-medium">${status}</span>`;
+                if (status === 'เสนอเซนต์' || status === 'กำลังดำเนินการ' || status === 'ออกเอกสาร') return `<span class="bg-blue-100 text-blue-800 px-2.5 py-1 rounded-full text-xs font-medium">${status}</span>`;
+                return `<span class="bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full text-xs font-medium">${status}</span>`;
+            };
 
-    // 2. My Inbox Table
-    const myDocs = documents.filter(d => d.assignee === currentUser.name);
-    document.getElementById('myInboxTableBody').innerHTML = myDocs.length ? myDocs.map(d => `
-        <tr class="hover:bg-gray-50">
-            <td class="p-3 font-bold text-blue-600">${formatRegDisplay(d)}</td>
-            <td class="p-3 uppercase text-xs font-semibold text-gray-500">${d.type}</td>
-            <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div></td>
-            <td class="p-3">
-                ${d.ackStatus === 'รับทราบแล้ว' ? `<span class="text-emerald-600 text-xs font-medium"><i class="fa-solid fa-check-circle mr-1"></i>${d.ackTime}</span>` : `<button onclick="acknowledgeDoc(${d.id})" class="bg-amber-500 hover:bg-amber-600 text-white text-xs px-3 py-1 rounded-lg transition">กดรับทราบงาน</button>`}
-            </td>
-            <td class="p-3">${getStatusBadge(d.status)}</td>
-            <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
-            <td class="p-3 text-center">
-                <button onclick="updateDocStatusPrompt(${d.id})" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2.5 py-1 rounded-lg transition">เปลี่ยนสถานะ</button>
-            </td>
-        </tr>
-    `).join('') : `<tr><td colspan="7" class="p-6 text-center text-gray-400">ไม่มีงานที่ได้รับมอบหมายในขณะนี้</td></tr>`;
+            const formatRegDisplay = (doc) => {
+                if (doc.regNo && doc.regNo !== '-') {
+                    return `${doc.regNo} - ${doc.yearStr}`;
+                }
+                return `-`;
+            };
 
-    // 3. Incoming Table
-    const filterYearInc = document.getElementById('filterYearIncoming').value;
-    const searchInc = document.getElementById('searchIncoming').value.toLowerCase();
-    const incDocs = documents.filter(d => {
-        const matchType = (d.type === 'incoming');
-        const matchYear = (!filterYearInc || d.yearStr === filterYearInc);
-        const matchText = (d.subject.toLowerCase().includes(searchInc) || d.sender.toLowerCase().includes(searchInc) || d.docNumber.toLowerCase().includes(searchInc) || (d.centralRegNo && d.centralRegNo.toLowerCase().includes(searchInc)));
-        return matchType && matchYear && matchText;
-    });
-    document.getElementById('incomingTableBody').innerHTML = incDocs.length ? incDocs.map(d => `
-        <tr class="hover:bg-gray-50">
-            <td class="p-3 font-bold text-blue-600">${d.regNo} - ${d.yearStr}</td>
-            <td class="p-3 text-xs"><span class="font-semibold">${d.centralRegNo}</span><br><span class="text-gray-400">${formatThaiDate(d.receiveDate)}</span></td>
-            <td class="p-3 text-xs"><span class="font-semibold">${d.docNumber}</span><br><span class="text-gray-400">${formatThaiDate(d.docDate)}</span></td>
-            <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div><div class="text-xs text-gray-500">ผู้ส่ง: ${d.sender}</div></td>
-            <td class="p-3"><span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded text-xs">${d.urgency}</span></td>
-            <td class="p-3">${getStatusBadge(d.status)}</td>
-            <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
-            <td class="p-3 text-center">${getActionButtons(d)}</td>
-        </tr>
-    `).join('') : `<tr><td colspan="8" class="p-6 text-center text-gray-400">ไม่พบข้อมูลหนังสือรับ</td></tr>`;
+            // 1. Dashboard Table
+            const dashDocs = documents.slice(0, 5);
+            document.getElementById('dashboardTableBody').innerHTML = dashDocs.length ? dashDocs.map(d => `
+                <tr class="hover:bg-gray-50">
+                    <td class="p-3 font-bold text-blue-600">${formatRegDisplay(d)}</td>
+                    <td class="p-3">
+                        <div class="font-medium text-gray-800 truncate max-w-xs">${d.subject}</div>
+                        <div class="text-xs text-gray-500">จาก/ถึง: ${d.sender}</div>
+                    </td>
+                    <td class="p-3 text-gray-600">${d.assignee}</td>
+                    <td class="p-3"><span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded text-xs font-medium">${d.urgency || 'ปกติ'}</span></td>
+                    <td class="p-3 text-gray-600">${formatThaiDate(d.dueDate)}</td>
+                    <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
+                    <td class="p-3 text-center">${getActionButtons(d)}</td>
+                </tr>
+            `).join('') : `<tr><td colspan="7" class="p-6 text-center text-gray-400">ยังไม่มีข้อมูลในระบบ</td></tr>`;
 
-    // 4. Outgoing Table
-    const filterYearOut = document.getElementById('filterYearOutgoing').value;
-    const searchOut = document.getElementById('searchOutgoing').value.toLowerCase();
-    const outDocs = documents.filter(d => {
-        const matchType = (d.type === 'outgoing');
-        const matchYear = (!filterYearOut || d.yearStr === filterYearOut);
-        const matchText = (d.subject.toLowerCase().includes(searchOut) || d.sender.toLowerCase().includes(searchOut) || d.docNumber.toLowerCase().includes(searchOut));
-        return matchType && matchYear && matchText;
-    });
-    document.getElementById('outgoingTableBody').innerHTML = outDocs.length ? outDocs.map(d => `
-        <tr class="hover:bg-gray-50">
-            <td class="p-3 font-bold text-emerald-600">ปี ${d.yearStr}</td>
-            <td class="p-3 text-xs"><span class="font-semibold">${d.docNumber}</span><br><span class="text-gray-400">${formatThaiDate(d.docDate)}</span></td>
-            <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div><div class="text-xs text-gray-500">ผู้รับ: ${d.sender}</div></td>
-            <td class="p-3">${getStatusBadge(d.status)}</td>
-            <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
-            <td class="p-3 text-center">${getActionButtons(d)}</td>
-        </tr>
-    `).join('') : `<tr><td colspan="6" class="p-6 text-center text-gray-400">ไม่พบข้อมูลหนังสือส่ง</td></tr>`;
+            // 2. My Inbox Table
+            const myDocs = documents.filter(d => d.assignee === currentUser.name);
+            document.getElementById('myInboxTableBody').innerHTML = myDocs.length ? myDocs.map(d => `
+                <tr class="hover:bg-gray-50">
+                    <td class="p-3 font-bold text-blue-600">${formatRegDisplay(d)}</td>
+                    <td class="p-3 uppercase text-xs font-semibold text-gray-500">${d.type}</td>
+                    <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div></td>
+                    <td class="p-3">
+                        ${d.ackStatus === 'รับทราบแล้ว' ? `<span class="text-emerald-600 text-xs font-medium"><i class="fa-solid fa-check-circle mr-1"></i>${d.ackTime}</span>` : `<button onclick="acknowledgeDoc(${d.id})" class="bg-amber-500 hover:bg-amber-600 text-white text-xs px-3 py-1 rounded-lg transition">กดรับทราบงาน</button>`}
+                    </td>
+                    <td class="p-3">${getStatusBadge(d.status)}</td>
+                    <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
+                    <td class="p-3 text-center">
+                        <button onclick="updateDocStatusPrompt(${d.id})" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2.5 py-1 rounded-lg transition">เปลี่ยนสถานะ</button>
+                    </td>
+                </tr>
+            `).join('') : `<tr><td colspan="7" class="p-6 text-center text-gray-400">ไม่มีงานที่ได้รับมอบหมายในขณะนี้</td></tr>`;
 
-    // 5. Orders Table
-    const filterYearOrd = document.getElementById('filterYearOrders').value;
-    const searchOrd = document.getElementById('searchOrders').value.toLowerCase();
-    const ordDocs = documents.filter(d => {
-        const matchType = (d.type === 'orders');
-        const matchYear = (!filterYearOrd || d.yearStr === filterYearOrd);
-        const matchText = (d.subject.toLowerCase().includes(searchOrd) || d.docNumber.toLowerCase().includes(searchOrd));
-        return matchType && matchYear && matchText;
-    });
-    document.getElementById('ordersTableBody').innerHTML = ordDocs.length ? ordDocs.map(d => `
-        <tr class="hover:bg-gray-50">
-            <td class="p-3 font-bold text-amber-600">ปี ${d.yearStr}</td>
-            <td class="p-3 text-xs"><span class="font-semibold">${d.docNumber}</span><br><span class="text-gray-400">${formatThaiDate(d.docDate)}</span></td>
-            <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div></td>
-            <td class="p-3">${getStatusBadge(d.status)}</td>
-            <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
-            <td class="p-3 text-center">${getActionButtons(d)}</td>
-        </tr>
-    `).join('') : `<tr><td colspan="6" class="p-6 text-center text-gray-400">ไม่พบข้อมูลคำสั่ง</td></tr>`;
+            // 3. Incoming Table
+            const filterYearInc = document.getElementById('filterYearIncoming').value;
+            const searchInc = document.getElementById('searchIncoming').value.toLowerCase();
+            const incDocs = documents.filter(d => {
+                const matchType = (d.type === 'incoming');
+                const matchYear = (!filterYearInc || String(d.yearStr) === String(filterYearInc));
+                const matchText = (d.subject.toLowerCase().includes(searchInc) || d.sender.toLowerCase().includes(searchInc) || d.docNumber.toLowerCase().includes(searchInc) || (d.centralRegNo && d.centralRegNo.toLowerCase().includes(searchInc)));
+                return matchType && matchYear && matchText;
+            });
+            document.getElementById('incomingTableBody').innerHTML = incDocs.length ? incDocs.map(d => `
+                <tr class="hover:bg-gray-50">
+                    <td class="p-3 font-bold text-blue-600">${d.regNo} - ${d.yearStr}</td>
+                    <td class="p-3 text-xs"><span class="font-semibold">${d.centralRegNo}</span><br><span class="text-gray-400">${formatThaiDate(d.receiveDate)}</span></td>
+                    <td class="p-3 text-xs"><span class="font-semibold">${d.docNumber}</span><br><span class="text-gray-400">${formatThaiDate(d.docDate)}</span></td>
+                    <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div><div class="text-xs text-gray-500">ผู้ส่ง: ${d.sender}</div></td>
+                    <td class="p-3"><span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded text-xs">${d.urgency}</span></td>
+                    <td class="p-3">${getStatusBadge(d.status)}</td>
+                    <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
+                    <td class="p-3 text-center">${getActionButtons(d)}</td>
+                </tr>
+            `).join('') : `<tr><td colspan="8" class="p-6 text-center text-gray-400">ไม่พบข้อมูลหนังสือรับ</td></tr>`;
 
-    // 6. Memos Table
-    const filterYearMem = document.getElementById('filterYearMemos').value;
-    const searchMem = document.getElementById('searchMemos').value.toLowerCase();
-    const memDocs = documents.filter(d => {
-        const matchType = (d.type === 'memos');
-        const matchYear = (!filterYearMem || d.yearStr === filterYearMem);
-        const matchText = (d.subject.toLowerCase().includes(searchMem) || d.sender.toLowerCase().includes(searchMem) || d.docNumber.toLowerCase().includes(searchMem));
-        return matchType && matchYear && matchText;
-    });
-    document.getElementById('memosTableBody').innerHTML = memDocs.length ? memDocs.map(d => `
-        <tr class="hover:bg-gray-50">
-            <td class="p-3 font-bold text-purple-600">ปีงบฯ ${d.yearStr}</td>
-            <td class="p-3 text-xs"><span class="font-semibold">${d.docNumber}</span><br><span class="text-gray-400">${formatThaiDate(d.docDate)}</span></td>
-            <td class="p-3"><div class="font-medium text-gray-800">เรียน: ${d.sender}</div><div class="text-xs text-gray-500">เรื่อง: ${d.subject}</div></td>
-            <td class="p-3">${getStatusBadge(d.status)}</td>
-            <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
-            <td class="p-3 text-center">${getActionButtons(d)}</td>
-        </tr>
-    `).join('') : `<tr><td colspan="6" class="p-6 text-center text-gray-400">ไม่พบข้อมูลบันทึกข้อความ</td></tr>`;
+            // 4. Outgoing Table
+            const filterYearOut = document.getElementById('filterYearOutgoing').value;
+            const searchOut = document.getElementById('searchOutgoing').value.toLowerCase();
+            const outDocs = documents.filter(d => {
+                const matchType = (d.type === 'outgoing');
+                const matchYear = (!filterYearOut || String(d.yearStr) === String(filterYearOut));
+                const matchText = (d.subject.toLowerCase().includes(searchOut) || d.sender.toLowerCase().includes(searchOut) || d.docNumber.toLowerCase().includes(searchOut));
+                return matchType && matchYear && matchText;
+            });
+            document.getElementById('outgoingTableBody').innerHTML = outDocs.length ? outDocs.map(d => `
+                <tr class="hover:bg-gray-50">
+                    <td class="p-3 font-bold text-emerald-600">ปี ${d.yearStr}</td>
+                    <td class="p-3 text-xs"><span class="font-semibold">${d.docNumber}</span><br><span class="text-gray-400">${formatThaiDate(d.docDate)}</span></td>
+                    <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div><div class="text-xs text-gray-500">ผู้รับ: ${d.sender}</div></td>
+                    <td class="p-3">${getStatusBadge(d.status)}</td>
+                    <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
+                    <td class="p-3 text-center">${getActionButtons(d)}</td>
+                </tr>
+            `).join('') : `<tr><td colspan="6" class="p-6 text-center text-gray-400">ไม่พบข้อมูลหนังสือส่ง</td></tr>`;
 
-    // 7. All Docs Table
-    document.getElementById('allDocsTableBody').innerHTML = documents.length ? documents.map(d => `
-        <tr class="hover:bg-gray-50">
-            <td class="p-3 uppercase text-xs font-semibold text-gray-500">${d.type}</td>
-            <td class="p-3 font-bold text-gray-700">${d.yearStr}</td>
-            <td class="p-3 font-bold text-blue-600">${formatRegDisplay(d)} <span class="font-normal text-xs text-gray-500">(${d.docNumber})</span></td>
-            <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div></td>
-            <td class="p-3">${getStatusBadge(d.status)}</td>
-            <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
-            <td class="p-3 text-center">${getActionButtons(d)}</td>
-        </tr>
-    `).join('') : `<tr><td colspan="7" class="p-6 text-center text-gray-400">ยังไม่มีเอกสารในระบบทั้งหมด</td></tr>`;
+            // 5. Orders Table
+            const filterYearOrd = document.getElementById('filterYearOrders').value;
+            const searchOrd = document.getElementById('searchOrders').value.toLowerCase();
+            const ordDocs = documents.filter(d => {
+                const matchType = (d.type === 'orders');
+                const matchYear = (!filterYearOrd || String(d.yearStr) === String(filterYearOrd));
+                const matchText = (d.subject.toLowerCase().includes(searchOrd) || d.docNumber.toLowerCase().includes(searchOrd));
+                return matchType && matchYear && matchText;
+            });
+            document.getElementById('ordersTableBody').innerHTML = ordDocs.length ? ordDocs.map(d => `
+                <tr class="hover:bg-gray-50">
+                    <td class="p-3 font-bold text-amber-600">ปี ${d.yearStr}</td>
+                    <td class="p-3 text-xs"><span class="font-semibold">${d.docNumber}</span><br><span class="text-gray-400">${formatThaiDate(d.docDate)}</span></td>
+                    <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div></td>
+                    <td class="p-3">${getStatusBadge(d.status)}</td>
+                    <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
+                    <td class="p-3 text-center">${getActionButtons(d)}</td>
+                </tr>
+            `).join('') : `<tr><td colspan="6" class="p-6 text-center text-gray-400">ไม่พบข้อมูลคำสั่ง</td></tr>`;
 
-    // 8. Overdue Table
-    const today = new Date().toISOString().split('T')[0];
-    const overdueDocs = documents.filter(d => d.dueDate && d.dueDate < today && d.status !== 'ดำเนินการแล้ว' && d.status !== 'เสร็จสิ้น');
-    document.getElementById('overdueTableBody').innerHTML = overdueDocs.length ? overdueDocs.map(d => `
-        <tr class="hover:bg-red-50/50">
-            <td class="p-3 uppercase text-xs font-semibold text-gray-500">${d.type}</td>
-            <td class="p-3 font-bold text-red-600">${formatRegDisplay(d)}</td>
-            <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div></td>
-            <td class="p-3 text-gray-600">${d.assignee}</td>
-            <td class="p-3 text-red-600 font-semibold">${formatThaiDate(d.dueDate)}</td>
-            <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
-            <td class="p-3 text-center">${getActionButtons(d)}</td>
-        </tr>
-    `).join('') : `<tr><td colspan="6" class="p-6 text-center text-gray-400">ไม่มีงานค้างเกินกำหนดในขณะนี้</td></tr>`;
+            // 6. Memos Table
+            const filterYearMem = document.getElementById('filterYearMemos').value;
+            const searchMem = document.getElementById('searchMemos').value.toLowerCase();
+            const memDocs = documents.filter(d => {
+                const matchType = (d.type === 'memos');
+                const matchYear = (!filterYearMem || String(d.yearStr) === String(filterYearMem));
+                const matchText = (d.subject.toLowerCase().includes(searchMem) || d.sender.toLowerCase().includes(searchMem) || d.docNumber.toLowerCase().includes(searchMem));
+                return matchType && matchYear && matchText;
+            });
+            document.getElementById('memosTableBody').innerHTML = memDocs.length ? memDocs.map(d => `
+                <tr class="hover:bg-gray-50">
+                    <td class="p-3 font-bold text-purple-600">ปีงบฯ ${d.yearStr}</td>
+                    <td class="p-3 text-xs"><span class="font-semibold">${d.docNumber}</span><br><span class="text-gray-400">${formatThaiDate(d.docDate)}</span></td>
+                    <td class="p-3"><div class="font-medium text-gray-800">เรียน: ${d.sender}</div><div class="text-xs text-gray-500">เรื่อง: ${d.subject}</div></td>
+                    <td class="p-3">${getStatusBadge(d.status)}</td>
+                    <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
+                    <td class="p-3 text-center">${getActionButtons(d)}</td>
+                </tr>
+            `).join('') : `<tr><td colspan="6" class="p-6 text-center text-gray-400">ไม่พบข้อมูลบันทึกข้อความ</td></tr>`;
+
+            // 7. All Docs Table
+            document.getElementById('allDocsTableBody').innerHTML = documents.length ? documents.map(d => `
+                <tr class="hover:bg-gray-50">
+                    <td class="p-3 uppercase text-xs font-semibold text-gray-500">${d.type}</td>
+                    <td class="p-3 font-bold text-gray-700">${d.yearStr}</td>
+                    <td class="p-3 font-bold text-blue-600">${formatRegDisplay(d)} <span class="font-normal text-xs text-gray-500">(${d.docNumber})</span></td>
+                    <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div></td>
+                    <td class="p-3">${getStatusBadge(d.status)}</td>
+                    <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
+                    <td class="p-3 text-center">${getActionButtons(d)}</td>
+                </tr>
+            `).join('') : `<tr><td colspan="7" class="p-6 text-center text-gray-400">ยังไม่มีเอกสารในระบบทั้งหมด</td></tr>`;
+
+            // 8. Overdue Table
+            const today = new Date().toISOString().split('T')[0];
+            const overdueDocs = documents.filter(d => d.dueDate && d.dueDate < today && d.status !== 'ดำเนินการแล้ว' && d.status !== 'เสร็จสิ้น');
+            document.getElementById('overdueTableBody').innerHTML = overdueDocs.length ? overdueDocs.map(d => `
+                <tr class="hover:bg-red-50/50">
+                    <td class="p-3 uppercase text-xs font-semibold text-gray-500">${d.type}</td>
+                    <td class="p-3 font-bold text-red-600">${formatRegDisplay(d)}</td>
+                    <td class="p-3"><div class="font-medium text-gray-800">${d.subject}</div></td>
+                    <td class="p-3 text-gray-600">${d.assignee}</td>
+                    <td class="p-3 text-red-600 font-semibold">${formatThaiDate(d.dueDate)}</td>
+                    <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
+                    <td class="p-3 text-center">${getActionButtons(d)}</td>
+                </tr>
+            `).join('') : `<tr><td colspan="6" class="p-6 text-center text-gray-400">ไม่มีงานค้างเกินกำหนดในขณะนี้</td></tr>`;
         }
 
         function openDocumentModal() {

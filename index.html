@@ -184,7 +184,7 @@
         <div class="flex-1 flex flex-col min-w-0">
             
             <!-- Top Header Bar -->
-            <header class="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-4 md:px-8 shadow-xs sticky top-0 z-30">
+            <header class="hidden bg-white border-b border-gray-200 h-16 flex items-center justify-between px-4 md:px-8 shadow-xs sticky top-0 z-30">
                 <div class="flex items-center space-x-3">
                     <button onclick="toggleMobileMenu()" class="md:hidden text-gray-600 hover:text-gray-900 focus:outline-none text-xl">
                         <i class="fa-solid fa-bars"></i>
@@ -358,8 +358,8 @@
                                 <select id="filterYearIncoming" onchange="renderTables()" class="px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                     <option value="">ทุกปี (All Years)</option>
                                     <option value="2569" selected>ปี 2569</option>
-                                    <option value="2568">ปี 2568</option>
-                                    <option value="2570">ปี 2570</option>
+                                    <option value="2568">ปี 2570</option>
+                                    <option value="2570">ปี 2571</option>
                                 </select>
                                 <div class="relative w-full md:w-60">
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
@@ -400,8 +400,8 @@
                                 <select id="filterYearOutgoing" onchange="renderTables()" class="px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                     <option value="">ทุกปี (All Years)</option>
                                     <option value="2569" selected>ปี 2569</option>
-                                    <option value="2568">ปี 2568</option>
-                                    <option value="2570">ปี 2570</option>
+                                    <option value="2568">ปี 2570</option>
+                                    <option value="2570">ปี 2571</option>
                                 </select>
                                 <div class="relative w-full md:w-60">
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
@@ -440,8 +440,8 @@
                                 <select id="filterYearOrders" onchange="renderTables()" class="px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                     <option value="">ทุกปี (All Years)</option>
                                     <option value="2569" selected>ปี 2569</option>
-                                    <option value="2568">ปี 2568</option>
-                                    <option value="2570">ปี 2570</option>
+                                    <option value="2568">ปี 2570</option>
+                                    <option value="2570">ปี 2571</option>
                                 </select>
                                 <div class="relative w-full md:w-60">
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
@@ -480,8 +480,8 @@
                                 <select id="filterYearMemos" onchange="renderTables()" class="px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                     <option value="">ทุกปี (All Years)</option>
                                     <option value="2569" selected>ปีงบฯ 2569</option>
-                                    <option value="2568">ปีงบฯ 2568</option>
-                                    <option value="2570">ปีงบฯ 2570</option>
+                                    <option value="2568">ปีงบฯ 2570</option>
+                                    <option value="2570">ปีงบฯ 2571</option>
                                 </select>
                                 <div class="relative w-full md:w-60">
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
@@ -591,69 +591,74 @@
         </button>
     </div>
 
-    <!-- ==================== MODAL: ADD / EDIT DOCUMENT ==================== -->
-    <div id="documentModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center hidden p-4 overflow-y-auto">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden my-8">
-            <div class="bg-blue-600 px-6 py-4 text-white flex justify-between items-center">
-                <h3 id="modalTitle" class="font-bold text-lg">ลงทะเบียนหนังสือใหม่</h3>
-                <button onclick="closeDocumentModal()" class="text-white/80 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <form id="documentForm" onsubmit="saveDocument(event)" class="p-6 space-y-4">
-                <input type="hidden" id="editDocId">
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">ประเภทหนังสือ</label>
-                        <select id="docType" onchange="toggleFormFields()" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm font-semibold">
-                            <option value="incoming">หนังสือรับ (ปีปฏิทิน)</option>
-                            <option value="outgoing">หนังสือส่ง (ปีปฏิทิน)</option>
-                            <option value="orders">คำสั่ง (ปีปฏิทิน)</option>
-                            <option value="memos">บันทึกข้อความ (ปีงบประมาณ)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1"><span id="yearLabelName">ปีปฏิทิน</span></label>
-                        <select id="selectedYear" onchange="updateModalRegPreview()" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm font-semibold text-blue-900 bg-blue-50">
-                            <option value="2569">2569</option>
-                            <option value="2568">2568</option>
-                            <option value="2570">2570</option>
-                        </select>
-                    </div>
+       <!-- ==================== MODAL: ADD / EDIT DOCUMENT ==================== -->
+<div id="documentModal" class="fixed inset-0 z-50 bg-slate-900/65 backdrop-blur-xs flex items-center justify-center hidden p-4">
+    <!-- ปรับแก้ให้กล่องมีความสูงพอดีจอ และซ่อนส่วนเกินเฉพาะด้านใน -->
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden my-auto">
+        
+        <!-- ส่วนหัวสีน้ำเงิน (เพิ่ม sticky top-0 z-20 เพื่อไม่ให้เลื่อนหาย) -->
+        <div class="bg-blue-600 px-6 py-4 text-white flex justify-between items-center sticky top-0 z-20 shrink-0 shadow-md">
+            <h3 id="modalTitle" class="font-bold text-lg">ลงทะเบียนหนังสือใหม่</h3>
+            <button type="button" onclick="closeDocumentModal()" class="text-white/80 hover:text-white text-xl focus:outline-none"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <!-- ส่วนฟอร์มด้านในที่ให้เลื่อนเนื้อหา (overflow-y-auto) -->
+        <form id="documentForm" onsubmit="saveDocument(event)" class="p-6 space-y-4 overflow-y-auto flex-1">
+            <input type="hidden" id="editDocId">
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">ประเภทหนังสือ</label>
+                    <select id="docType" onchange="toggleFormFields()" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm font-semibold">
+                        <option value="incoming">หนังสือรับ (ปีปฏิทิน)</option>
+                        <option value="outgoing">หนังสือส่ง (ปีปฏิทิน)</option>
+                        <option value="orders">คำสั่ง (ปีปฏิทิน)</option>
+                        <option value="memos">บันทึกข้อความ (ปีงบประมาณ)</option>
+                    </select>
                 </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1"><span id="yearLabelName">ปีปฏิทิน</span></label>
+                    <select id="selectedYear" onchange="updateModalRegPreview()" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm font-semibold text-blue-900 bg-blue-50">
+                        <option value="2569">2569</option>
+                        <option value="2568">2570</option>
+                        <option value="2570">2571</option>
+                    </select>
+                </div>
+            </div>
 
-                <!-- ฟิลด์เฉพาะตามประเภทเอกสาร -->
-                <div id="dynamicFormFields" class="space-y-4"></div>
+            <!-- ฟิลด์เฉพาะตามประเภทเอกสาร -->
+            <div id="dynamicFormFields" class="space-y-4"></div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div id="assigneeWrapper">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">มอบหมายผู้รับผิดชอบ</label>
-                        <select id="docAssignee" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div id="assigneeWrapper">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">มอบหมายผู้รับผิดชอบ</label>
+                    <select id="docAssignee" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
                             <option value="นิศาชล คงดี">นิศาชล คงดี (ผู้ช่วยเจ้าพนักงานธุรการ)</option>
                             <option value="นายจิรพงษ์  พัฒนพันธ์">นายจิรพงษ์  พัฒนพันธ์ (ผู้อำนวยการกองช่าง)</option>
                             <option value="นายศรายุทธ  สงวนรัษฐ์">นายศรายุทธ  สงวนรัษฐ์ (นายช่างโยธาชำนาญงาน)</option>
                             <option value="นายพิทักษ์  โพธิ์ขาว">นายพิทักษ์  โพธิ์ขาว (นายช่างไฟฟ้าชำนาญงาน)</option>
                             <option value="นายยิ่งอนันต์  สัทธรรม">นายยิ่งอนันต์  สัทธรรม (ผู้ช่วยนายช่างประปา)</option>
-                        </select>
-                    </div>
-                    <div id="dueDateWrapper">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">กำหนดวันเสร็จสิ้น</label>
-                        <input type="date" id="docDueDate" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
-                    </div>
+                    </select>
                 </div>
+                <div id="dueDateWrapper">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">กำหนดวันเสร็จสิ้น</label>
+                    <input type="date" id="docDueDate" class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+                </div>
+            </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">แนบไฟล์เอกสาร (PDF / รูปภาพ) - ไม่บังคับ</label>
-                    <input type="file" id="docFile" accept=".pdf,image/*" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm file:mr-4 file:py-1 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                    <p class="text-xs text-gray-400 mt-1">หากไม่เลือกไฟล์ ช่องไฟล์แนบในตารางจะเว้นว่างไว้</p>
-                </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">แนบไฟล์เอกสาร (PDF / รูปภาพ) - ไม่บังคับ</label>
+                <input type="file" id="docFile" accept=".pdf,image/*" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm file:mr-4 file:py-1 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                <p class="text-xs text-gray-400 mt-1">หากไม่เลือกไฟล์ ช่องไฟล์แนบในตารางจะเว้นว่างไว้</p>
+            </div>
 
-                <div class="flex justify-end space-x-3 pt-4 border-t border-gray-100">
-                    <button type="button" onclick="closeDocumentModal()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-sm transition">ยกเลิก</button>
-                    <button type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm transition font-medium">บันทึกข้อมูล</button>
-                </div>
-            </form>
-        </div>
+            <div class="flex justify-end space-x-3 pt-4 border-t border-gray-100">
+                <button type="button" onclick="closeDocumentModal()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-sm transition">ยกเลิก</button>
+                <button type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm transition font-medium">บันทึกข้อมูล</button>
+            </div>
+        </form>
     </div>
+</div>
 
     <!-- ==================== JAVASCRIPT LOGIC ==================== -->
     <script>

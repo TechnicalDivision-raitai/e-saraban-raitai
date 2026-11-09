@@ -1170,7 +1170,13 @@
             document.getElementById('statOverdue').innerText = overdue;
             document.getElementById('badgeOverdue').innerText = overdue;
 
-            const myCount = documents.filter(d => d.assignee === currentUser.name).length;
+            // นับเฉพาะงานที่ได้รับมอบหมายและยังไม่เสร็จสิ้น
+            // สถานะ 'ดำเนินการแล้ว' และ 'เสร็จสิ้น' จะไม่ถูกนำมานับใน Badge
+            const completedStatuses = ['ดำเนินการแล้ว', 'เสร็จสิ้น'];
+            const myCount = documents.filter(d =>
+                d.assignee === currentUser.name &&
+                !completedStatuses.includes(String(d.status || '').trim())
+            ).length;
             document.getElementById('badgeMyInbox').innerText = myCount;
         }
 

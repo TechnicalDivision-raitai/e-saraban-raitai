@@ -138,7 +138,7 @@
                     <span>สรุปงานฎีกา</span>
                 </a>
 
-                <a href="#" onclick="switchTab('myInbox')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-tab="myInbox">
+                <a id="myInboxNavDesktop" href="#" onclick="switchTab('myInbox')" class="nav-link flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-tab="myInbox">
                     <i class="fa-solid fa-inbox w-5 text-center"></i>
                     <span>กล่องงานของฉัน</span>
                     <span id="badgeMyInbox" class="ml-auto bg-blue-500 text-white text-xs px-2 py-0.5 rounded-full font-bold">0</span>
@@ -237,7 +237,7 @@
                     </div>
                     <nav class="flex-1 space-y-1 overflow-y-auto py-2">
                         <a href="#" onclick="switchTab('dashboard'); toggleMobileMenu();" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800"><i class="fa-solid fa-chart-pie w-5"></i><span>แดชบอร์ด</span></a>
-                        <a href="#" onclick="switchTab('myInbox'); toggleMobileMenu();" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800"><i class="fa-solid fa-inbox w-5"></i><span>กล่องงานของฉัน</span></a>
+                        <a id="myInboxNavDrawer" href="#" onclick="switchTab('myInbox'); toggleMobileMenu();" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800"><i class="fa-solid fa-inbox w-5"></i><span>กล่องงานของฉัน</span></a>
                         <a href="#" onclick="switchTab('incoming'); toggleMobileMenu();" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800"><i class="fa-solid fa-file-arrow-down w-5 text-blue-400"></i><span>หนังสือรับ</span></a>
                         <a href="#" onclick="switchTab('outgoing'); toggleMobileMenu();" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800"><i class="fa-solid fa-file-arrow-up w-5 text-emerald-400"></i><span>หนังสือส่ง</span></a>
                         <a href="#" onclick="switchTab('orders'); toggleMobileMenu();" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-800"><i class="fa-solid fa-gavel w-5 text-amber-400"></i><span>คำสั่ง</span></a>
@@ -825,7 +825,7 @@
             <i class="fa-solid fa-chart-pie text-lg"></i>
             <span class="text-[10px] mt-0.5">หน้าแรก</span>
         </button>
-        <button onclick="switchTab('myInbox')" class="mobile-nav-btn flex flex-col items-center justify-center text-gray-400 flex-1 py-1 relative" data-tab="myInbox">
+        <button id="myInboxNavBottom" onclick="switchTab('myInbox')" class="mobile-nav-btn flex flex-col items-center justify-center text-gray-400 flex-1 py-1 relative" data-tab="myInbox">
             <i class="fa-solid fa-inbox text-lg"></i>
             <span class="text-[10px] mt-0.5">งานของฉัน</span>
         </button>
@@ -1057,6 +1057,12 @@
         function updateUserInterface() {
             const isAdmin = currentUser.role === 'admin' && currentUser.name === 'นิศาชล คงดี';
 
+            // ซ่อนเมนูกล่องงานของฉันจากผู้ใช้งาน Staff ทุกช่องทาง (Desktop / Mobile)
+            ['myInboxNavDesktop', 'myInboxNavDrawer', 'myInboxNavBottom'].forEach(id => {
+                const inboxNav = document.getElementById(id);
+                if (inboxNav) inboxNav.classList.toggle('hidden', !isAdmin);
+            });
+
             document.getElementById('sidebarUserName').innerText = currentUser.name;
             document.getElementById('sidebarUserRoleName').innerText = `สถานะ: ${currentUser.roleName}`;
             document.getElementById('headerRoleName').innerText = currentUser.roleName;
@@ -1093,6 +1099,9 @@
         }
 
         function switchTab(tabId) {
+            if (tabId === 'myInbox' && currentUser.role !== 'admin') {
+                tabId = 'dashboard';
+            }
             document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
             document.getElementById(`view-${tabId}`).classList.remove('hidden');
 
@@ -1612,9 +1621,9 @@
             const myDocs = documents.filter(d => d.assignee === currentUser.name);
             document.getElementById('myInboxTableBody').innerHTML = myDocs.length ? myDocs.map(d => `
                 <tr class="hover:bg-gray-50">
-                    <td class="p-3 font-bold text-blue-600">${formatRegDisplay(d)}</td>
+                    <td class="p-3 font-bold text-blue-600">${d.type === 'outgoing' ? (d.docNumber || '-') : d.type === 'vouchers' ? (d.voucherNo || '-') : formatRegDisplay(d)}</td>
                     <td class="p-3 uppercase text-xs font-semibold text-gray-500">${d.type}</td>
-                    <td class="p-3"><div class="font-medium text-gray-800">${d.subject || '-'}</div></td>
+                    <td class="p-3"><div class="font-medium text-gray-800">${d.type === 'vouchers' ? (d.voucherProject || '-') : (d.subject || '-')}</div></td>
                     <td class="p-3">
                         ${d.ackStatus === 'รับทราบแล้ว' ? `<span class="text-emerald-600 text-xs font-medium"><i class="fa-solid fa-check-circle mr-1"></i>${d.ackTime}</span>` : `<button onclick="acknowledgeDoc(${d.id})" class="bg-amber-500 hover:bg-amber-600 text-white text-xs px-3 py-1 rounded-lg transition">กดรับทราบงาน</button>`}
                     </td>

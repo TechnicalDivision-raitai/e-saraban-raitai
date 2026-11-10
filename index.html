@@ -428,6 +428,9 @@
                                 <select id="myInboxFilterYear" onchange="renderTables()" class="w-full sm:w-36 px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white">
                                     <option value="">ทุกปี</option>
                                 </select>
+                                <select id="myInboxFilterStatus" onchange="renderTables()" class="w-full sm:w-44 px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white">
+                                    <option value="">ทุกสถานะ</option>
+                                </select>
                                 <input type="search" id="myInboxSearch" oninput="renderTables()" placeholder="ค้นหาเรื่อง ผู้รับ/ผู้ส่ง เลขที่หนังสือ เลขรับกองช่าง..." class="w-full md:w-80 px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                             </div>
                         </div>
@@ -439,6 +442,7 @@
                                     <tr>
                                         <th class="sticky top-0 z-10 bg-gray-50 p-3">เลขทะเบียน</th>
                                         <th class="sticky top-0 z-10 bg-gray-50 p-3">ประเภท</th>
+                                        <th class="sticky top-0 z-10 bg-gray-50 p-3">วันที่</th>
                                         <th class="sticky top-0 z-10 bg-gray-50 p-3">เรื่อง / ผู้เกี่ยวข้อง</th>
                                         <th class="sticky top-0 z-10 bg-gray-50 p-3">สถานะรับทราบ</th>
                                         <th class="sticky top-0 z-10 bg-gray-50 p-3">สถานะงาน</th>
@@ -954,6 +958,24 @@
 
                 <!-- ฟิลด์เฉพาะตามประเภทเอกสาร -->
                 <div id="dynamicFormFields" class="space-y-4"></div>
+                <datalist id="incomingSenderSuggestions"></datalist>
+                <datalist id="outgoingRecipientSuggestions"></datalist>
+                <datalist id="memoAddresseeSuggestions"></datalist>
+                <datalist id="voucherMakerSuggestions"></datalist>
+                <datalist id="voucherPayeeSuggestions"></datalist>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">สถานะดำเนินการ</label>
+                    <select id="fieldStatus" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm font-semibold text-blue-700">
+                        <option value="รอรับทราบ">รอรับทราบ</option>
+                        <option value="ลงรับแล้ว">ลงรับแล้ว</option>
+                        <option value="ออกเอกสาร">ออกเอกสาร</option>
+                        <option value="เสนอเซนต์">เสนอเซนต์</option>
+                        <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
+                        <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
+                        <option value="เสร็จสิ้น">เสร็จสิ้น</option>
+                    </select>
+                </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="standardMetaFields">
                     <div id="assigneeWrapper">
@@ -975,7 +997,20 @@
                 <div id="fileAttachmentWrapper">
                     <label class="block text-sm font-medium text-gray-700 mb-1">แนบไฟล์เอกสาร (PDF / รูปภาพ) - ไม่บังคับ</label>
                     <input type="file" id="docFile" accept=".pdf,image/*" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm file:mr-4 file:py-1 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                    <p class="text-xs text-gray-400 mt-1">หากไม่เลือกไฟล์ ช่องไฟล์แนบในตารางจะเว้นว่างไว้</p>
+                    <input type="hidden" id="removeExistingAttachment" value="false">
+                    <div id="existingAttachmentRow" class="hidden mt-2 items-center justify-between gap-3 rounded-xl border border-blue-100 bg-blue-50 px-3 py-2">
+                        <a id="existingAttachmentLink" href="#" target="_blank" rel="noopener noreferrer" class="min-w-0 truncate text-sm font-medium text-blue-700 hover:underline">
+                            <i class="fa-solid fa-paperclip mr-1"></i><span id="existingAttachmentName"></span>
+                        </a>
+                        <button type="button" onclick="markExistingAttachmentForRemoval()" class="shrink-0 rounded-lg px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50">
+                            <i class="fa-solid fa-trash mr-1"></i>นำไฟล์ออก
+                        </button>
+                    </div>
+                    <div id="attachmentRemovalNotice" class="hidden mt-2 items-center justify-between gap-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2">
+                        <span class="text-xs text-amber-800">ไฟล์แนบเดิมจะถูกนำออกจากรายการเมื่อกดบันทึก</span>
+                        <button type="button" onclick="restoreExistingAttachment()" class="shrink-0 rounded-lg px-3 py-1.5 text-xs font-medium text-blue-700 hover:bg-blue-50">ยกเลิก</button>
+                    </div>
+                    <p id="fileAttachmentHint" class="text-xs text-gray-400 mt-1">หากไม่เลือกไฟล์ ช่องไฟล์แนบในตารางจะเว้นว่างไว้</p>
                 </div>
 
                 <div class="flex justify-end space-x-3 pt-4 border-t border-gray-100">
@@ -996,29 +1031,73 @@
         let voucherAmountChartInstance = null;
         let currentImportType = 'incoming'; // ตัวแปรเก็บประเภทปัจจุบันที่จะนำเข้า Excel
 
-        function populateYearFilterOptions(selectId, sourceDocs, allLabel = 'ทุกปี', yearPrefix = 'ปี') {
+        function getCurrentBuddhistYear() {
+            return new Intl.DateTimeFormat('en-US-u-ca-buddhist', {
+                timeZone: 'Asia/Bangkok',
+                year: 'numeric'
+            }).format(new Date());
+        }
+
+        function populateYearFilterOptions(selectId, sourceDocs, allLabel = 'ทุกปี', yearPrefix = 'ปี', defaultYear = '') {
             const select = document.getElementById(selectId);
             if (!select) return;
 
-            const selectedYear = select.value;
             const years = [...new Set(sourceDocs.map(doc => String(doc.yearStr || '').trim()).filter(Boolean))]
                 .sort((a, b) => Number(b) - Number(a));
+            const selectedYear = select.value || (years.includes(defaultYear) ? defaultYear : (years[0] || ''));
             select.innerHTML = `<option value="">${allLabel}</option>` + years
                 .map(year => `<option value="${year}">${yearPrefix} ${year}</option>`).join('');
             select.value = years.includes(selectedYear) ? selectedYear : '';
+        }
+
+        function populateStatusFilterOptions(selectId, sourceDocs) {
+            const select = document.getElementById(selectId);
+            if (!select) return;
+
+            const selectedStatus = select.value;
+            const workflowOrder = ['รอรับทราบ', 'ลงรับแล้ว', 'ออกเอกสาร', 'เสนอเซนต์', 'กำลังดำเนินการ', 'ดำเนินการแล้ว', 'เสร็จสิ้น'];
+            const availableStatuses = [...new Set(sourceDocs.map(doc => String(doc.status || '').trim()).filter(Boolean))];
+            const orderedStatuses = [
+                ...workflowOrder.filter(status => availableStatuses.includes(status)),
+                ...availableStatuses.filter(status => !workflowOrder.includes(status)).sort((a, b) => a.localeCompare(b, 'th'))
+            ];
+            select.innerHTML = '<option value="">ทุกสถานะ</option>' + orderedStatuses
+                .map(status => `<option value="${status}">${status}</option>`).join('');
+            select.value = orderedStatuses.includes(selectedStatus) ? selectedStatus : '';
         }
 
         function refreshYearFilterOptions() {
             const myInboxDocs = documents.filter(doc => doc.assignee === currentUser.name);
             populateYearFilterOptions('globalFilterYear', documents, 'ทุกปี (All Years)', 'ปี');
             populateYearFilterOptions('filterSummaryYearVouchers', documents.filter(doc => doc.type === 'vouchers'), 'ทุกปีงบประมาณ (All Years)', 'ปีงบฯ');
-            populateYearFilterOptions('myInboxFilterYear', myInboxDocs);
+            populateYearFilterOptions('myInboxFilterYear', myInboxDocs, 'ทุกปี', 'ปี', getCurrentBuddhistYear());
             populateYearFilterOptions('filterYearIncoming', documents.filter(doc => doc.type === 'incoming'));
             populateYearFilterOptions('filterYearOutgoing', documents.filter(doc => doc.type === 'outgoing'));
             populateYearFilterOptions('filterYearOrders', documents.filter(doc => doc.type === 'orders'));
             populateYearFilterOptions('filterYearMemos', documents.filter(doc => doc.type === 'memos'), 'ทุกปี', 'ปีงบฯ');
             populateYearFilterOptions('filterYearVouchers', documents.filter(doc => doc.type === 'vouchers'), 'ทุกปี', 'ปีงบฯ');
             populateYearFilterOptions('allDocsFilterYear', documents);
+        }
+
+        function refreshContactSuggestions() {
+            const populateList = (listId, values) => {
+                const list = document.getElementById(listId);
+                if (!list) return;
+                list.replaceChildren();
+                [...new Set(values.map(value => String(value || '').trim()).filter(value => value && value !== '-'))]
+                    .sort((a, b) => a.localeCompare(b, 'th'))
+                    .forEach(value => {
+                        const option = document.createElement('option');
+                        option.value = value;
+                        list.appendChild(option);
+                    });
+            };
+
+            populateList('incomingSenderSuggestions', documents.filter(doc => doc.type === 'incoming').map(doc => doc.sender));
+            populateList('outgoingRecipientSuggestions', documents.filter(doc => doc.type === 'outgoing').map(doc => doc.sender));
+            populateList('memoAddresseeSuggestions', documents.filter(doc => doc.type === 'memos').map(doc => doc.sender));
+            populateList('voucherMakerSuggestions', documents.filter(doc => doc.type === 'vouchers').map(doc => doc.voucherMaker));
+            populateList('voucherPayeeSuggestions', documents.filter(doc => doc.type === 'vouchers').map(doc => doc.voucherPayee));
         }
 
         async function loadDocumentsFromSupabase() {
@@ -1254,6 +1333,7 @@
 
         function renderAll() {
             refreshYearFilterOptions();
+            refreshContactSuggestions();
             updateStats();
             renderCharts();
             renderVoucherCharts();
@@ -1446,7 +1526,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">ผู้ส่ง / หน่วยงานต้นสังกัด</label>
-                            <input type="text" id="fieldSender" required placeholder="เช่น อำเภอพิบูลมังสาหาร" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
+                            <input type="text" id="fieldSender" list="incomingSenderSuggestions" required placeholder="เช่น อำเภอพิบูลมังสาหาร" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">ความเร่งด่วน</label>
@@ -1472,14 +1552,6 @@
                         <label class="block text-sm font-medium text-gray-700 mb-1">เรื่อง</label>
                         <input type="text" id="fieldSubject" required placeholder="ระบุเรื่องหนังสือ" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">สถานะดำเนินการ</label>
-                        <select id="fieldStatus" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm font-semibold text-blue-700">
-                            <option value="ลงรับแล้ว">ลงรับแล้ว</option>
-                            <option value="เสนอเซนต์">เสนอเซนต์</option>
-                            <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
-                        </select>
-                    </div>
                 `;
             } else if (type === 'outgoing') {
                 html = `
@@ -1497,19 +1569,9 @@
                         <label class="block text-sm font-medium text-gray-700 mb-1">เรื่อง</label>
                         <input type="text" id="fieldSubject" required placeholder="ระบุเรื่องหนังสือส่ง" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">ผู้รับ / หน่วยงานรับ</label>
-                            <input type="text" id="fieldSender" required placeholder="เช่น ท้องถิ่นจังหวัดอุบลราชธานี" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">สถานะดำเนินการ</label>
-                            <select id="fieldStatus" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm font-semibold text-blue-700">
-                                <option value="ออกเอกสาร">ออกเอกสาร</option>
-                                <option value="เสนอเซนต์">เสนอเซนต์</option>
-                                <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
-                            </select>
-                        </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">ผู้รับ / หน่วยงานรับ</label>
+                        <input type="text" id="fieldSender" list="outgoingRecipientSuggestions" required placeholder="เช่น ท้องถิ่นจังหวัดอุบลราชธานี" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
                     </div>
                 `;
             } else if (type === 'orders') {
@@ -1527,14 +1589,6 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">เรื่อง</label>
                         <input type="text" id="fieldSubject" required placeholder="ระบุเรื่องคำสั่ง" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">สถานะดำเนินการ</label>
-                        <select id="fieldStatus" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm font-semibold text-blue-700">
-                            <option value="ออกเอกสาร">ออกเอกสาร</option>
-                            <option value="เสนอเซนต์">เสนอเซนต์</option>
-                            <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
-                        </select>
                     </div>
                 `;
             } else if (type === 'memos') {
@@ -1556,20 +1610,12 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">เรียน</label>
-                            <input type="text" id="fieldSender" required placeholder="เช่น นายกองค์การบริหารส่วนตำบลไร่ใต้" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
+                            <input type="text" id="fieldSender" list="memoAddresseeSuggestions" required placeholder="เช่น นายกองค์การบริหารส่วนตำบลไร่ใต้" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
                         </div>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">เรื่อง</label>
                         <input type="text" id="fieldSubject" required placeholder="ระบุเรื่องบันทึกข้อความ" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">สถานะดำเนินการ</label>
-                        <select id="fieldStatus" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm font-semibold text-blue-700">
-                            <option value="ออกเอกสาร">ออกเอกสาร</option>
-                            <option value="เสนอเซนต์">เสนอเซนต์</option>
-                            <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
-                        </select>
                     </div>
                 `;
             } else if (type === 'forms') {
@@ -1598,7 +1644,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">ผู้จัดทำ</label>
-                            <input type="text" id="fieldVoucherMaker" required placeholder="ระบุชื่อผู้จัดทำฎีกา" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
+                            <input type="text" id="fieldVoucherMaker" list="voucherMakerSuggestions" required placeholder="ระบุชื่อผู้จัดทำฎีกา" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1614,7 +1660,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">ผู้รับเงิน</label>
-                            <input type="text" id="fieldVoucherPayee" required placeholder="ระบุชื่อผู้รับเงิน" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
+                            <input type="text" id="fieldVoucherPayee" list="voucherPayeeSuggestions" required placeholder="ระบุชื่อผู้รับเงิน" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">จำนวนเงินขอเบิก (บาท)</label>
@@ -1628,6 +1674,10 @@
                 `;
             }
             container.innerHTML = html;
+            const statusField = document.getElementById('fieldStatus');
+            if (statusField) {
+                statusField.value = ['outgoing', 'orders', 'memos'].includes(type) ? 'ออกเอกสาร' : 'ลงรับแล้ว';
+            }
             updateModalRegPreview();
         }
 
@@ -1765,15 +1815,46 @@
             // 2. My Inbox Table
             const assignedDocs = documents.filter(d => d.assignee === currentUser.name);
             populateYearFilterOptions('myInboxFilterYear', assignedDocs);
+            populateStatusFilterOptions('myInboxFilterStatus', assignedDocs);
             const myInboxYear = document.getElementById('myInboxFilterYear').value;
+            const myInboxStatus = document.getElementById('myInboxFilterStatus').value;
             const myInboxQuery = document.getElementById('myInboxSearch').value.trim().toLocaleLowerCase('th-TH');
+            const getInboxDate = (doc) => {
+                const firstAvailableDate = (...dates) => dates.find(date => date && date !== '-') || '';
+                if (doc.type === 'incoming') return firstAvailableDate(doc.receiveDate, doc.docDate);
+                if (doc.type === 'vouchers') return firstAvailableDate(doc.voucherDate, doc.docDate);
+                return firstAvailableDate(doc.docDate, doc.receiveDate, doc.voucherDate);
+            };
+            const getInboxDateSortValue = (dateValue) => {
+                if (!dateValue || dateValue === '-') return 0;
+                const value = String(dateValue).trim();
+                let match = value.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+                let year, month, day;
+                if (match) {
+                    [, year, month, day] = match;
+                } else {
+                    match = value.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$/);
+                    if (!match) return Date.parse(value) || 0;
+                    [, day, month, year] = match;
+                }
+                year = Number(year);
+                if (year > 2400) year -= 543;
+                return Date.UTC(year, Number(month) - 1, Number(day));
+            };
             const myDocs = assignedDocs.filter(d =>
-                (!myInboxYear || String(d.yearStr) === myInboxYear) && matchesDocumentSearch(d, myInboxQuery)
-            );
+                (!myInboxYear || String(d.yearStr) === myInboxYear) &&
+                (!myInboxStatus || d.status === myInboxStatus) &&
+                matchesDocumentSearch(d, myInboxQuery)
+            ).sort((a, b) => {
+                const dateA = getInboxDateSortValue(getInboxDate(a));
+                const dateB = getInboxDateSortValue(getInboxDate(b));
+                return dateB - dateA;
+            });
             document.getElementById('myInboxTableBody').innerHTML = myDocs.length ? myDocs.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-bold text-blue-600">${d.type === 'outgoing' ? (d.docNumber || '-') : d.type === 'vouchers' ? (d.voucherNo || '-') : formatRegDisplay(d)}</td>
                     <td class="p-3 uppercase text-xs font-semibold text-gray-500">${d.type}</td>
+                    <td class="p-3 whitespace-nowrap text-gray-600">${formatThaiDate(getInboxDate(d))}</td>
                     <td class="p-3"><div class="font-medium text-gray-800">${d.type === 'vouchers' ? (d.voucherProject || '-') : (d.subject || '-')}</div><div class="text-xs text-gray-500">${getPartyLabel(d)}</div></td>
                     <td class="p-3">
                         ${d.ackStatus === 'รับทราบแล้ว' ? `<span class="text-emerald-600 text-xs font-medium"><i class="fa-solid fa-check-circle mr-1"></i>${d.ackTime}</span>` : `<button onclick="acknowledgeDoc(${d.id})" class="bg-amber-500 hover:bg-amber-600 text-white text-xs px-3 py-1 rounded-lg transition">กดรับทราบงาน</button>`}
@@ -1784,7 +1865,7 @@
                         <button onclick="updateDocStatusPrompt(${d.id})" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2.5 py-1 rounded-lg transition">เปลี่ยนสถานะ</button>
                     </td>
                 </tr>
-            `).join('') : `<tr><td colspan="7" class="p-6 text-center text-gray-400">ไม่พบงานตามเงื่อนไขที่เลือก</td></tr>`;
+            `).join('') : `<tr><td colspan="8" class="p-6 text-center text-gray-400">ไม่พบงานตามเงื่อนไขที่เลือก</td></tr>`;
 
             // 3. Incoming Table (1. หนังสือรับ: เรียงตาม เลขรับกองช่าง จากมากไปหาน้อย)
             const filterYearInc = document.getElementById('filterYearIncoming').value;
@@ -2011,6 +2092,11 @@
             document.getElementById('modalTitle').innerText = 'ลงทะเบียนหนังสือใหม่';
             document.getElementById('documentForm').reset();
             document.getElementById('editDocId').value = '';
+            document.getElementById('existingAttachmentRow').classList.add('hidden');
+            document.getElementById('existingAttachmentRow').classList.remove('flex');
+            document.getElementById('attachmentRemovalNotice').classList.add('hidden');
+            document.getElementById('attachmentRemovalNotice').classList.remove('flex');
+            document.getElementById('fileAttachmentHint').innerText = 'หากไม่เลือกไฟล์ ช่องไฟล์แนบในตารางจะเว้นว่างไว้';
             document.getElementById('docType').value = 'incoming';
             document.getElementById('selectedYear').value = '2569';
             toggleFormFields();
@@ -2137,6 +2223,10 @@
                     voucher_amount: voucherAmount,
                     voucher_project: voucherProject
                 };
+                if (document.getElementById('removeExistingAttachment').value === 'true') {
+                    updatePayload.file_name = '';
+                    updatePayload.file_url = '';
+                }
                 if (fileName && fileData) {
                     updatePayload.file_name = fileName;
                     updatePayload.file_url = fileData;
@@ -2215,6 +2305,23 @@
             document.getElementById('editDocId').value = doc.id;
             document.getElementById('docType').value = doc.type;
             document.getElementById('selectedYear').value = doc.yearStr || '2569';
+            document.getElementById('docFile').value = '';
+            document.getElementById('removeExistingAttachment').value = 'false';
+            document.getElementById('attachmentRemovalNotice').classList.add('hidden');
+            document.getElementById('fileAttachmentHint').innerText = 'หากไม่เลือกไฟล์ ช่องไฟล์แนบในตารางจะเว้นว่างไว้';
+            const existingAttachmentRow = document.getElementById('existingAttachmentRow');
+            const existingAttachmentLink = document.getElementById('existingAttachmentLink');
+            if (doc.fileData) {
+                existingAttachmentLink.href = doc.fileData;
+                document.getElementById('existingAttachmentName').innerText = doc.fileName || 'เปิดดูไฟล์แนบเดิม';
+                existingAttachmentRow.classList.remove('hidden');
+                existingAttachmentRow.classList.add('flex');
+            } else {
+                existingAttachmentLink.removeAttribute('href');
+                document.getElementById('existingAttachmentName').innerText = '';
+                existingAttachmentRow.classList.add('hidden');
+                existingAttachmentRow.classList.remove('flex');
+            }
             toggleFormFields();
 
             setTimeout(() => {
@@ -2244,34 +2351,84 @@
             document.getElementById('documentModal').classList.remove('hidden');
         }
 
-        function deleteDoc(id) {
+        function markExistingAttachmentForRemoval() {
+            document.getElementById('removeExistingAttachment').value = 'true';
+            document.getElementById('existingAttachmentRow').classList.add('hidden');
+            document.getElementById('existingAttachmentRow').classList.remove('flex');
+            document.getElementById('attachmentRemovalNotice').classList.remove('hidden');
+            document.getElementById('attachmentRemovalNotice').classList.add('flex');
+        }
+
+        function restoreExistingAttachment() {
+            document.getElementById('removeExistingAttachment').value = 'false';
+            document.getElementById('attachmentRemovalNotice').classList.add('hidden');
+            document.getElementById('attachmentRemovalNotice').classList.remove('flex');
+            document.getElementById('existingAttachmentRow').classList.remove('hidden');
+            document.getElementById('existingAttachmentRow').classList.add('flex');
+        }
+
+        async function deleteDoc(id) {
             if (currentUser.role !== 'admin' || currentUser.name !== 'นิศาชล คงดี') {
                 Swal.fire('ไม่อนุญาต', 'คุณไม่มีสิทธิ์ลบข้อมูล', 'warning');
                 return;
             }
-            Swal.fire({
-                title: 'ยืนยันการลบ?',
-                text: 'คุณต้องการลบรายการนี้ใช่หรือไม่',
+            const doc = documents.find(item => item.id === id);
+            if (!doc) return;
+            const hasAttachment = Boolean(doc.fileData && doc.fileData.trim());
+
+            const result = await Swal.fire({
+                title: 'เลือกสิ่งที่ต้องการลบ',
+                text: hasAttachment
+                    ? 'ลบไฟล์แนบจะเอาชื่อและ URL ออกจากรายการหนังสือ โดยไม่ลบไฟล์ใน Google Drive'
+                    : 'รายการนี้ไม่มีไฟล์แนบ คุณสามารถลบรายการหนังสือได้',
                 icon: 'warning',
+                input: 'radio',
+                inputOptions: hasAttachment ? {
+                    attachment: 'เอาไฟล์แนบออกจากรายการ (เก็บหนังสือไว้)',
+                    record: 'ลบรายการหนังสือทั้งหมด'
+                } : {
+                    record: 'ลบรายการหนังสือทั้งหมด'
+                },
+                inputValidator: value => value ? undefined : 'กรุณาเลือกสิ่งที่ต้องการลบ',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
                 cancelButtonText: 'ยกเลิก',
-                confirmButtonText: 'ยืนยันลบ'
-            }).then(async (result) => {
-                if (result.isConfirmed) {
-                    const { error } = await supabaseClient
-                        .from('documents')
-                        .delete()
-                        .eq('id', id);
-
-                    if (error) {
-                        Swal.fire('เกิดข้อผิดพลาด', error.message, 'error');
-                    } else {
-                        loadDocumentsFromSupabase();
-                        Swal.fire('ลบสำเร็จ', 'รายการถูกลบออกจากระบบแล้ว', 'success');
-                    }
-                }
+                confirmButtonText: 'ยืนยัน'
             });
+
+            if (!result.isConfirmed || !result.value) return;
+
+            if (result.value === 'attachment') {
+                const { data, error } = await supabaseClient
+                    .from('documents')
+                    .update({ file_name: '', file_url: '' })
+                    .eq('id', id)
+                    .select('id')
+                    .maybeSingle();
+
+                if (error) {
+                    Swal.fire('เกิดข้อผิดพลาด', error.message, 'error');
+                } else if (!data) {
+                    Swal.fire('ลบไฟล์แนบไม่สำเร็จ', 'ไม่พบรายการหรือไม่มีสิทธิ์แก้ไขรายการนี้ในฐานข้อมูล', 'error');
+                } else {
+                    doc.fileName = '';
+                    doc.fileData = '';
+                    renderAll();
+                }
+                return;
+            }
+
+            const { error } = await supabaseClient
+                .from('documents')
+                .delete()
+                .eq('id', id);
+
+            if (error) {
+                Swal.fire('เกิดข้อผิดพลาด', error.message, 'error');
+            } else {
+                loadDocumentsFromSupabase();
+                Swal.fire('ลบสำเร็จ', 'รายการถูกลบออกจากระบบแล้ว', 'success');
+            }
         }
 
         function viewDoc(id) {

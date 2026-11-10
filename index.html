@@ -40,7 +40,61 @@
         .sarabun-font {
             font-family: 'Sarabun', sans-serif;
         }
+        main table thead th {
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            background-color: #f9fafb;
+            box-shadow: 0 1px 0 #e5e7eb;
+        }
+        .sticky-tab-heading {
+            position: sticky;
+            top: calc(0px - var(--main-top-padding, 0px));
+            z-index: 30;
+            background-color: #fff;
+        }
+        main .sticky-table-view table thead th {
+            top: calc(var(--table-header-offset, 0px) - var(--main-top-padding, 0px));
+        }
+        main .sticky-table-view::before {
+            content: "";
+            position: sticky;
+            top: calc(0px - var(--main-top-padding, 0px));
+            display: block;
+            height: var(--table-header-offset, 0px);
+            margin-bottom: calc(0px - var(--table-header-offset, 0px));
+            background-color: #fff;
+            z-index: 25;
+            pointer-events: none;
+        }
+        main, aside nav {
+            scrollbar-width: thin;
+            scrollbar-color: #64748b transparent;
+        }
+        main::-webkit-scrollbar, aside nav::-webkit-scrollbar {
+            width: 8px;
+        }
+        main::-webkit-scrollbar-track, aside nav::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        main::-webkit-scrollbar-thumb, aside nav::-webkit-scrollbar-thumb {
+            background: rgba(100, 116, 139, 0.55);
+            border: 2px solid transparent;
+            border-radius: 999px;
+            background-clip: padding-box;
+        }
+        main::-webkit-scrollbar-thumb:hover, aside nav::-webkit-scrollbar-thumb:hover {
+            background: rgba(148, 163, 184, 0.8);
+            background-clip: padding-box;
+        }
+        main table {
+            border-collapse: separate !important;
+            border-spacing: 0;
+        }
         @media print {
+            main table thead th {
+                position: static;
+            }
             body * {
                 visibility: hidden;
             }
@@ -104,7 +158,7 @@
     </div>
 
     <!-- ==================== MAIN APP CONTAINER ==================== -->
-    <div id="appContent" class="hidden min-h-screen flex flex-col md:flex-row">
+    <div id="appContent" class="hidden h-screen flex flex-col md:flex-row">
         
         <!-- Sidebar Desktop -->
         <aside class="hidden md:flex flex-col w-64 bg-slate-900 text-white border-r border-slate-800 shrink-0">
@@ -197,10 +251,10 @@
         </aside>
 
         <!-- Main Content Area -->
-        <div class="flex-1 flex flex-col min-w-0">
+        <div class="flex-1 flex flex-col min-w-0 min-h-0">
             
             <!-- Top Header Bar -->
-            <header class="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-4 md:px-8 shadow-xs sticky top-0 z-30">
+            <header class="bg-white border-b border-gray-200 h-16 shrink-0 flex items-center justify-between px-4 md:px-8 shadow-xs sticky top-0 z-30">
                 <div class="flex items-center space-x-3">
                     <button onclick="toggleMobileMenu()" class="md:hidden text-gray-600 hover:text-gray-900 focus:outline-none text-xl">
                         <i class="fa-solid fa-bars"></i>
@@ -256,7 +310,7 @@
             </div>
 
             <!-- Dynamic Tab Content Views -->
-            <main class="flex-1 p-4 md:p-8 overflow-y-auto pb-20 md:pb-8">
+            <main class="flex-1 min-h-0 p-4 md:p-8 overflow-y-auto pb-20 md:pb-8">
                 
                 <!-- 1. DASHBOARD TAB -->
                 <div id="view-dashboard" class="tab-view space-y-6">
@@ -338,12 +392,12 @@
                         </div>
                     </div>
 
-                    <div class="bg-white rounded-2xl border border-gray-200 shadow-xs overflow-hidden">
+                    <div class="bg-white rounded-2xl border border-gray-200 shadow-xs">
                         <div class="p-4 border-b border-gray-100 flex items-center justify-between">
                             <h3 class="font-bold text-gray-800">หนังสือเร่งด่วน / งานค้างดำเนินการ</h3>
                             <button onclick="switchTab('allDocs')" class="text-xs font-semibold text-blue-600 hover:text-blue-800">ดูทั้งหมด →</button>
                         </div>
-                        <div class="overflow-x-auto">
+                        <div class="overflow-x-visible">
                             <table class="w-full text-left border-collapse">
                                 <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                     <tr>
@@ -363,25 +417,33 @@
                 </div>
 
                 <!-- 2. MY INBOX TAB -->
-                <div id="view-myInbox" class="tab-view hidden space-y-6">
-                    <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
-                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5">
+                <div id="view-myInbox" class="tab-view sticky-table-view hidden space-y-0">
+                    <div class="sticky-tab-heading bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                             <div>
                                 <h2 class="text-lg font-bold text-gray-800">กล่องงานของฉัน (My Inbox)</h2>
                                 <p class="text-xs text-gray-500">รายการหนังสือและเอกสารทั้งหมดที่คุณได้รับมอบหมาย</p>
                             </div>
+                            <div class="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+                                <select id="myInboxFilterYear" onchange="renderTables()" class="w-full sm:w-36 px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white">
+                                    <option value="">ทุกปี</option>
+                                </select>
+                                <input type="search" id="myInboxSearch" oninput="renderTables()" placeholder="ค้นหาเรื่อง ผู้รับ/ผู้ส่ง เลขที่หนังสือ เลขรับกองช่าง..." class="w-full md:w-80 px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            </div>
                         </div>
-                        <div class="overflow-x-auto">
+                    </div>
+                    <div class="bg-white rounded-2xl border border-gray-200 shadow-xs">
+                        <div class="overflow-x-visible">
                             <table class="w-full text-left border-collapse">
                                 <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                     <tr>
-                                        <th class="p-3">เลขทะเบียน</th>
-                                        <th class="p-3">ประเภท</th>
-                                        <th class="p-3">เรื่อง / ผู้ส่ง</th>
-                                        <th class="p-3">สถานะรับทราบ</th>
-                                        <th class="p-3">สถานะงาน</th>
-                                        <th class="p-3 text-center">ไฟล์แนบ</th>
-                                        <th class="p-3 text-center">การกระทำ</th>
+                                        <th class="sticky top-0 z-10 bg-gray-50 p-3">เลขทะเบียน</th>
+                                        <th class="sticky top-0 z-10 bg-gray-50 p-3">ประเภท</th>
+                                        <th class="sticky top-0 z-10 bg-gray-50 p-3">เรื่อง / ผู้เกี่ยวข้อง</th>
+                                        <th class="sticky top-0 z-10 bg-gray-50 p-3">สถานะรับทราบ</th>
+                                        <th class="sticky top-0 z-10 bg-gray-50 p-3">สถานะงาน</th>
+                                        <th class="sticky top-0 z-10 bg-gray-50 p-3 text-center">ไฟล์แนบ</th>
+                                        <th class="sticky top-0 z-10 bg-gray-50 p-3 text-center">การกระทำ</th>
                                     </tr>
                                 </thead>
                                 <tbody id="myInboxTableBody" class="divide-y divide-gray-100 text-sm"></tbody>
@@ -391,9 +453,9 @@
                 </div>
 
                 <!-- 3. INCOMING DOCS TAB -->
-                <div id="view-incoming" class="tab-view hidden space-y-6">
+                <div id="view-incoming" class="tab-view sticky-table-view hidden space-y-6">
                     <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
-                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5">
+                        <div class="sticky-tab-heading flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                             <div>
                                 <h2 class="text-lg font-bold text-gray-800">ทะเบียนหนังสือรับ (ปีปฏิทิน)</h2>
                                 <p class="text-xs text-gray-500">จัดการและตรวจสอบหนังสือรับเข้ากองช่าง อบต.ไร่ใต้ (เรียงตามเลขรับกองช่าง จากมากไปหาน้อย)</p>
@@ -419,7 +481,7 @@
                                 <button onclick="exportCSV('incoming')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
                             </div>
                         </div>
-                        <div class="overflow-x-auto">
+                        <div class="overflow-x-visible">
                             <table class="w-full text-left border-collapse">
                                 <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                     <tr>
@@ -440,9 +502,9 @@
                 </div>
 
                 <!-- 4. OUTGOING DOCS TAB -->
-                <div id="view-outgoing" class="tab-view hidden space-y-6">
+                <div id="view-outgoing" class="tab-view sticky-table-view hidden space-y-6">
                     <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
-                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5">
+                        <div class="sticky-tab-heading flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                             <div>
                                 <h2 class="text-lg font-bold text-gray-800">ทะเบียนหนังสือส่ง (ปีปฏิทิน)</h2>
                                 <p class="text-xs text-gray-500">จัดการและตรวจสอบหนังสือส่งออกจากกองช่าง อบต.ไร่ใต้ (เรียงตามวันที่ จากล่าสุดย้อนไป)</p>
@@ -468,7 +530,7 @@
                                 <button onclick="exportCSV('outgoing')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
                             </div>
                         </div>
-                        <div class="overflow-x-auto">
+                        <div class="overflow-x-visible">
                             <table class="w-full text-left border-collapse">
                                 <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                     <tr>
@@ -487,9 +549,9 @@
                 </div>
 
                 <!-- 5. ORDERS TAB -->
-                <div id="view-orders" class="tab-view hidden space-y-6">
+                <div id="view-orders" class="tab-view sticky-table-view hidden space-y-6">
                     <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
-                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5">
+                        <div class="sticky-tab-heading flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                             <div>
                                 <h2 class="text-lg font-bold text-gray-800">ทะเบียนคำสั่ง (ปีปฏิทิน)</h2>
                                 <p class="text-xs text-gray-500">คำสั่งและประกาศภายในกองช่าง อบต.ไร่ใต้ (เรียงตามเลขที่คำสั่ง จากมากไปน้อย)</p>
@@ -515,7 +577,7 @@
                                 <button onclick="exportCSV('orders')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
                             </div>
                         </div>
-                        <div class="overflow-x-auto">
+                        <div class="overflow-x-visible">
                             <table class="w-full text-left border-collapse">
                                 <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                     <tr>
@@ -534,9 +596,9 @@
                 </div>
 
                 <!-- 6. MEMOS TAB -->
-                <div id="view-memos" class="tab-view hidden space-y-6">
+                <div id="view-memos" class="tab-view sticky-table-view hidden space-y-6">
                     <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
-                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5">
+                        <div class="sticky-tab-heading flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                             <div>
                                 <h2 class="text-lg font-bold text-gray-800">ทะเบียนบันทึกข้อความ (ปีงบประมาณ)</h2>
                                 <p class="text-xs text-gray-500">บันทึกข้อความภายในและระหว่างกอง (เรียงตามวันที่ จากล่าสุดย้อนไป)</p>
@@ -562,7 +624,7 @@
                                 <button onclick="exportCSV('memos')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
                             </div>
                         </div>
-                        <div class="overflow-x-auto">
+                        <div class="overflow-x-visible">
                             <table class="w-full text-left border-collapse">
                                 <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                     <tr>
@@ -581,9 +643,9 @@
                 </div>
 
                 <!-- 7. FORMS TAB -->
-                <div id="view-forms" class="tab-view hidden space-y-6">
+                <div id="view-forms" class="tab-view sticky-table-view hidden space-y-6">
                     <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
-                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5">
+                        <div class="sticky-tab-heading flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                             <div>
                                 <h2 class="text-lg font-bold text-gray-800">ทะเบียนแบบฟอร์ม</h2>
                                 <p class="text-xs text-gray-500">จัดการและตรวจสอบแบบฟอร์มภายในกองช่าง</p>
@@ -595,7 +657,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="overflow-x-auto">
+                        <div class="overflow-x-visible">
                             <table class="w-full text-left border-collapse">
                                 <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                     <tr>
@@ -613,9 +675,9 @@
                 </div>
 
                 <!-- 8. VOUCHERS TAB (งานฎีกา - แยกตามปีงบประมาณ) -->
-                <div id="view-vouchers" class="tab-view hidden space-y-6">
+                <div id="view-vouchers" class="tab-view sticky-table-view hidden space-y-6">
                     <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
-                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5">
+                        <div class="sticky-tab-heading flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                             <div>
                                 <h2 class="text-lg font-bold text-gray-800">ทะเบียนงานฎีกา (ปีงบประมาณ)</h2>
                                 <p class="text-xs text-gray-500">จัดการและตรวจสอบการเบิกจ่ายงานฎีกา (เรียงตามวันที่ จากล่าสุดย้อนไป)</p>
@@ -641,7 +703,7 @@
                                 <button onclick="exportCSV('vouchers')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-xl text-sm transition shrink-0"><i class="fa-solid fa-file-excel mr-1"></i> CSV</button>
                             </div>
                         </div>
-                        <div class="overflow-x-auto">
+                        <div class="overflow-x-visible">
                             <table class="w-full text-left border-collapse">
                                 <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                     <tr>
@@ -728,7 +790,7 @@
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
                             <h3 class="font-bold text-gray-800 mb-4">สรุปยอดเงินแยกตามประเภทฎีกา</h3>
-                            <div class="overflow-x-auto">
+                            <div class="overflow-x-visible">
                                 <table class="w-full text-left border-collapse">
                                     <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                         <tr>
@@ -744,7 +806,7 @@
 
                         <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
                             <h3 class="font-bold text-gray-800 mb-4">รายการงานฎีกาล่าสุด</h3>
-                            <div class="overflow-x-auto">
+                            <div class="overflow-x-visible">
                                 <table class="w-full text-left border-collapse">
                                     <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                         <tr>
@@ -761,25 +823,30 @@
                 </div>
 
                 <!-- 10. ALL DOCS TAB -->
-                <div id="view-allDocs" class="tab-view hidden space-y-6">
+                <div id="view-allDocs" class="tab-view sticky-table-view hidden space-y-6">
                     <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
-                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5">
+                        <div class="sticky-tab-heading flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                             <div>
                                 <h2 class="text-lg font-bold text-gray-800">รวมทะเบียนเอกสารทั้งหมด</h2>
                                 <p class="text-xs text-gray-500">ค้นหา กรอง และพิมพ์รายงานภาพรวมสารบรรณ อบต.ไร่ใต้</p>
                             </div>
-                            <div class="flex items-center space-x-2">
+                            <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                                <select id="allDocsFilterYear" onchange="renderTables()" class="px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white">
+                                    <option value="">ทุกปี</option>
+                                </select>
+                                <input type="search" id="allDocsSearch" oninput="renderTables()" placeholder="ค้นหาเรื่อง ผู้รับ/ผู้ส่ง เลขที่หนังสือ เลขรับกองช่าง..." class="w-full md:w-72 px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                 <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-xl text-sm transition"><i class="fa-solid fa-print mr-1"></i> พิมพ์รายงาน A4</button>
                             </div>
                         </div>
-                        <div class="overflow-x-auto" id="printableArea">
+                        <div class="overflow-x-visible" id="printableArea">
                             <table class="w-full text-left border-collapse">
                                 <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                     <tr>
                                         <th class="p-3">ประเภท</th>
                                         <th class="p-3">ปี</th>
                                         <th class="p-3">เลขทะเบียน/เลขที่</th>
-                                        <th class="p-3">เรื่อง / ผู้ส่ง/ผู้รับ</th>
+                                        <th class="p-3">เรื่อง</th>
+                                        <th class="p-3">ผู้ส่ง / ผู้รับ / ผู้รับเงิน</th>
                                         <th class="p-3">สถานะ</th>
                                         <th class="p-3 text-center">ไฟล์แนบ</th>
                                         <th class="p-3 text-center">จัดการ</th>
@@ -792,11 +859,13 @@
                 </div>
 
                 <!-- 11. OVERDUE TAB -->
-                <div id="view-overdue" class="tab-view hidden space-y-6">
+                <div id="view-overdue" class="tab-view sticky-table-view hidden space-y-6">
                     <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
+                        <div class="sticky-tab-heading">
                         <h2 class="text-lg font-bold text-gray-800 mb-1">ติดตามงานเกินกำหนด (Overdue Tracker)</h2>
-                        <p class="text-xs text-gray-500 mb-5">รายการเอกสารที่เลยกำหนดเวลาแล้วเสร็จ ควรเร่งรัดติดตาม</p>
-                        <div class="overflow-x-auto">
+                        <p class="text-xs text-gray-500">รายการเอกสารที่เลยกำหนดเวลาแล้วเสร็จ ควรเร่งรัดติดตาม</p>
+                        </div>
+                        <div class="overflow-x-visible">
                             <table class="w-full text-left border-collapse">
                                 <thead class="bg-red-50 text-xs text-red-700 uppercase">
                                     <tr>
@@ -926,6 +995,31 @@
         let voucherTypeChartInstance = null;
         let voucherAmountChartInstance = null;
         let currentImportType = 'incoming'; // ตัวแปรเก็บประเภทปัจจุบันที่จะนำเข้า Excel
+
+        function populateYearFilterOptions(selectId, sourceDocs, allLabel = 'ทุกปี', yearPrefix = 'ปี') {
+            const select = document.getElementById(selectId);
+            if (!select) return;
+
+            const selectedYear = select.value;
+            const years = [...new Set(sourceDocs.map(doc => String(doc.yearStr || '').trim()).filter(Boolean))]
+                .sort((a, b) => Number(b) - Number(a));
+            select.innerHTML = `<option value="">${allLabel}</option>` + years
+                .map(year => `<option value="${year}">${yearPrefix} ${year}</option>`).join('');
+            select.value = years.includes(selectedYear) ? selectedYear : '';
+        }
+
+        function refreshYearFilterOptions() {
+            const myInboxDocs = documents.filter(doc => doc.assignee === currentUser.name);
+            populateYearFilterOptions('globalFilterYear', documents, 'ทุกปี (All Years)', 'ปี');
+            populateYearFilterOptions('filterSummaryYearVouchers', documents.filter(doc => doc.type === 'vouchers'), 'ทุกปีงบประมาณ (All Years)', 'ปีงบฯ');
+            populateYearFilterOptions('myInboxFilterYear', myInboxDocs);
+            populateYearFilterOptions('filterYearIncoming', documents.filter(doc => doc.type === 'incoming'));
+            populateYearFilterOptions('filterYearOutgoing', documents.filter(doc => doc.type === 'outgoing'));
+            populateYearFilterOptions('filterYearOrders', documents.filter(doc => doc.type === 'orders'));
+            populateYearFilterOptions('filterYearMemos', documents.filter(doc => doc.type === 'memos'), 'ทุกปี', 'ปีงบฯ');
+            populateYearFilterOptions('filterYearVouchers', documents.filter(doc => doc.type === 'vouchers'), 'ทุกปี', 'ปีงบฯ');
+            populateYearFilterOptions('allDocsFilterYear', documents);
+        }
 
         async function loadDocumentsFromSupabase() {
             try {
@@ -1098,6 +1192,19 @@
             }
         }
 
+        function updateStickyTableHeaderOffset() {
+            const view = document.querySelector('main .sticky-table-view:not(.hidden)');
+            const heading = view?.querySelector('.sticky-tab-heading');
+            if (!view || !heading) return;
+
+            const mainTopPadding = parseFloat(getComputedStyle(view.closest('main')).paddingTop) || 0;
+            const headerOffset = heading.getBoundingClientRect().height;
+            view.style.setProperty('--main-top-padding', `${mainTopPadding}px`);
+            view.style.setProperty('--table-header-offset', `${headerOffset}px`);
+        }
+
+        window.addEventListener('resize', updateStickyTableHeaderOffset);
+
         function switchTab(tabId) {
             if (tabId === 'myInbox' && currentUser.role !== 'admin') {
                 tabId = 'dashboard';
@@ -1138,6 +1245,7 @@
             };
             document.getElementById('pageTitle').innerText = titles[tabId] || 'ระบบสารบรรณ';
             renderAll();
+            requestAnimationFrame(updateStickyTableHeaderOffset);
         }
 
         function toggleMobileMenu() {
@@ -1145,6 +1253,7 @@
         }
 
         function renderAll() {
+            refreshYearFilterOptions();
             updateStats();
             renderCharts();
             renderVoucherCharts();
@@ -1566,6 +1675,18 @@
             return dateStr;
         }
 
+        function formatThaiDateTime(date) {
+            return new Intl.DateTimeFormat('th-TH', {
+                timeZone: 'Asia/Bangkok',
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hourCycle: 'h23'
+            }).format(date);
+        }
+
         function renderTables() {
             const isAdmin = currentUser.role === 'admin' && currentUser.name === 'นิศาชล คงดี';
 
@@ -1603,6 +1724,24 @@
                 return `-`;
             };
 
+            const getPartyLabel = (doc) => {
+                if (doc.type === 'incoming') return doc.sender ? `ผู้ส่ง: ${doc.sender}` : '';
+                if (doc.type === 'outgoing') return doc.sender ? `ผู้รับ: ${doc.sender}` : '';
+                if (doc.type === 'vouchers') return doc.voucherPayee ? `ผู้รับเงิน: ${doc.voucherPayee}` : '';
+                if (doc.type === 'memos') return doc.sender ? `เรียน: ${doc.sender}` : '';
+                return doc.sender ? `ผู้เกี่ยวข้อง: ${doc.sender}` : '';
+            };
+
+            const matchesDocumentSearch = (doc, query) => {
+                if (!query) return true;
+                const searchableValues = [
+                    doc.subject, doc.sender, doc.voucherPayee, doc.docNumber,
+                    doc.regNo, doc.centralRegNo, doc.voucherNo, doc.formCode,
+                    doc.formName, doc.voucherProject, doc.yearStr
+                ];
+                return searchableValues.some(value => String(value || '').toLocaleLowerCase('th-TH').includes(query));
+            };
+
             // 1. Dashboard Table (กรองตามปี Global Filter)
             const globalYear = document.getElementById('globalFilterYear').value;
             const filteredDashDocs = globalYear ? documents.filter(d => String(d.yearStr) === String(globalYear)) : documents;
@@ -1624,12 +1763,18 @@
             `).join('') : `<tr><td colspan="7" class="p-6 text-center text-gray-400">ยังไม่มีข้อมูลในระบบสำหรับปีนี้</td></tr>`;
 
             // 2. My Inbox Table
-            const myDocs = documents.filter(d => d.assignee === currentUser.name);
+            const assignedDocs = documents.filter(d => d.assignee === currentUser.name);
+            populateYearFilterOptions('myInboxFilterYear', assignedDocs);
+            const myInboxYear = document.getElementById('myInboxFilterYear').value;
+            const myInboxQuery = document.getElementById('myInboxSearch').value.trim().toLocaleLowerCase('th-TH');
+            const myDocs = assignedDocs.filter(d =>
+                (!myInboxYear || String(d.yearStr) === myInboxYear) && matchesDocumentSearch(d, myInboxQuery)
+            );
             document.getElementById('myInboxTableBody').innerHTML = myDocs.length ? myDocs.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-bold text-blue-600">${d.type === 'outgoing' ? (d.docNumber || '-') : d.type === 'vouchers' ? (d.voucherNo || '-') : formatRegDisplay(d)}</td>
                     <td class="p-3 uppercase text-xs font-semibold text-gray-500">${d.type}</td>
-                    <td class="p-3"><div class="font-medium text-gray-800">${d.type === 'vouchers' ? (d.voucherProject || '-') : (d.subject || '-')}</div></td>
+                    <td class="p-3"><div class="font-medium text-gray-800">${d.type === 'vouchers' ? (d.voucherProject || '-') : (d.subject || '-')}</div><div class="text-xs text-gray-500">${getPartyLabel(d)}</div></td>
                     <td class="p-3">
                         ${d.ackStatus === 'รับทราบแล้ว' ? `<span class="text-emerald-600 text-xs font-medium"><i class="fa-solid fa-check-circle mr-1"></i>${d.ackTime}</span>` : `<button onclick="acknowledgeDoc(${d.id})" class="bg-amber-500 hover:bg-amber-600 text-white text-xs px-3 py-1 rounded-lg transition">กดรับทราบงาน</button>`}
                     </td>
@@ -1639,7 +1784,7 @@
                         <button onclick="updateDocStatusPrompt(${d.id})" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2.5 py-1 rounded-lg transition">เปลี่ยนสถานะ</button>
                     </td>
                 </tr>
-            `).join('') : `<tr><td colspan="7" class="p-6 text-center text-gray-400">ไม่มีงานที่ได้รับมอบหมายในขณะนี้</td></tr>`;
+            `).join('') : `<tr><td colspan="7" class="p-6 text-center text-gray-400">ไม่พบงานตามเงื่อนไขที่เลือก</td></tr>`;
 
             // 3. Incoming Table (1. หนังสือรับ: เรียงตาม เลขรับกองช่าง จากมากไปหาน้อย)
             const filterYearInc = document.getElementById('filterYearIncoming').value;
@@ -1824,17 +1969,23 @@
             `).join('') : `<tr><td colspan="3" class="p-6 text-center text-gray-400">ไม่มีรายการงานฎีกาในปีนี้</td></tr>`;
 
             // 10. All Docs Table
-            document.getElementById('allDocsTableBody').innerHTML = documents.length ? documents.map(d => `
+            populateYearFilterOptions('allDocsFilterYear', documents);
+            const allDocsYear = document.getElementById('allDocsFilterYear').value;
+            const allDocsQuery = document.getElementById('allDocsSearch').value.trim().toLocaleLowerCase('th-TH');
+            const allDocs = documents.filter(d =>
+                (!allDocsYear || String(d.yearStr) === allDocsYear) && matchesDocumentSearch(d, allDocsQuery)
+            );
+            document.getElementById('allDocsTableBody').innerHTML = allDocs.length ? allDocs.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 uppercase text-xs font-semibold text-gray-500">${d.type}</td>
                     <td class="p-3 font-bold text-gray-700">${d.yearStr || '-'}</td>
                     <td class="p-3 font-bold text-blue-600">${formatRegDisplay(d)} <span class="font-normal text-xs text-gray-500">(${d.docNumber || d.formCode || d.voucherNo || '-'})</span></td>
-                    <td class="p-3"><div class="font-medium text-gray-800">${d.subject || d.formName || d.voucherProject || '-'}</div></td>
+                    <td class="p-3"><div class="font-medium text-gray-800">${d.subject || d.formName || d.voucherProject || '-'}</div><div class="text-xs text-gray-500">${getPartyLabel(d)}</div></td>
                     <td class="p-3">${getStatusBadge(d.status)}</td>
                     <td class="p-3 text-center">${getFileAttachmentButton(d)}</td>
                     <td class="p-3 text-center">${getActionButtons(d)}</td>
                 </tr>
-            `).join('') : `<tr><td colspan="7" class="p-6 text-center text-gray-400">ยังไม่มีเอกสารในระบบทั้งหมด</td></tr>`;
+            `).join('') : `<tr><td colspan="7" class="p-6 text-center text-gray-400">ไม่พบเอกสารตามเงื่อนไขที่เลือก</td></tr>`;
 
             // 11. Overdue Table
             const today = new Date().toISOString().split('T')[0];
@@ -2161,22 +2312,27 @@
             const doc = documents.find(d => d.id === id);
             if (doc) {
                 const now = new Date();
-                const ackTimeStr = `${now.getDate()} ม.ค. ${now.getFullYear()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+                const ackTimeStr = formatThaiDateTime(now);
                 
-                const { error } = await supabaseClient
+                const { data, error } = await supabaseClient
                     .from('documents')
                     .update({
                         ack_status: 'รับทราบแล้ว',
-                        ack_time: ackTimeStr,
-                        status: 'กำลังดำเนินการ'
+                        ack_time: ackTimeStr
                     })
-                    .eq('id', id);
+                    .eq('id', id)
+                    .select('id, ack_status, ack_time, status')
+                    .maybeSingle();
 
                 if (error) {
                     Swal.fire('เกิดข้อผิดพลาด', error.message, 'error');
+                } else if (!data) {
+                    Swal.fire('อัปเดตไม่สำเร็จ', 'ไม่พบรายการหรือไม่มีสิทธิ์แก้ไขรายการนี้ในฐานข้อมูล', 'error');
                 } else {
-                    loadDocumentsFromSupabase();
-                    Swal.fire('สำเร็จ', 'กดรับทราบงานเรียบร้อยแล้ว', 'success');
+                    doc.ackStatus = data.ack_status || 'รับทราบแล้ว';
+                    doc.ackTime = data.ack_time || ackTimeStr;
+                    doc.status = data.status || doc.status;
+                    renderAll();
                 }
             }
         }
@@ -2212,7 +2368,6 @@
                         Swal.fire('เกิดข้อผิดพลาด', error.message, 'error');
                     } else {
                         loadDocumentsFromSupabase();
-                        Swal.fire('สำเร็จ', 'อัปเดตสถานะเรียบร้อยแล้ว', 'success');
                     }
                 }
             });

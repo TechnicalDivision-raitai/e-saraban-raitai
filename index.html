@@ -91,6 +91,89 @@
             border-collapse: separate !important;
             border-spacing: 0;
         }
+
+        /* Consistent register proportions; retain full subjects with natural wrapping. */
+        main table.register-table {
+            table-layout: fixed;
+            width: 100%;
+        }
+        main .register-table th {
+            padding: 12px 10px;
+            font-size: 12px;
+            line-height: 1.5;
+            vertical-align: middle;
+            font-weight: 600;
+            overflow-wrap: normal;
+            word-break: normal;
+        }
+        main .register-table td {
+            padding: 12px 10px;
+            font-size: 13px;
+            line-height: 1.6;
+            vertical-align: middle;
+            overflow-wrap: anywhere;
+        }
+        main .register-table td .text-xs {
+            font-size: 11px;
+            line-height: 1.5;
+        }
+        main .register-table th button[data-sort] {
+            gap: 4px;
+            line-height: 1.5;
+            align-items: center;
+        }
+        main .register-table td.text-center {
+            white-space: nowrap;
+        }
+        main .register-table td.text-center button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 24px;
+            min-height: 28px;
+            margin-left: 0;
+            vertical-align: middle;
+        }
+        main .register-table td > span[class*="rounded"] {
+            display: inline-block;
+            max-width: 100%;
+            white-space: normal;
+            overflow-wrap: normal;
+            padding: 4px 8px;
+            line-height: 1.45;
+        }
+        main .register-table td.text-right {
+            font-variant-numeric: tabular-nums;
+        }
+        main table[data-register="incoming"] td:nth-child(4) { font-size: 13px; line-height: 1.65; }
+        main table[data-register="outgoing"] td:nth-child(3) { font-size: 13px; line-height: 1.65; }
+        main table[data-register="orders"] td:nth-child(3) { font-size: 13px; line-height: 1.65; }
+        main table[data-register="memos"] td:nth-child(3) { font-size: 13px; line-height: 1.65; }
+        main table[data-register="forms"] td:nth-child(3) { font-size: 13px; line-height: 1.65; }
+        main table[data-register="vouchers"] td:nth-child(4) { font-size: 13px; line-height: 1.65; }
+        main table[data-register="myInbox"] td:nth-child(4) { font-size: 13px; line-height: 1.65; }
+        main table[data-register="allDocs"] td:nth-child(4) { font-size: 13px; line-height: 1.65; }
+        main table[data-register="overdue"] td:nth-child(3) { font-size: 13px; line-height: 1.65; }
+        main table[data-register="dashboard"] td:nth-child(2) { font-size: 13px; line-height: 1.65; }
+        main table[data-register="vouchersSummary"] td:nth-child(1) { font-size: 13px; line-height: 1.65; }
+        main table[data-register="vouchersRecent"] td:nth-child(2) { font-size: 13px; line-height: 1.65; }
+
+        main table[data-register="incoming"] td:nth-child(2) .text-gray-400,
+        main table[data-register="incoming"] td:nth-child(3) .text-gray-400,
+        main table[data-register="outgoing"] td:nth-child(2) .text-gray-400,
+        main table[data-register="orders"] td:nth-child(2) .text-gray-400,
+        main table[data-register="memos"] td:nth-child(2) .text-gray-400,
+        main table[data-register="vouchers"] td:nth-child(2) {
+            white-space: nowrap;
+        }
+        @media (max-width: 1100px) {
+            main .register-table { min-width: 960px; }
+            main table[data-register="forms"] { min-width: 680px; }
+            main table[data-register="vouchersSummary"],
+            main table[data-register="vouchersRecent"] { min-width: 380px; }
+            main div:has(> .register-table) { overflow-x: auto; }
+        }
+
         @media print {
             main table thead th {
                 position: static;
@@ -398,7 +481,7 @@
                             <button onclick="switchTab('allDocs')" class="text-xs font-semibold text-blue-600 hover:text-blue-800">ดูทั้งหมด →</button>
                         </div>
                         <div class="overflow-x-visible">
-                            <table class="w-full text-left border-collapse">
+                            <table data-register="dashboard" class="register-table w-full text-left border-collapse"><colgroup><col style="width:14%"><col style="width:30%"><col style="width:18%"><col style="width:10%"><col style="width:12%"><col style="width:8%"><col style="width:8%"></colgroup>
                                 <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                     <tr>
                                         <th class="p-3">เลขทะเบียน</th>
@@ -437,7 +520,7 @@
                     </div>
                     <div class="bg-white rounded-2xl border border-gray-200 shadow-xs">
                         <div class="overflow-x-visible">
-                            <table class="w-full text-left border-collapse">
+                            <table data-register="myInbox" class="register-table w-full text-left border-collapse"><colgroup><col style="width:12%"><col style="width:10%"><col style="width:12%"><col style="width:25%"><col style="width:13%"><col style="width:12%"><col style="width:7%"><col style="width:9%"></colgroup>
                                 <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                     <tr>
                                         <th class="sticky top-0 z-10 bg-gray-50 p-3">เลขทะเบียน</th>
@@ -486,7 +569,7 @@
                             </div>
                         </div>
                         <div class="overflow-x-visible">
-                            <table class="w-full text-left border-collapse">
+                            <table data-register="incoming" class="register-table w-full text-left border-collapse"><colgroup><col style="width:9%"><col style="width:12%"><col style="width:17%"><col style="width:27%"><col style="width:9%"><col style="width:11%"><col style="width:7%"><col style="width:8%"></colgroup>
                                 <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                     <tr>
                                         <th class="p-3">เลขรับกองช่าง</th>
@@ -535,7 +618,7 @@
                             </div>
                         </div>
                         <div class="overflow-x-visible">
-                            <table class="w-full text-left border-collapse">
+                            <table data-register="outgoing" class="register-table w-full text-left border-collapse"><colgroup><col style="width:11%"><col style="width:22%"><col style="width:35%"><col style="width:14%"><col style="width:9%"><col style="width:9%"></colgroup>
                                 <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                     <tr>
                                         <th class="p-3">ปีปฏิทิน</th>
@@ -582,7 +665,7 @@
                             </div>
                         </div>
                         <div class="overflow-x-visible">
-                            <table class="w-full text-left border-collapse">
+                            <table data-register="orders" class="register-table w-full text-left border-collapse"><colgroup><col style="width:11%"><col style="width:22%"><col style="width:35%"><col style="width:14%"><col style="width:9%"><col style="width:9%"></colgroup>
                                 <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                     <tr>
                                         <th class="p-3">ปีปฏิทิน</th>
@@ -629,7 +712,7 @@
                             </div>
                         </div>
                         <div class="overflow-x-visible">
-                            <table class="w-full text-left border-collapse">
+                            <table data-register="memos" class="register-table w-full text-left border-collapse"><colgroup><col style="width:11%"><col style="width:22%"><col style="width:35%"><col style="width:14%"><col style="width:9%"><col style="width:9%"></colgroup>
                                 <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                     <tr>
                                         <th class="p-3">ปีงบประมาณ</th>
@@ -662,7 +745,7 @@
                             </div>
                         </div>
                         <div class="overflow-x-visible">
-                            <table class="w-full text-left border-collapse">
+                            <table data-register="forms" class="register-table w-full text-left border-collapse"><colgroup><col style="width:20%"><col style="width:20%"><col style="width:40%"><col style="width:10%"><col style="width:10%"></colgroup>
                                 <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                     <tr>
                                         <th class="p-3">งาน</th>
@@ -684,7 +767,7 @@
                         <div class="sticky-tab-heading flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                             <div>
                                 <h2 class="text-lg font-bold text-gray-800">ทะเบียนงานฎีกา (ปีงบประมาณ)</h2>
-                                <p class="text-xs text-gray-500">จัดการและตรวจสอบการเบิกจ่ายงานฎีกา (เรียงตามวันที่ จากล่าสุดย้อนไป)</p>
+                                <p class="text-xs text-gray-500">จัดการและตรวจสอบการเบิกจ่ายงานฎีกา (คลิกหัวคอลัมน์เพื่อเรียงลำดับ)</p>
                             </div>
                             <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
                                 <select id="filterYearVouchers" onchange="renderTables()" class="px-3 py-2 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
@@ -708,7 +791,7 @@
                             </div>
                         </div>
                         <div class="overflow-x-visible">
-                            <table class="w-full text-left border-collapse">
+                            <table data-register="vouchers" class="register-table w-full text-left border-collapse"><colgroup><col style="width:10%"><col style="width:12%"><col style="width:19%"><col style="width:25%"><col style="width:13%"><col style="width:12%"><col style="width:9%"></colgroup>
                                 <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                     <tr>
                                         <th class="p-3">ปีงบประมาณ</th>
@@ -795,7 +878,7 @@
                         <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
                             <h3 class="font-bold text-gray-800 mb-4">สรุปยอดเงินแยกตามประเภทฎีกา</h3>
                             <div class="overflow-x-visible">
-                                <table class="w-full text-left border-collapse">
+                                <table data-register="vouchersSummary" class="register-table w-full text-left border-collapse"><colgroup><col style="width:45%"><col style="width:20%"><col style="width:35%"></colgroup>
                                     <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                         <tr>
                                             <th class="p-3">ประเภทฎีกา</th>
@@ -811,7 +894,7 @@
                         <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
                             <h3 class="font-bold text-gray-800 mb-4">รายการงานฎีกาล่าสุด</h3>
                             <div class="overflow-x-visible">
-                                <table class="w-full text-left border-collapse">
+                                <table data-register="vouchersRecent" class="register-table w-full text-left border-collapse"><colgroup><col style="width:24%"><col style="width:46%"><col style="width:30%"></colgroup>
                                     <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                         <tr>
                                             <th class="p-3">เลขผู้เบิก</th>
@@ -843,7 +926,7 @@
                             </div>
                         </div>
                         <div class="overflow-x-visible" id="printableArea">
-                            <table class="w-full text-left border-collapse">
+                            <table data-register="allDocs" class="register-table w-full text-left border-collapse"><colgroup><col style="width:11%"><col style="width:9%"><col style="width:19%"><col style="width:31%"><col style="width:12%"><col style="width:9%"><col style="width:9%"></colgroup>
                                 <thead class="bg-gray-50 text-xs text-gray-500 uppercase">
                                     <tr>
                                         <th class="p-3">ประเภท</th>
@@ -870,7 +953,7 @@
                         <p class="text-xs text-gray-500">รายการเอกสารที่เลยกำหนดเวลาแล้วเสร็จ ควรเร่งรัดติดตาม</p>
                         </div>
                         <div class="overflow-x-visible">
-                            <table class="w-full text-left border-collapse">
+                            <table data-register="overdue" class="register-table w-full text-left border-collapse"><colgroup><col style="width:11%"><col style="width:14%"><col style="width:28%"><col style="width:17%"><col style="width:12%"><col style="width:9%"><col style="width:9%"></colgroup>
                                 <thead class="bg-red-50 text-xs text-red-700 uppercase">
                                     <tr>
                                         <th class="p-3">ประเภท</th>
@@ -963,6 +1046,7 @@
                 <datalist id="memoAddresseeSuggestions"></datalist>
                 <datalist id="voucherMakerSuggestions"></datalist>
                 <datalist id="voucherPayeeSuggestions"></datalist>
+                <datalist id="voucherCategorySuggestions"></datalist>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">สถานะดำเนินการ</label>
@@ -1031,6 +1115,78 @@
         let voucherAmountChartInstance = null;
         let currentImportType = 'incoming'; // ตัวแปรเก็บประเภทปัจจุบันที่จะนำเข้า Excel
 
+
+        function getCurrentFiscalYear(date = new Date()) {
+            const parts = new Intl.DateTimeFormat('en-US', {
+                timeZone: 'Asia/Bangkok', year: 'numeric', month: 'numeric'
+            }).formatToParts(date);
+            const year = Number(parts.find(part => part.type === 'year').value);
+            const month = Number(parts.find(part => part.type === 'month').value);
+            return String(year + 543 + (month >= 10 ? 1 : 0));
+        }
+
+        // Each table retains its own selected column and direction during refreshes.
+        const tableSortState = {};
+        const tableSortColumns = {
+            incoming: ['regNo', 'centralRegNo', 'docNumber', 'subject', 'urgency', 'status'],
+            outgoing: ['yearStr', 'docNumber', 'subject', 'status'],
+            orders: ['yearStr', 'docNumber', 'subject', 'status'],
+            memos: ['yearStr', 'docNumber', 'subject', 'status'],
+            forms: ['memoWork', 'formCode', 'formName'],
+            vouchers: ['yearStr', 'voucherDate', 'voucherNo', 'voucherCategory', 'voucherPayee', 'voucherAmount'],
+            myInbox: ['regNo', 'type', 'date', 'subject', 'ackStatus', 'status'],
+            allDocs: ['type', 'yearStr', 'regNo', 'subject', 'status'],
+            overdue: ['type', 'regNo', 'subject', 'assignee', 'dueDate']
+        };
+
+        function sortTableDocuments(key, rows) {
+            const state = tableSortState[key];
+            if (!state) return rows;
+            const value = doc => {
+                if (state.field === 'date') return doc.receiveDate || doc.voucherDate || doc.docDate || '';
+                if (state.field === 'subject') return doc.subject || doc.voucherProject || doc.formName || '';
+                return doc[state.field] ?? '';
+            };
+            return rows.sort((a, b) => {
+                const x = value(a), y = value(b);
+                const result = state.field === 'voucherAmount'
+                    ? Number(x || 0) - Number(y || 0)
+                    : String(x).localeCompare(String(y), 'th', { numeric: true, sensitivity: 'base' });
+                return state.direction === 'asc' ? result : -result;
+            });
+        }
+
+        function initializeTableSorting() {
+            Object.entries(tableSortColumns).forEach(([key, fields]) => {
+                const body = document.getElementById(key + 'TableBody');
+                if (!body) return;
+                const headers = body.closest('table').querySelectorAll('thead th');
+                fields.forEach((field, index) => {
+                    const header = headers[index];
+                    if (!header) return;
+                    let button = header.querySelector('button[data-sort]');
+                    if (!button) {
+                        button = document.createElement('button');
+                        button.type = 'button';
+                        button.dataset.sort = field;
+                        button.className = 'inline-flex items-center gap-1 text-left hover:text-blue-600';
+                        button.dataset.label = header.textContent.trim();
+                        header.replaceChildren(button);
+                        button.onclick = () => {
+                            const previous = tableSortState[key];
+                            tableSortState[key] = {field, direction: previous?.field === field && previous.direction === 'asc' ? 'desc' : 'asc'};
+                            renderTables();
+                        };
+                    }
+                    const active = tableSortState[key]?.field === field;
+                    const direction = tableSortState[key]?.direction;
+                    header.setAttribute('aria-sort', active ? (direction === 'asc' ? 'ascending' : 'descending') : 'none');
+                    button.textContent = button.dataset.label + ' ' + (active ? (direction === 'asc' ? '↑' : '↓') : '↕');
+                    button.title = 'คลิกเพื่อเรียงลำดับ ' + button.dataset.label;
+                });
+            });
+        }
+
         function getCurrentBuddhistYear() {
             return new Intl.DateTimeFormat('en-US-u-ca-buddhist', {
                 timeZone: 'Asia/Bangkok',
@@ -1044,7 +1200,10 @@
 
             const years = [...new Set(sourceDocs.map(doc => String(doc.yearStr || '').trim()).filter(Boolean))]
                 .sort((a, b) => Number(b) - Number(a));
-            const selectedYear = select.value || (years.includes(defaultYear) ? defaultYear : (years[0] || ''));
+            const selectedYear = select.dataset.yearsInitialized === 'true'
+                ? select.value
+                : (selectId === 'myInboxFilterYear' ? '' : (years.includes(defaultYear) ? defaultYear : (years[0] || '')));
+            select.dataset.yearsInitialized = 'true';
             select.innerHTML = `<option value="">${allLabel}</option>` + years
                 .map(year => `<option value="${year}">${yearPrefix} ${year}</option>`).join('');
             select.value = years.includes(selectedYear) ? selectedYear : '';
@@ -1066,11 +1225,18 @@
             select.value = orderedStatuses.includes(selectedStatus) ? selectedStatus : '';
         }
 
+        function getMyInboxDocuments() {
+            return documents.filter(doc =>
+                doc.assignee === currentUser.name &&
+                String(doc.status || '').trim() !== 'เสร็จสิ้น'
+            );
+        }
+
         function refreshYearFilterOptions() {
-            const myInboxDocs = documents.filter(doc => doc.assignee === currentUser.name);
+            const myInboxDocs = getMyInboxDocuments();
             populateYearFilterOptions('globalFilterYear', documents, 'ทุกปี (All Years)', 'ปี');
             populateYearFilterOptions('filterSummaryYearVouchers', documents.filter(doc => doc.type === 'vouchers'), 'ทุกปีงบประมาณ (All Years)', 'ปีงบฯ');
-            populateYearFilterOptions('myInboxFilterYear', myInboxDocs, 'ทุกปี', 'ปี', getCurrentBuddhistYear());
+            populateYearFilterOptions('myInboxFilterYear', myInboxDocs, 'ทุกปี', 'ปี');
             populateYearFilterOptions('filterYearIncoming', documents.filter(doc => doc.type === 'incoming'));
             populateYearFilterOptions('filterYearOutgoing', documents.filter(doc => doc.type === 'outgoing'));
             populateYearFilterOptions('filterYearOrders', documents.filter(doc => doc.type === 'orders'));
@@ -1097,6 +1263,7 @@
             populateList('outgoingRecipientSuggestions', documents.filter(doc => doc.type === 'outgoing').map(doc => doc.sender));
             populateList('memoAddresseeSuggestions', documents.filter(doc => doc.type === 'memos').map(doc => doc.sender));
             populateList('voucherMakerSuggestions', documents.filter(doc => doc.type === 'vouchers').map(doc => doc.voucherMaker));
+            populateList('voucherCategorySuggestions', documents.filter(doc => doc.type === 'vouchers').map(doc => doc.voucherCategory));
             populateList('voucherPayeeSuggestions', documents.filter(doc => doc.type === 'vouchers').map(doc => doc.voucherPayee));
         }
 
@@ -1362,8 +1529,7 @@
             // นับเฉพาะงานที่ได้รับมอบหมายและยังไม่เสร็จสิ้น
             // สถานะ 'ดำเนินการแล้ว' และ 'เสร็จสิ้น' จะไม่ถูกนำมานับใน Badge
             const completedStatuses = ['ดำเนินการแล้ว', 'เสร็จสิ้น'];
-            const myCount = documents.filter(d =>
-                d.assignee === currentUser.name &&
+            const myCount = getMyInboxDocuments().filter(d =>
                 !completedStatuses.includes(String(d.status || '').trim())
             ).length;
             document.getElementById('badgeMyInbox').innerText = myCount;
@@ -1500,6 +1666,15 @@
                 }
             }
 
+            if (type === 'vouchers' && !document.getElementById('editDocId').value) {
+                const year = getCurrentFiscalYear();
+                const select = document.getElementById('selectedYear');
+                if (![...select.options].some(option => option.value === year)) {
+                    select.add(new Option(year, year));
+                }
+                select.value = year;
+            }
+            refreshContactSuggestions();
             let html = '';
             if (type === 'incoming') {
                 html = `
@@ -1654,7 +1829,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">ประเภทฎีกา</label>
-                            <input type="text" id="fieldVoucherCategory" required placeholder="เช่น ค่าวัสดุ, ค่าจ้างเหมา" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
+                            <input type="text" id="fieldVoucherCategory" list="voucherCategorySuggestions" required placeholder="เช่น ค่าวัสดุ, ค่าจ้างเหมา" class="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm">
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1738,6 +1913,7 @@
         }
 
         function renderTables() {
+            initializeTableSorting();
             const isAdmin = currentUser.role === 'admin' && currentUser.name === 'นิศาชล คงดี';
 
             const getActionButtons = (doc) => {
@@ -1813,7 +1989,7 @@
             `).join('') : `<tr><td colspan="7" class="p-6 text-center text-gray-400">ยังไม่มีข้อมูลในระบบสำหรับปีนี้</td></tr>`;
 
             // 2. My Inbox Table
-            const assignedDocs = documents.filter(d => d.assignee === currentUser.name);
+            const assignedDocs = getMyInboxDocuments();
             populateYearFilterOptions('myInboxFilterYear', assignedDocs);
             populateStatusFilterOptions('myInboxFilterStatus', assignedDocs);
             const myInboxYear = document.getElementById('myInboxFilterYear').value;
@@ -1850,6 +2026,7 @@
                 const dateB = getInboxDateSortValue(getInboxDate(b));
                 return dateB - dateA;
             });
+            sortTableDocuments('myInbox', myDocs);
             document.getElementById('myInboxTableBody').innerHTML = myDocs.length ? myDocs.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-bold text-blue-600">${d.type === 'outgoing' ? (d.docNumber || '-') : d.type === 'vouchers' ? (d.voucherNo || '-') : formatRegDisplay(d)}</td>
@@ -1877,6 +2054,7 @@
                 return matchType && matchYear && matchText;
             }).sort((a, b) => parseInt(b.regNo || 0) - parseInt(a.regNo || 0));
 
+            sortTableDocuments('incoming', incDocs);
             document.getElementById('incomingTableBody').innerHTML = incDocs.length ? incDocs.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-bold text-blue-600">${d.regNo} - ${d.yearStr}</td>
@@ -1900,6 +2078,7 @@
                 return matchType && matchYear && matchText;
             }).sort((a, b) => new Date(b.docDate || 0) - new Date(a.docDate || 0));
 
+            sortTableDocuments('outgoing', outDocs);
             document.getElementById('outgoingTableBody').innerHTML = outDocs.length ? outDocs.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-bold text-emerald-600">ปี ${d.yearStr}</td>
@@ -1925,6 +2104,7 @@
                 return numB - numA;
             });
 
+            sortTableDocuments('orders', ordDocs);
             document.getElementById('ordersTableBody').innerHTML = ordDocs.length ? ordDocs.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-bold text-amber-600">ปี ${d.yearStr}</td>
@@ -1946,6 +2126,7 @@
                 return matchType && matchYear && matchText;
             }).sort((a, b) => new Date(b.docDate || 0) - new Date(a.docDate || 0));
 
+            sortTableDocuments('memos', memDocs);
             document.getElementById('memosTableBody').innerHTML = memDocs.length ? memDocs.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-bold text-purple-600">ปีงบฯ ${d.yearStr}</td>
@@ -1968,6 +2149,7 @@
                 const matchText = ((d.memoWork && d.memoWork.toLowerCase().includes(searchForm)) || (d.formCode && d.formCode.toLowerCase().includes(searchForm)) || (d.formName && d.formName.toLowerCase().includes(searchForm)));
                 return matchType && matchText;
             });
+            sortTableDocuments('forms', formDocs);
             document.getElementById('formsTableBody').innerHTML = formDocs.length ? formDocs.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-bold text-cyan-600">${d.memoWork || '-'}</td>
@@ -1988,6 +2170,7 @@
                 return matchType && matchYear && matchText;
             }).sort((a, b) => new Date(b.voucherDate || 0) - new Date(a.voucherDate || 0));
 
+            sortTableDocuments('vouchers', voucherDocs);
             document.getElementById('vouchersTableBody').innerHTML = voucherDocs.length ? voucherDocs.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 font-bold text-rose-600">ปีงบฯ ${d.yearStr || '-'}</td>
@@ -2056,6 +2239,7 @@
             const allDocs = documents.filter(d =>
                 (!allDocsYear || String(d.yearStr) === allDocsYear) && matchesDocumentSearch(d, allDocsQuery)
             );
+            sortTableDocuments('allDocs', allDocs);
             document.getElementById('allDocsTableBody').innerHTML = allDocs.length ? allDocs.map(d => `
                 <tr class="hover:bg-gray-50">
                     <td class="p-3 uppercase text-xs font-semibold text-gray-500">${d.type}</td>
@@ -2071,6 +2255,7 @@
             // 11. Overdue Table
             const today = new Date().toISOString().split('T')[0];
             const overdueDocs = documents.filter(d => d.dueDate && d.dueDate < today && d.status !== 'ดำเนินการแล้ว' && d.status !== 'เสร็จสิ้น');
+            sortTableDocuments('overdue', overdueDocs);
             document.getElementById('overdueTableBody').innerHTML = overdueDocs.length ? overdueDocs.map(d => `
                 <tr class="hover:bg-red-50/50">
                     <td class="p-3 uppercase text-xs font-semibold text-gray-500">${d.type}</td>
@@ -2524,6 +2709,8 @@
                     if (error) {
                         Swal.fire('เกิดข้อผิดพลาด', error.message, 'error');
                     } else {
+                        doc.status = result.value;
+                        renderAll();
                         loadDocumentsFromSupabase();
                     }
                 }
